@@ -36,7 +36,7 @@ public class TeacherSubjectController {
 	@GetMapping("/schedule")
 	public String getSubject(Model model, Principal principal) {
 		Account current_account = (Account) ((Authentication) principal).getPrincipal();
-		Teacher teacher = teacherMapper.getTeacher(current_account.getAccUsername());
+		Teacher teacher = teacherMapper.getTeacher(0, current_account.getAccUsername());
 		
 		List<Subject> teacherSubject = subjectMapper.getTeacherSubject(teacher.getTeaId());
 		
@@ -49,7 +49,7 @@ public class TeacherSubjectController {
 	@GetMapping("/mark/{subId}")
 	public String markScore(Model model, Principal principal, @PathVariable int subId) {
 		Account current_account = (Account) ((Authentication) principal).getPrincipal();
-		Teacher teacher = teacherMapper.getTeacher(current_account.getAccUsername());
+		Teacher teacher = teacherMapper.getTeacher(0, current_account.getAccUsername());
 		
 		List<Student_Score> studentScore = studentScoreMapper.getTeacherMark(teacher.getTeaId(), subId);
 		
@@ -62,7 +62,7 @@ public class TeacherSubjectController {
 	@GetMapping("/mark")
 	public String markScoreAll(Model model, Principal principal) {
 		Account current_account = (Account) ((Authentication) principal).getPrincipal();
-		Teacher teacher = teacherMapper.getTeacher(current_account.getAccUsername());
+		Teacher teacher = teacherMapper.getTeacher(0, current_account.getAccUsername());
 		
 		List<Student_Score> studentScore = studentScoreMapper.getTeacherMark(teacher.getTeaId(), 0);
 		
@@ -78,7 +78,7 @@ public class TeacherSubjectController {
 							  @RequestParam(name = "stuId") int stuId,
 							  @RequestParam(name = "score") float score) {
 		Account current_account = (Account) ((Authentication) principal).getPrincipal();
-		Teacher teacher = teacherMapper.getTeacher(current_account.getAccUsername());
+		Teacher teacher = teacherMapper.getTeacher(0, current_account.getAccUsername());
 		
 		List<Student_Score> studentScore = studentScoreMapper.getTeacherMark(teacher.getTeaId(), subId);
 		
@@ -86,6 +86,7 @@ public class TeacherSubjectController {
 		if(score < 0 || score > 10) {
 			model.addAttribute("message", "Invalid score");
 			model.addAttribute("studentScore", studentScore);
+			model.addAttribute("teacher", teacher);
 			return "teacher/TeacherMark";
 		}
 		

@@ -18,7 +18,20 @@
 	<select id="getTeacher" resultMap="TeacherMapper" parameterType="map">
 		SELECT *
 		FROM TEACHERS
-		WHERE TEA_EMAIL = #{tea_email}
+		WHERE 
+		<choose>
+			<when test="teaId != 0">
+				TEA_ID = #{teaId}
+			</when>
+			<when test="teaEmail != null">
+				TEA_EMAIL = #{teaEmail}
+			</when>
+		</choose>
+	</select>
+	
+	<select id="getAllTeacher" resultMap="TeacherMapper" parameterType="map">
+		SELECT *
+		FROM TEACHERS
 	</select>
 	
 	<update id="updateTeacher" parameterType="map">

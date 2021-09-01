@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeLeaf.org">
+<head>
+<title>Admin</title>
+
+<th:block th:insert="component/common-css :: common-css"></th:block>
+<th:block th:insert="component/common-js :: common-js"></th:block>
+<th:block th:insert="component/change_avatar :: change_avatar"></th:block>
+
+<link rel="stylesheet"
+	th:href="@{https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css}">
+</head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+html, body, h1, h2, h3, h4, h5 {
+	font-family: "Raleway", sans-serif
+}
+</style>
+<body class="w3-light-grey">
+
+	<th:block th:if="message != null">
+		<input type="hidden" th:value="${message}" id="mess" />
+		<script>
+			var mess = document.getElementById("mess");
+			if (mess.value !== "") {
+				alert(mess.value);
+				console.log("+" + mess.value + "+");
+			}
+		</script>
+	</th:block>
+
+	<div class="w3-bar w3-top w3-black w3-large" style="z-index: 4">
+		<button
+			class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey"
+			onclick="w3_open();">
+			<i class="fa fa-bars"></i> Menu
+		</button>
+		<span class="w3-bar-item w3-right"> Admin </span>
+	</div>
+
+	<!-- Sidebar/menu -->
+	<nav class="w3-sidebar w3-collapse w3-white "
+		style="z-index: 3; width: 300px;" id="mySidebar">
+		<br>
+		<div class="w3-container w3-row">
+			<div class="w3-col s4">
+				<img th:src="@{/images/admin_avatar.jpg}"
+					class="w3-circle w3-margin-right" style="width: 46px"
+					onclick="document.getElementById('my_avatar').style.display='block'">
+			</div>
+			<div class="w3-col s8 w3-bar">
+				<span>Welcome, <strong>Admin</strong></span><br> <a
+					class="w3-bar-item w3-button"><i class="fa fa-envelope"></i></a> <a
+					class="w3-bar-item w3-button"><i class="fa fa-user"></i></a> <a
+					class="w3-bar-item w3-button"><i class="fa fa-cog"></i></a>
+			</div>
+		</div>
+		<hr>
+		<div class="w3-container">
+			<h5>My Dashboard</h5>
+		</div>
+		<div class="w3-bar-block">
+			<a th:href="@{/admin/account/student}"
+				class="w3-bar-item w3-button
+			w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black"
+				onclick="w3_close()" title="close menu"><i
+				class="fa fa-remove fa-fw"></i> Close Menu</a> 
+				
+			<a onclick="myAccFunc('account')" href="javascript:void(0)" id="myBtn"
+				class="w3-bar-item w3-button w3-padding w3-blue"> 
+				<i class="fas fa-address-book"></i> Account</a>
+			<div id="account" class="w3-bar-block w3-hide w3-padding w3-show">
+				<a th:href="@{/admin/account/student}" class="w3-bar-item w3-button w3-padding w3-blue"><i
+					class="fa fa-caret-right w3-margin-right"></i> Student</a> 
+				<a th:href="@{/admin/account/teacher}" class="w3-bar-item w3-button w3-padding"> Teacher</a>
+				<a th:href="@{/admin/account/detail}" class="w3-bar-item w3-button w3-padding"> Detail</a>
+			</div>
+			
+			<a onclick="myAccFunc('subject')" href="javascript:void(0)" id="myBtn"
+				class="w3-bar-item w3-button w3-padding"> <i
+				class="fas fa-book-open"></i> Subject</a>
+			<div id="subject" class="w3-bar-block w3-hide w3-padding">
+				<a href="" class="w3-bar-item w3-button w3-padding"> Subject List</a> 
+				<a href="" class="w3-bar-item w3-button w3-padding"> Subject Detail</a>
+			</div>
+			
+			<a href="" class="w3-bar-item w3-button w3-padding"> <i
+				class="fas fa-chalkboard-teacher"></i> Student's Subject
+			</a>
+			 
+			<form th:action="@{/logout}" method="POST">
+				<span class="input-group-btn">
+					<button class="btn btn-default w3-button w3-padding w3-bar-item"
+						type="submit">
+						<span class="fas fa-sign-out-alt fa-fw"></span> Logout
+					</button>
+				</span>
+			</form><br> <br>
+		</div>
+	</nav>
+
+	<!-- Overlay effect when opening sidebar on small screens -->
+	<div class="w3-overlay w3-hide-large w3-animate-opacity"
+		onclick="w3_close()" style="cursor: pointer" title="close side menu"
+		id="myOverlay"></div>
+
+	<!-- !PAGE CONTENT! -->
+	<div class="w3-main" style="margin-left: 300px; margin-top: 43px;">
+		<!-- Header -->
+		<header class="w3-container" style="padding-top: 22px">
+			<h2>
+				<b><i class="fas fa-address-book"></i> Student List</b>
+			</h2>
+		</header>
+		<div class="panel-body">
+			<div class="input-group">
+				<input class="form-control" type="text"
+					placeholder="Search for names..." id="myInput"
+					onkeyup="myFunction()"> <span class="input-group-btn">
+					<button class="btn btn-default" type="button">
+						<span class="glyphicon glyphicon-search"></span>
+					</button>
+				</span>
+			</div>
+			<br>
+			<form th:action="@{/admin/account/student}" method="post">
+				<table id="table" class="w3-table-all w3-hoverable" cellpadding="0"
+					width="100%">
+					<thead>
+						<tr class="w3-blue">
+							<th class="w3-center">ID</th>
+							<th>Name</th>
+							<th class="w3-center">Phone</th>
+							<th>School</th>
+							<th>Email</th>
+							<th>Password</th>
+							<th class="w3-center">Detail</th>
+							<th class="w3-center">Active/InActive</th>
+						</tr>
+						<tr>
+							<td class="w3-center"><input size="3"
+								class="form-control w3-center" type="hidden" name="id"/></td>
+							<td><input size="20"
+								class="form-control" type="text" name="name"
+								required /></td>
+							<td class="w3-center"><input size="15"
+								class="form-control w3-center" type="text" name="phone"
+								required /></td>
+							<td><input size="20"
+								class="form-control" type="text" name="school"
+								required /></td>
+							<td><input size="40" 
+								class="form-control" type="email" name="email" 
+								required /></td>
+							<td><input size="10" 
+								class="form-control" type="password" name="password" 
+								required /></td>
+							<td class="w3-center"></td>
+							<td class="w3-center"><button class="form-control w3-center">
+									<i class="fas fa-user-plus"></i>
+								</button></td>
+						</tr>
+						<th:block th:each="student : ${studentList}">
+							<tr>
+								<td th:text="${student.stuId}" class="w3-center"></td>
+								<td th:text="${student.stuName}"></td>
+								<td th:text="${student.stuPhone}" class="w3-center"></td>
+								<td th:text="${student.stuSchool}"></td>
+								<td th:text="${student.stuEmail}"></td>
+								<td></td>
+								<td class="w3-center"><a
+									th:href="@{/admin/account/student/{stuId}(stuId=${student.stuId})}"><i
+										class="fas fa-paper-plane"></i></a></td>
+								<td class="w3-center"><a href="">
+									<th:block th:if="student.stuId != '2'"> 
+										<i class="fas fa-user-check"></i>
+									</th:block>
+									<th:block th:unless="student.stuId != '2'"> 
+										<i class="fas fa-user-slash"></i>
+									</th:block>
+								</a></td>
+							</tr>
+						</th:block>
+				</table>
+			</form>
+		</div>
+		<hr>
+
+
+		<hr>
+		<div class="w3-container w3-dark-grey w3-padding-32">
+			<div class="w3-row">
+				<div class="w3-container w3-third">
+					<h5 class="w3-bottombar w3-border-green">User</h5>
+					<p>Student</p>
+					<p>Teacher</p>
+					<p>Manager</p>
+				</div>
+				<div class="w3-container w3-third">
+					<h5 class="w3-bottombar w3-border-red">System</h5>
+					<p>Browser</p>
+					<p>OS</p>
+					<p>More</p>
+				</div>
+				<div class="w3-container w3-third">
+					<h5 class="w3-bottombar w3-border-orange">Target</h5>
+					<p>School</p>
+					<p>Teaching Center</p>
+				</div>
+			</div>
+		</div>
+
+		<!-- Footer -->
+		<footer class="w3-container w3-padding-16 w3-light-grey">
+			<h4>FOOTER</h4>
+			<p>
+				Powered by <a href="https://www.w3schools.com/w3css/default.asp"
+					target="_blank">w3.css</a>
+			</p>
+		</footer>
+	</div>
+	<script>
+		var mySidebar = document.getElementById("mySidebar");
+		var overlayBg = document.getElementById("myOverlay");
+	</script>
+</body>
+</html>

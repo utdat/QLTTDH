@@ -28,7 +28,7 @@
 	<select id="getTeacherSubject" resultMap="SubjectMapper" parameterType="map">
 		SELECT SUB_ID, SUB_NAME, SUB_STARTDATE, SUB_SCHEDULE, SUB_ROOM, SUB_TUITION
 		FROM SUBJECTS
-		WHERE SUBJECTS.TEA_ID = #{tea_id}
+		WHERE SUBJECTS.TEA_ID = #{teaId}
 	</select>
 	
 </mapper>

@@ -10,5 +10,5 @@ import com.quanlytrungtamdayhoc.dbo.Subject;
 @Mapper
 public interface SubjectMapper {
 	
-	List<Subject> getTeacherSubject(@Param("tea_id") int id);
+	List<Subject> getTeacherSubject(@Param("teaId") int id);
 }

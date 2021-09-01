@@ -39,7 +39,7 @@ public class TeacherProfileController {
 	public String getProfile(Model model, Principal principal) {
 		Account currentAccount = (Account) ((Authentication) principal).getPrincipal();
 		
-		Teacher teacher = teacherMapper.getTeacher(currentAccount.getAccUsername());
+		Teacher teacher = teacherMapper.getTeacher(0, currentAccount.getAccUsername());
 		
 		model.addAttribute("teacher", teacher);
 		return "teacher/TeacherProfile";
@@ -58,21 +58,20 @@ public class TeacherProfileController {
 		
 		if(teacherMapper.updateTeacher(teacher,currentAccount.getAccUsername() ,birthdate) > 0) {
 			message = "Successfully update information";
-		}else {
-			message = "Update failed";
-		}
-		
-		if(!newPass.equals("") && newPass.equals(confirmPass)){
-			if(accountMapper.updatePassword(currentAccount.getAccUsername(), passwordEncoder.encode(newPass)) > 0) {
-				message = "Successfully update information";
-				System.out.println("success");
-			}else {
-				message = "Update failed";
+			
+			if(!newPass.equals("")){
+				if(newPass.equals(confirmPass) && accountMapper.updatePassword(currentAccount.getAccUsername(), passwordEncoder.encode(newPass)) > 0) {
+					message = "Successfully update password";
+					System.out.println("success");
+				}else {
+					message = "Update password failed";
+				}
 			}
+		}else {
+			message = "Update information failed";
 		}
 		
-		
-		teacher = teacherMapper.getTeacher(currentAccount.getAccUsername());
+		teacher = teacherMapper.getTeacher(0, currentAccount.getAccUsername());
 		
 		model.addAttribute("teacher", teacher);
 		model.addAttribute("message", message);

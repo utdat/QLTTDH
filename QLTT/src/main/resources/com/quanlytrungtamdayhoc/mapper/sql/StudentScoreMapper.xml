@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.quanlytrungtamdayhoc.mapper.StudentScoreMapper">
-	<resultMap id="Student_ScoreMapper" type="com.quanlytrungtamdayhoc.dbo.Student_Score">
+	<resultMap id="StudentScoreMapper" type="com.quanlytrungtamdayhoc.dbo.Student_Score">
 		<result property="score" column="SCORE"/>
 		
 		<association property="subject" javaType="com.quanlytrungtamdayhoc.dbo.Subject">
@@ -41,7 +41,7 @@
 		</association>
 	</resultMap>
 	
-	<select id="getTeacherMark" resultMap="Student_ScoreMapper" parameterType="map">
+	<select id="getTeacherMark" resultMap="StudentScoreMapper" parameterType="map">
 		SELECT STUDENT_SCORES.SUB_ID, SUB_NAME, STUDENT_SCORES.STU_ID, STU_NAME, SCORE
 		FROM STUDENT_SCORES
 		INNER JOIN STUDENTS ON STUDENTS.STU_ID = STUDENT_SCORES.STU_ID
