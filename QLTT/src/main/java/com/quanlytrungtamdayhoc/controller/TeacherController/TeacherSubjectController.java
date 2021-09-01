@@ -41,6 +41,7 @@ public class TeacherSubjectController {
 		List<Subject> teacherSubject = subjectMapper.getTeacherSubject(teacher.getTeaId());
 		
 		model.addAttribute("teacherSubject", teacherSubject);
+		model.addAttribute("teacher", teacher);
 
 		return "teacher/TeacherSchedule";
 	}
@@ -53,6 +54,7 @@ public class TeacherSubjectController {
 		List<Student_Score> studentScore = studentScoreMapper.getTeacherMark(teacher.getTeaId(), subId);
 		
 		model.addAttribute("studentScore", studentScore);
+		model.addAttribute("teacher", teacher);
 
 		return "teacher/TeacherMark";
 	}
@@ -65,6 +67,7 @@ public class TeacherSubjectController {
 		List<Student_Score> studentScore = studentScoreMapper.getTeacherMark(teacher.getTeaId(), 0);
 		
 		model.addAttribute("studentScore", studentScore);
+		model.addAttribute("teacher", teacher);
 
 		return "teacher/TeacherMark";
 	}
@@ -74,9 +77,16 @@ public class TeacherSubjectController {
 							  @RequestParam(name = "subId") int subId,
 							  @RequestParam(name = "stuId") int stuId,
 							  @RequestParam(name = "score") float score) {
+		Account current_account = (Account) ((Authentication) principal).getPrincipal();
+		Teacher teacher = teacherMapper.getTeacher(current_account.getAccUsername());
+		
+		List<Student_Score> studentScore = studentScoreMapper.getTeacherMark(teacher.getTeaId(), subId);
+		
 		
 		if(score < 0 || score > 10) {
-			return "redirect:/teacher/mark/" + subId;
+			model.addAttribute("message", "Invalid score");
+			model.addAttribute("studentScore", studentScore);
+			return "teacher/TeacherMark";
 		}
 		
 		int kq = studentScoreMapper.updateScore(subId, stuId, score);

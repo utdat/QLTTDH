@@ -1,5 +1,6 @@
 package com.quanlytrungtamdayhoc.dbo;
 
+import java.beans.Transient;
 import java.util.Date;
 
 import org.springframework.stereotype.Component;
@@ -83,6 +84,15 @@ public class Teacher {
 	}
 	public void setTeaSalaryrate(Float teaSalaryrate) {
 		this.teaSalaryrate = teaSalaryrate;
+	}
+	
+	@Transient
+	public String getAvatarPath() {
+		if(teaAvatar == null || teaId < 0) {
+			return "/images/default_user.png";
+		}
+		
+		return "/images/" + teaId + "/" + teaAvatar;
 	}
 	
 }

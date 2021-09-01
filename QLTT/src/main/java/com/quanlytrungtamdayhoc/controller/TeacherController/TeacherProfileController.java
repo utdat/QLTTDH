@@ -52,7 +52,7 @@ public class TeacherProfileController {
 								@RequestParam(name = "birthdate") String birthdate,
 								@RequestParam(name = "confirmPass") String confirmPass,
 								@RequestParam(name = "newPass") String newPass) {
-		String message = "";
+		String message = null;
 		Account currentAccount = (Account) ((Authentication) principal).getPrincipal();
 		
 		

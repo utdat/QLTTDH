@@ -29,7 +29,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 	protected void configure(HttpSecurity http) throws Exception {
 		
 		http.authorizeRequests()
-	    .antMatchers("/css/**").permitAll()
+	    .antMatchers("/css/**", "/images/**").permitAll()
 	    .antMatchers("/admin/**").hasRole("ADMIN")
 	    .antMatchers("/teacher/**").hasRole("TEACHER")
 	    .antMatchers("/student/**").hasRole("STUDENT")
@@ -37,7 +37,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 		.formLogin().loginPage("/login").permitAll()
 		.defaultSuccessUrl("/userInfo")
 		.failureUrl("/login?success=false")
-		.loginProcessingUrl("/spring_security_check");
+		.loginProcessingUrl("/spring_security_check").and()
+		.logout().logoutSuccessUrl("/login");
 	}
 	
 	@Override

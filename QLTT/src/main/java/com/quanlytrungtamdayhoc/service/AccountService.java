@@ -22,8 +22,6 @@ public class AccountService implements UserDetailsService{
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		Account account = account_mapper.getAccount(username);
 		
-		System.out.println(username);
-		
 		if(account == null) {
 			 throw new UsernameNotFoundException("Not found");
 		}
@@ -38,9 +36,6 @@ public class AccountService implements UserDetailsService{
 				account.setAuthorities(Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN")));
 			}
 		}
-		
-		
-		System.out.println(account.getAuthorities());
 
 		return account;
 	}

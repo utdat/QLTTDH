@@ -30,20 +30,21 @@ public class LoginController {
 	}
 	
 	@GetMapping("/userInfo")
-	public ModelAndView UserInfo(Principal principal) {
-		ModelAndView view = new ModelAndView();
+	public String UserInfo(Model model, Principal principal) {
+		String view = "";
 		
 		Account currentAccount = (Account) ((Authentication) principal).getPrincipal();
 		
 		if(currentAccount.getAccRole() == 2) {
 			Teacher teacher = teacherMapper.getTeacher(currentAccount.getAccUsername());
-			view.setViewName("teacher/TeacherProfile");
-			view.addObject("teacher", teacher);
+			view = "teacher/TeacherProfile";
+			model.addAttribute("teacher", teacher);
 		}else if(currentAccount.getAccRole() == 1) {
-			view.setViewName("Login");
+			view = "Login";
 		}
 		
-		view.addObject("account", currentAccount);
+		model.addAttribute("message", "Successfully logged in");
+		
 		return view;
 	}
 }

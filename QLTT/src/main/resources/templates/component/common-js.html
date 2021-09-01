@@ -9,7 +9,7 @@
 <script th:src="@{https://kit.fontawesome.com/a076d05399.js}"></script>
 
 
-<script>
+<script type="text/javascript">
 	function update_score(sub_id, stu_id) {
 		var score, link;
 
@@ -87,6 +87,23 @@
 		} else {
 			x.className = x.className.replace(" w3-show", "");
 		}
+	}
+	
+	$(document).ready(function() {
+		$('#fileImage').change(function(){
+			showImageThumbnail(this);
+		});
+	});
+	
+	function showImageThumbnail(fileInput){
+		file = fileInput.files[0];
+		reader = new FileReader();
+		
+		reader.onload = function(e){
+			$('#thumbnail').attr('src', e.target.result);
+		};
+		
+		reader.readAsDataURL(file);
 	}
 
 

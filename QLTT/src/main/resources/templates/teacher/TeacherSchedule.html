@@ -33,7 +33,7 @@ html, body, h1, h2, h3, h4, h5 {
 		<br>
 		<div class="w3-container w3-row">
 			<div class="w3-col s4">
-				<img src="<%=dir%>" class="w3-circle w3-margin-right"
+				<img th:src="@{${teacher.getAvatarPath()}}" class="w3-circle w3-margin-right"
 					style="width: 46px"
 					onclick="document.getElementById('my_avatar').style.display='block'">
 			</div>
@@ -70,9 +70,13 @@ html, body, h1, h2, h3, h4, h5 {
 					class="w3-bar-item w3-button
 				w3-padding"> Mark</a>
 			</div>
-			<a href="" class="w3-bar-item w3-button w3-padding"> <i
-				class="fas fa-sign-out-alt fa-fw"></i> Logout
-			</a><br> <br>
+			<form th:action="@{/logout}" method="POST">
+				<span class="input-group-btn">
+					<button class="btn btn-default w3-button w3-padding w3-bar-item" type="submit">
+						<span class="fas fa-sign-out-alt fa-fw"></span> Logout
+					</button>
+				</span>
+			</form><br> <br>
 		</div>
 	</nav>
 

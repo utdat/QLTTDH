@@ -12,10 +12,14 @@
 <div class="alert alert-primary" role="alert" th:text="${message}" th:if="${message}"></div> -->
 
 <th:block th:if="message != null">  
+	<input type="hidden" th:value="${message}" id="mess"/>
 	<script>
-		alert("${message}");
+		var mess = document.getElementById("mess");
+		if(mess.value !== ""){
+			alert(mess.value);
+			console.log("+"+mess.value+"+");
+		}
 	</script>
- 
 </th:block>
 
 </body>

@@ -36,6 +36,9 @@
 		<if test="teacher.teaGender != null">
 		, TEA_GENDER = #{teacher.teaGender}
 		</if>
+		<if test="teacher.teaAvatar != null">
+		, TEA_AVATAR = #{teacher.teaAvatar}
+		</if>
 		<if test="birthdate != null">
 		, TEA_BIRTHDATE = #{birthdate}
 		</if>
