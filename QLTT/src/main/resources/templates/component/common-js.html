@@ -10,13 +10,19 @@
 
 
 <script>
-	function update_score(sub_id, stu_id) {
-		var score, link;
+	function update_score(id) {
+		var midterm, endterm, link;
 
-		score = document.getElementById(sub_id + "_" + stu_id + "_i");
-		link = document.getElementById(sub_id + "_" + stu_id + "_a");
-		
-		link.href += "&score=" + score.value;
+		midterm = document.getElementById(id + "_mid");
+		endterm = document.getElementById(id + "_end");
+		link = document.getElementById(id + "_a");
+
+		if (midterm.value !== '') {
+			link.href += "&midterm=" + midterm.value;
+		}
+		if (endterm.value !== '') {
+			link.href += "&endterm=" + endterm.value;
+		}
 	}
 
 	function w3_open() {
@@ -53,8 +59,8 @@
 		}
 	}
 
-	function showPass(id) {
-		var x = document.getElementById(id);
+	function showPass() {
+		var x = document.getElementById("pass");
 		if (x.type === "password") {
 			x.type = "text";
 		} else {
@@ -81,7 +87,7 @@
 	})();
 
 	function myAccFunc() {
-		var x = document.getElementById("subject");
+		var x = document.getElementById("adminsubject");
 		if (x.className.indexOf("w3-show") == -1) {
 			x.className += " w3-show";
 		} else {

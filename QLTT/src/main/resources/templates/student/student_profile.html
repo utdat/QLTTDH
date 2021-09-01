@@ -1,0 +1,270 @@
+<!-- <%@page import="java.util.HashMap"%>
+<%@page import="java.sql.SQLOutput"%>
+<%@page import="entity.Accounts"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
+<%
+Accounts acc_cur = (Accounts) session.getAttribute("acc_cur");
+HashMap<Integer, String> dep_map = (HashMap<Integer, String>) session.getAttribute("dep_map");
+
+String dir = "";
+if (acc_cur.getAvatar() == null) {
+	dir = "images/default_user.png";
+} else {
+	dir = "images/" + acc_cur.getAvatar();
+}
+%> -->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeLeaf.org">
+<head>
+<title>Student</title>
+<th:block th:insert="component/common-css :: common-css"></th:block>
+<th:block th:insert="component/common-js :: common-js"></th:block>
+
+<!-- <th:block th:insert="component/change_avatar :: change_avatar"></th:block> -->
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+</head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+html, body, h1, h2, h3, h4, h5 {
+	font-family: "Raleway", sans-serif
+}
+
+.sel {
+	height: 34px;
+	padding: 6px 12px;
+}
+</style>
+<body class="w3-light-grey">
+	<!-- <%
+if (request.getAttribute("mess") != null && request.getAttribute("mess") != "") {
+%>
+<script>
+	alert("<%=request.getAttribute("mess")%>");
+</script>
+<%
+}%> -->
+	<div class="w3-bar w3-top w3-black w3-large" style="z-index: 4">
+		<button
+			class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey"
+			onclick="w3_open();">
+			<i class="fa fa-bars"></i> Menu
+		</button>
+		<span class="w3-bar-item w3-right"> Student </span>
+	</div>
+
+	<nav class="w3-sidebar w3-collapse w3-white"
+		style="z-index: 3; width: 300px;" id="mySidebar">
+		<br>
+		<div class="w3-container w3-row">
+			<div class="w3-col s4">
+				<img src="<%=dir%>" class="w3-circle w3-margin-right"
+					style="width: 46px"
+					onclick="document.getElementById('my_avatar').style.display='block'">
+			</div>
+			<div class="w3-col s8 w3-bar">
+				<span>Welcome</span><br> <a class="w3-bar-item w3-button"><i
+					class="fa fa-envelope"></i></a> <a class="w3-bar-item w3-button"><i
+					class="fa fa-user"></i></a> <a class="w3-bar-item w3-button"><i
+					class="fa fa-cog"></i></a>
+			</div>
+		</div>
+		<hr>
+		<div class="w3-container">
+			<h5>My Dashboard</h5>
+		</div>
+		<div class="w3-bar-block">
+			<a href="student_profile.html"
+				class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black"
+				onclick="w3_close()" title="close menu"><i
+				class="fa fa-remove fa-fw"></i> Close Menu</a> <a
+				href="student_profile.html" th:href="@{/student/profile}"
+				class="w3-bar-item w3-button w3-padding w3-blue"> <i
+				class="fas fa-user-edit fa-fw"></i> Profile
+			</a> <a href="student_subject.html" th:href="@{/student/subject}"
+				class="w3-bar-item w3-button w3-padding"> <i
+				class="fas fa-book-reader fa-fw"></i> Subject
+			</a> <a href="student_score.html" th:href="@{/student/score}"
+				class="w3-bar-item w3-button w3-padding"> <i
+				class="fas fa-user-graduate fa-fw"></i> Score
+			</a> <a href="" class="w3-bar-item w3-button w3-padding"> <i
+				class="fas fa-sign-out-alt fa-fw"></i> Logout
+			</a><br> <br>
+		</div>
+	</nav>
+
+
+	<!-- Overlay effect when opening sidebar on small screens -->
+	<div class="w3-overlay w3-hide-large w3-animate-opacity"
+		onclick="w3_close()" style="cursor: pointer" title="close side menu"
+		id="myOverlay"></div>
+
+	<!-- !PAGE CONTENT! -->
+	<div class="w3-main" style="margin-left: 300px; margin-top: 43px;">
+		<header class="w3-container" style="padding-top: 22px">
+			<h2>
+				<b><i class="fas fa-user-edit fa-fw"></i> Edit Profile</b>
+			</h2>
+		</header>
+		<!-- Header -->
+		<div class="panel-body">
+			<div class="card-body">
+				<form method="post" th:action="@{/student/profile}"
+					th:object=${student}>
+					<div class="row register-form">
+						<div class="col-md-6">
+
+							<div class="form-group">
+								<div class="input-group-prepend">
+									<span class="input-group-text">Full Name</span>
+								</div>
+								<input type="text" class="form-control" th:field="*{stuName}"
+									placeholder="Your Full Name *" name="name" />
+							</div>
+
+							<div class="form-group">
+								<div class="input-group-prepend">
+									<span class="input-group-text">Email</span>
+								</div>
+								<input type="email" class="form-control" th:field="*{stuEmail}"
+									placeholder="Your Email *" name="email" />
+							</div>
+
+							<div class="form-group">
+								<div class="input-group-prepend">
+									<span class="input-group-text">Current Password</span>
+								</div>
+								<input type="email" class="form-control" th:field="*{stuEmail}"
+									placeholder="Your Current Password *" name="currentPassword" />
+							</div>
+
+							<div class="form-group">
+								<div class="input-group-prepend">
+									<span class="input-group-text">New Password</span>
+								</div>
+								<input type="email" class="form-control" th:field="*{stuEmail}"
+									placeholder="Your New Password *" name="newPassword" />
+							</div>
+
+							<div class="form-group">
+								<div class="input-group-prepend">
+									<span class="input-group-text">Phone Number</span>
+								</div>
+								<input type="number" class="form-control" th:field="*{stuPhone}"
+									placeholder="Your Phone *" name="phone" />
+							</div>
+
+							<div class="form-group">
+								<div class="input-group-prepend">
+									<span class="input-group-text">Address</span>
+								</div>
+								<input type="text" class="form-control" th:field="*{stuAddress}"
+									placeholder="Your Address " name="address" />
+							</div>
+
+						</div>
+
+						<div class="col-md-6">
+
+							<div class="form-group">
+								<div class="input-group-prepend">
+									<span class="input-group-text">Gender</span>
+								</div>
+								<select class="form-control" name="gender"
+									th:field="*{stuGender}">
+									<option th:value="M" th:text="Male"></option>
+									<option th:value="F" th:text="Female"></option>
+								</select>
+							</div>
+
+							<div class="form-group">
+								<div class="input-group-prepend">
+									<span class="input-group-text">Birthday</span>
+								</div>
+								<input type="date" class="form-control"
+									th:value="${#dates.format(student.stuBirthdate, 'yyyy-MM-dd')}"
+									placeholder="Your Birthday *" name="birthday" />
+							</div>
+
+							<div class="form-group">
+								<div class="input-group-prepend">
+									<span class="input-group-text">School</span>
+								</div>
+								<input type="text" class="form-control" th:field=*{stuSchool}
+									placeholder="Your school *" name="school" />
+							</div>
+
+
+							<div class="form-group">
+								<div class="input-group-prepend">
+									<span class="input-group-text">Join Date</span>
+								</div>
+								<input type="date" maxlength="10" name="joindate"
+									th:value="${#dates.format(student.stuJoindate, 'yyyy-MM-dd')}"
+									class="form-control" placeholder="Your Join Date *" disabled />
+							</div>
+
+							<div class="form-group">
+								<div class="input-group-prepend">
+									<span class="input-group-text">ID</span>
+								</div>
+								<input type="text" class="form-control" th:field="*{stuId}"
+									placeholder="Your First Name *" name="id" disabled />
+							</div>
+
+							<div class="form-group">
+								<div class="input-group-prepend">
+									<span class="input-group-text">User Type</span>
+								</div>
+								<input type="text" class="form-control" value="Student" disabled />
+							</div>
+						</div>
+					</div>
+					<button class="w3-btn w3-green">Update</button>
+				</form>
+			</div>
+		</div>
+		<hr>
+		<hr>
+		<div class="w3-container w3-dark-grey w3-padding-32">
+			<div class="w3-row">
+				<div class="w3-container w3-third">
+					<h5 class="w3-bottombar w3-border-green">User</h5>
+					<p>Student</p>
+					<p>Teacher</p>
+					<p>Manager</p>
+				</div>
+				<div class="w3-container w3-third">
+					<h5 class="w3-bottombar w3-border-red">System</h5>
+					<p>Browser</p>
+					<p>OS</p>
+					<p>More</p>
+				</div>
+				<div class="w3-container w3-third">
+					<h5 class="w3-bottombar w3-border-orange">Target</h5>
+					<p>School</p>
+					<p>Teaching Center</p>
+				</div>
+			</div>
+		</div>
+
+		<!-- Footer -->
+		<footer class="w3-container w3-padding-16 w3-light-grey">
+			<h4>FOOTER</h4>
+			<p>
+				Powered by <a href="https://www.w3schools.com/w3css/default.asp"
+					target="_blank">w3.css</a>
+			</p>
+		</footer>
+	</div>
+
+
+	<script>
+		var mySidebar = document.getElementById("mySidebar");
+		var overlayBg = document.getElementById("myOverlay");
+	</script>
+</body>
+</html>

@@ -13,7 +13,4 @@ public interface AccountMapper {
 	List<Account> getAllAccount();
 	
 	Account getAccount(@Param("username") String username);
-	
-	int updatePassword(@Param("username") String username,
-					   @Param("password") String password);
 }

@@ -18,7 +18,7 @@ import com.quanlytrungtamdayhoc.service.AccountService;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	@Autowired
-	private AccountService accountService;
+	AccountService account_service;
 	
 	@Bean
 	public PasswordEncoder passwordEncoder() {
@@ -33,7 +33,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 	    .antMatchers("/admin/**").hasRole("ADMIN")
 	    .antMatchers("/teacher/**").hasRole("TEACHER")
 	    .antMatchers("/student/**").hasRole("STUDENT")
-	    .anyRequest().authenticated().and()
+	    .anyRequest().authenticated()
+	    .and()
 		.formLogin().loginPage("/login").permitAll()
 		.defaultSuccessUrl("/userInfo")
 		.failureUrl("/login?success=false")
@@ -48,6 +49,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 		 * .authorities("ROLE_USER");
 		 */
 		
-		auth.userDetailsService(accountService).passwordEncoder(passwordEncoder());
+		auth.userDetailsService(account_service).passwordEncoder(passwordEncoder());
 	}
 }

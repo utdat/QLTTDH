@@ -1,45 +1,51 @@
 package com.quanlytrungtamdayhoc.dbo;
 
-import org.springframework.stereotype.Component;
-
-@Component
 public class Announcement {
-	private int annId;
+
+	private Integer annId;
 	private String annTitle;
-	private int annType;
+	private Integer annType;
 	private String annLink;
-	private Subject subject;
-	
-	public int getAnnId() {
+	private Integer subId;
+
+	public Integer getAnnId() {
 		return annId;
 	}
-	public void setAnnId(int annId) {
+
+	public void setAnnId(Integer annId) {
 		this.annId = annId;
 	}
+
 	public String getAnnTitle() {
 		return annTitle;
 	}
+
 	public void setAnnTitle(String annTitle) {
 		this.annTitle = annTitle;
 	}
-	public int getAnnType() {
+
+	public Integer getAnnType() {
 		return annType;
 	}
-	public void setAnnType(int annType) {
+
+	public void setAnnType(Integer annType) {
 		this.annType = annType;
 	}
+
 	public String getAnnLink() {
 		return annLink;
 	}
+
 	public void setAnnLink(String annLink) {
 		this.annLink = annLink;
 	}
-	public Subject getSubject() {
-		return subject;
+
+	public Integer getSubId() {
+		return subId;
 	}
-	public void setSubject(Subject subject) {
-		this.subject = subject;
+
+	public void setSubId(Integer subId) {
+		this.subId = subId;
 	}
-	
-	
+
 }

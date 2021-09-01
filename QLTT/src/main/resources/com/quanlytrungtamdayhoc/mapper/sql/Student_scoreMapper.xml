@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.quanlytrungtamdayhoc.mapper.Student_scoreMapper">
+	<resultMap id="BaseResultMap"
+		type="com.quanlytrungtamdayhoc.dbo.Student_score">
+		<result column="SCORE" jdbcType="REAL" property="score" />
+
+		<association property="student"
+			javaType="com.quanlytrungtamdayhoc.dbo.Student">
+			<id property="stuId" column="STU_ID" />
+			<result column="STU_EMAIL" property="stuEmail" />
+			<result column="STU_NAME" property="stuName" />
+			<result column="STU_PHONE" property="stuPhone" />
+			<result column="STU_ADDRESS" property="stuAddress" />
+			<result column="STU_GENDER" property="stuGender" />
+			<result column="STU_BIRTHDATE" property="stuBirthdate" />
+			<result column="STU_JOINDATE" property="stuJoindate" />
+			<result column="STU_SCHOOL" property="stuSchool" />
+			<result column="STU_AVATAR" property="stuAvatar" />
+		</association>
+
+		<association property="subject"
+			javaType="com.quanlytrungtamdayhoc.dbo.Subject">
+			<id property="subId" column="SUB_ID" />
+			<result column="SUB_NAME" property="subName" />
+			<result column="SUB_STARTDATE" property="subStartdate" />
+			<result column="SUB_SCHEDULE" property="subSchedule" />
+			<result column="SUB_ROOM" property="subRoom" />
+			<result column="SUB_TUITION" property="subTuition" />
+		</association>
+
+	</resultMap>
+
+	<select id="getListStudentScore" resultMap="BaseResultMap"
+		parameterType="map">
+		SELECT *
+		FROM student_scores sc
+		JOIN students st ON
+		(sc.STU_ID = st.STU_ID)
+		JOIN subjects su ON (sc.SUB_ID = su.SUB_ID)
+		WHERE sc.STU_ID = #{stu_id}
+	</select>
+</mapper>

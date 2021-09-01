@@ -2,10 +2,7 @@ package com.quanlytrungtamdayhoc.dbo;
 
 import java.util.Date;
 
-import org.springframework.stereotype.Component;
-
-@Component
-public class Submit_Homework {
+public class Submit_homework {
 	private int annId;
 	private Student student;
 	private Date submitDate;

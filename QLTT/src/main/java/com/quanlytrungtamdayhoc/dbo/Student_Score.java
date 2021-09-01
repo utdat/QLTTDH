@@ -1,9 +1,6 @@
 package com.quanlytrungtamdayhoc.dbo;
 
-import org.springframework.stereotype.Component;
-
-@Component
-public class Student_Score {
+public class Student_score {
 	private Subject subject;
 	private Student student;
 	private float score;

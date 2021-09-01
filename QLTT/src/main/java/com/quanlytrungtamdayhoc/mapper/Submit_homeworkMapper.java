@@ -1,5 +1,5 @@
 package com.quanlytrungtamdayhoc.mapper;
 
-public interface TuitionMapper {
+public interface Submit_homeworkMapper {
    
 }

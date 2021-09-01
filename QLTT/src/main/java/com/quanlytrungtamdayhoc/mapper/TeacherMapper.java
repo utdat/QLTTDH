@@ -7,11 +7,8 @@ import com.quanlytrungtamdayhoc.dbo.Teacher;
 
 @Mapper
 public interface TeacherMapper {
-   
-	Teacher getTeacher(@Param("tea_email") String tea_email);
-	int updateTeacher(@Param("teacher") Teacher teacher, 
-					  @Param("email") String email,
-					  @Param("birthdate") String birthdate);
-
-	;
+ 
+	Teacher getTeacherByEmail(@Param("tea_email") String email);
+	
+	Teacher getTeacher(@Param("tea_id") int id);
 }

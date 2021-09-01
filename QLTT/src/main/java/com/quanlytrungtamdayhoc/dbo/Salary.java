@@ -1,8 +1,5 @@
 package com.quanlytrungtamdayhoc.dbo;
 
-import org.springframework.stereotype.Component;
-
-@Component
 public class Salary {
 	private Teacher teacher;
 	private int salMonth;
