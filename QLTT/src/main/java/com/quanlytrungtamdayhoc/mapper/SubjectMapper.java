@@ -9,8 +9,9 @@ import com.quanlytrungtamdayhoc.dbo.Subject;
 
 @Mapper
 public interface SubjectMapper {
-    
-	List<Subject> listSubjectById(@Param("tea_id") int id);
+  
+//	List<Subject> listSubjectById(@Param("tea_id") int id);
 	
-	List<Subject> listSubject();
+	List<Subject> listSubject(@Param("sub_id") int id);
+	
 }

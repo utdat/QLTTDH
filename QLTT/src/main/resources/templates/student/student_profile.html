@@ -19,10 +19,11 @@ if (acc_cur.getAvatar() == null) {
 <html xmlns:th="http://www.thymeLeaf.org">
 <head>
 <title>Student</title>
+
 <th:block th:insert="component/common-css :: common-css"></th:block>
 <th:block th:insert="component/common-js :: common-js"></th:block>
+<th:block th:insert="component/change_avatar :: change_avatar"></th:block>
 
-<!-- <th:block th:insert="component/change_avatar :: change_avatar"></th:block> -->
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 </head>
@@ -61,7 +62,7 @@ if (request.getAttribute("mess") != null && request.getAttribute("mess") != "") 
 		<br>
 		<div class="w3-container w3-row">
 			<div class="w3-col s4">
-				<img src="<%=dir%>" class="w3-circle w3-margin-right"
+				<img th:src="${student.getAvatarPath()}" class="w3-circle w3-margin-right"
 					style="width: 46px"
 					onclick="document.getElementById('my_avatar').style.display='block'">
 			</div>
@@ -109,6 +110,22 @@ if (request.getAttribute("mess") != null && request.getAttribute("mess") != "") 
 				<b><i class="fas fa-user-edit fa-fw"></i> Edit Profile</b>
 			</h2>
 		</header>
+		<div th:if="${success}"
+			class="row alert alert-success alert-dismissible w3-blue">
+			<button type="button" class="close" data-dismiss="alert"
+				aria-label="Close">
+				<span aria-hidden="true"></span>
+			</button>
+			<span th:text="${success}"></span>
+		</div>
+		<div th:if="${error}"
+			class="row alert alert-success alert-dismissible w3-red">
+			<button type="button" class="close" data-dismiss="alert"
+				aria-label="Close">
+				<span aria-hidden="true"></span>
+			</button>
+			<span th:text="${error}"></span>
+		</div>
 		<!-- Header -->
 		<div class="panel-body">
 			<div class="card-body">
@@ -135,18 +152,34 @@ if (request.getAttribute("mess") != null && request.getAttribute("mess") != "") 
 
 							<div class="form-group">
 								<div class="input-group-prepend">
-									<span class="input-group-text">Current Password</span>
+									<span class="input-group-text">New Password</span>
 								</div>
-								<input type="email" class="form-control" th:field="*{stuEmail}"
-									placeholder="Your Current Password *" name="currentPassword" />
+								<div class="input-group">
+									<input type="password" class="form-control" id="newPass"
+										placeholder="New Password *" name="newPass" /> <span
+										class="input-group-btn">
+										<button class="btn btn-default form-control" type="button"
+											onclick="showPass('newPass')">
+											<span class="fas fa-eye"></span>
+										</button>
+									</span>
+								</div>
 							</div>
 
 							<div class="form-group">
 								<div class="input-group-prepend">
-									<span class="input-group-text">New Password</span>
+									<span class="input-group-text">Confirm Password</span>
 								</div>
-								<input type="email" class="form-control" th:field="*{stuEmail}"
-									placeholder="Your New Password *" name="newPassword" />
+								<div class="input-group">
+									<input type="password" class="form-control" id="confirmPass"
+										placeholder="Confirm Password *" value="" name="confirmPass" /><span
+										class="input-group-btn">
+										<button class="btn btn-default form-control" type="button"
+											onclick="showPass('confirmPass')">
+											<span class="fas fa-eye"></span>
+										</button>
+									</span>
+								</div>
 							</div>
 
 							<div class="form-group">
@@ -186,7 +219,7 @@ if (request.getAttribute("mess") != null && request.getAttribute("mess") != "") 
 								</div>
 								<input type="date" class="form-control"
 									th:value="${#dates.format(student.stuBirthdate, 'yyyy-MM-dd')}"
-									placeholder="Your Birthday *" name="birthday" />
+									placeholder="Your Birthday *" name="birthdate" />
 							</div>
 
 							<div class="form-group">
@@ -223,7 +256,7 @@ if (request.getAttribute("mess") != null && request.getAttribute("mess") != "") 
 							</div>
 						</div>
 					</div>
-					<button class="w3-btn w3-green">Update</button>
+					<button class="w3-btn w3-blue">Update</button>
 				</form>
 			</div>
 		</div>

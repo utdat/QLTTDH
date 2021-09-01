@@ -11,18 +11,16 @@
 					onclick="document.getElementById('my_avatar').style.display='none'"
 					class="w3-button w3-xlarge w3-hover-red w3-display-topright"
 					title="Close Modal">&times;</span> 
-					<!-- <img
-					src="<%=dir %>" alt="Avatar" style="width: 30%"
-					class="w3-circle w3-margin-top"> -->
+					<img id="thumbnail" th:src="@{/images/default_user.png}" alt="Avatar" style="width: 30%" class="w3-circle w3-margin-top">
 			</div>
 
-			<form class="w3-container needs-validation" method="post" encType="multipart/form-data" novalidate>
+			<form class="w3-container needs-validation" method="post" th:action="@{/upload}" encType="multipart/form-data" novalidate>
 				<div class="w3-section">
 					<div class="form-group">
 						<div class="input-group-prepend">
 							<span class="input-group-text">Avatar</span>
 						</div>
-						<input type="file" name="avatar" required/>
+						<input type="file" id="fileImage" name="avatar" accept="image/png, image/jpeg" required/>
 						<div class="invalid-feedback">Please choose your image file.</div>
 					</div>
 					<button class="w3-button w3-block w3-green w3-section w3-padding"

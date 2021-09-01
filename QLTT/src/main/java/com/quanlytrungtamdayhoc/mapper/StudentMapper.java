@@ -13,5 +13,6 @@ public interface StudentMapper {
 	
 	Student getStudentByEmail(@Param("student_email") String email);
 	
-	Student updateStudentById(@Param("student_id") int id);
+	int updateStudent(@Param("student") Student student, @Param("email") String email,
+			  @Param("birthdate") String birthdate);
 }

@@ -22,8 +22,8 @@ dir = "images/" + acc_cur.getAvatar();
 <title>Student</title>
 <th:block th:insert="component/common-css :: common-css"></th:block>
 <th:block th:insert="component/common-js :: common-js"></th:block>
+<th:block th:insert="component/change_avatar :: change_avatar"></th:block>
 
-<!-- <th:block th:insert="component/change_avatar :: change_avatar"></th:block> -->
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 </head>
@@ -121,7 +121,7 @@ if (request.getAttribute("mess") != null && request.getAttribute("mess") != "") 
 			<br>
 			<th:block th:if="${#lists.isEmpty(subjects.getPageList)}">
 				<h3>No employee</h3>
-			</th:block> 
+			</th:block>
 			<th:block th:unless="${#lists.isEmpty(employees == null)}">
 				<table id="table" class="w3-table-all w3-hoverable">
 					<thead>
@@ -150,40 +150,41 @@ if (request.getAttribute("mess") != null && request.getAttribute("mess") != "") 
 									th:href="@{/student/subject/showTeacher/{id}(id=${sub.teacher.teaId})}"><i
 										class="fas fa-address-card"></i></a></td>
 								<td class="w3-center"><a
-									th:href="@{/student/subject/showTeacher/{id}(id=${sub.teacher.teaId})}"><i
+									th:href="@{/student/subject/insert(subId=${sub.subId}, teaId=${sub.teacher.teaId})}"><i
 										class="fas fa-paper-plane"></i></a></td>
 							</tr>
 						</th:block>
 				</table>
 				<ul class="pagination">
-			<li
-				th:class="${currentIndex == 1}? 'page-item disabled' : 'page-item'">
-				<a class="page-link" th:href="@{/student/subject}">First</a>
-			</li>
-			<li
-				th:class="${currentIndex == 1}? 'page-item disabled': 'page-item' ">
-				<a class="page-link" aria-label="Previous"
-				th:href="@{|${baseUrl}${currentIndex - 1}|}"
-				title='Go to previous page'><span aria-hidden="true">«</span>
-					<span class="sr-only">Previous</span></a>
-			</li>
-			<li th:each="item : ${#numbers.sequence(beginIndex,endIndex)}"
-				th:class="${item == currentIndex ? 'page-item active' :'page-item' }">
-				<a class="page-link" th:href="@{|${baseUrl}${item}|}"> <span
-					th:text='${item}'>1</span>
-			</a>
-			</li>
-			<li
-				th:class="${currentIndex == totalPageCount}? 'page-item disabled': 'page-item'">
-				<a class="page-link" aria-label="Next"
-				th:href="@{|${baseUrl}${currentIndex + 1}|}" title='Go to next page'><span
-					aria-hidden="true">»</span> <span class="sr-only">Next</span></a>
-			</li>
-			<li
-				th:class="${currentIndex == totalPageCount}? 'page-item disabled':'page-item'">
-				<a class="page-link" th:href="@{|${baseUrl}${totalPageCount}|}">Last</a>
-			</li>
-		</ul>
+					<li
+						th:class="${currentIndex == 1}? 'page-item disabled' : 'page-item'">
+						<a class="page-link" th:href="@{/student/subject}">First</a>
+					</li>
+					<li
+						th:class="${currentIndex == 1}? 'page-item disabled': 'page-item' ">
+						<a class="page-link" aria-label="Previous"
+						th:href="@{|${baseUrl}${currentIndex - 1}|}"
+						title='Go to previous page'><span aria-hidden="true">«</span>
+							<span class="sr-only">Previous</span></a>
+					</li>
+					<li th:each="item : ${#numbers.sequence(beginIndex,endIndex)}"
+						th:class="${item == currentIndex ? 'page-item active' :'page-item' }">
+						<a class="page-link" th:href="@{|${baseUrl}${item}|}"> <span
+							th:text='${item}'>1</span>
+					</a>
+					</li>
+					<li
+						th:class="${currentIndex == totalPageCount}? 'page-item disabled': 'page-item'">
+						<a class="page-link" aria-label="Next"
+						th:href="@{|${baseUrl}${currentIndex + 1}|}"
+						title='Go to next page'><span aria-hidden="true">»</span> <span
+							class="sr-only">Next</span></a>
+					</li>
+					<li
+						th:class="${currentIndex == totalPageCount}? 'page-item disabled':'page-item'">
+						<a class="page-link" th:href="@{|${baseUrl}${totalPageCount}|}">Last</a>
+					</li>
+				</ul>
 		</div>
 		</th:block>
 		<hr>

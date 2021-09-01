@@ -1,6 +1,6 @@
 package com.quanlytrungtamdayhoc.dbo;
 
-public class Student_score {
+public class StudentScore {
 	private Subject subject;
 	private Student student;
 	private float score;

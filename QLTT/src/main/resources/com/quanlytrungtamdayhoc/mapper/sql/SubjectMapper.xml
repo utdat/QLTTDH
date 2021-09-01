@@ -16,22 +16,34 @@
 		<association property="teacher"
 			javaType="com.quanlytrungtamdayhoc.dbo.Teacher">
 			<id property="teaId" column="TEA_ID" />
-			<result column="TEA_NAME" property="teaName" />
+			<result property="teaEmail" column="TEA_EMAIL" />
+			<result property="teaName" column="TEA_NAME" />
+			<result property="teaPhone" column="TEA_PHONE" />
+			<result property="teaAddress" column="TEA_ADDRESS" />
+			<result property="teaGender" column="TEA_GENDER" />
+			<result property="teaBirthdate" column="TEA_BIRTHDATE" />
+			<result property="teaHiredate" column="TEA_HIREDATE" />
+			<result property="teaSchool" column="TEA_SCHOOL" />
+			<result property="teaAvatar" column="TEA_AVATAR" />
+			<result property="teaSalaryrate" column="TEA_SALARYRATE" />
 		</association>
 
 	</resultMap>
 
-	<select id="listSubjectById" resultMap="BaseResultMap"
+<!-- 	<select id="listSubjectById" resultMap="BaseResultMap"
 		parameterType="map">
 		SELECT * FROM SUBJECTS
 		NATURAL JOIN TEACHERS WHERE
 		TEACHERS.TEA_ID=#{tea_id} ORDER BY SUB_STARTDATE
-	</select>
+	</select> -->
 
 	<select id="listSubject" resultMap="BaseResultMap"
 		parameterType="map">
-		SELECT * FROM SUBJECTS
-		NATURAL JOIN TEACHERS ORDER BY SUB_STARTDATE
+		SELECT *
+		FROM SUBJECTS 
+        JOIN TEACHERS ON (SUBJECTS.TEA_ID = TEACHERS.TEA_ID)
+ 		WHERE SUB_ID NOT IN (SELECT SUB_ID FROM STUDENT_SCORES WHERE
+		STUDENT_SCORES.STU_ID = 1) ORDER BY SUB_STARTDATE
 	</select>
 
 </mapper>

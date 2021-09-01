@@ -9,20 +9,14 @@
 <script th:src="@{https://kit.fontawesome.com/a076d05399.js}"></script>
 
 
-<script>
-	function update_score(id) {
-		var midterm, endterm, link;
+<script type="text/javascript">
+	function update_score(sub_id, stu_id) {
+		var score, link;
 
-		midterm = document.getElementById(id + "_mid");
-		endterm = document.getElementById(id + "_end");
-		link = document.getElementById(id + "_a");
-
-		if (midterm.value !== '') {
-			link.href += "&midterm=" + midterm.value;
-		}
-		if (endterm.value !== '') {
-			link.href += "&endterm=" + endterm.value;
-		}
+		score = document.getElementById(sub_id + "_" + stu_id + "_i");
+		link = document.getElementById(sub_id + "_" + stu_id + "_a");
+		
+		link.href += "&score=" + score.value;
 	}
 
 	function w3_open() {
@@ -59,8 +53,8 @@
 		}
 	}
 
-	function showPass() {
-		var x = document.getElementById("pass");
+	function showPass(id) {
+		var x = document.getElementById(id);
 		if (x.type === "password") {
 			x.type = "text";
 		} else {
@@ -87,12 +81,29 @@
 	})();
 
 	function myAccFunc() {
-		var x = document.getElementById("adminsubject");
+		var x = document.getElementById("subject");
 		if (x.className.indexOf("w3-show") == -1) {
 			x.className += " w3-show";
 		} else {
 			x.className = x.className.replace(" w3-show", "");
 		}
+	}
+	
+	$(document).ready(function() {
+		$('#fileImage').change(function(){
+			showImageThumbnail(this);
+		});
+	});
+	
+	function showImageThumbnail(fileInput){
+		file = fileInput.files[0];
+		reader = new FileReader();
+		
+		reader.onload = function(e){
+			$('#thumbnail').attr('src', e.target.result);
+		};
+		
+		reader.readAsDataURL(file);
 	}
 
 

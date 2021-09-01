@@ -29,10 +29,11 @@ dir = "images/" + acc_cur.getAvatar();
 <html xmlns:th="http://www.thymeLeaf.org">
 <head>
 <title>Student</title>
+
 <th:block th:insert="component/common-css :: common-css"></th:block>
 <th:block th:insert="component/common-js :: common-js"></th:block>
+<th:block th:insert="component/change_avatar :: change_avatar"></th:block>
 
-<!-- <th:block th:insert="component/change_avatar :: change_avatar"></th:block> -->
 
 <link rel="stylesheet"
 	th:href="@{https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css}">
@@ -133,24 +134,30 @@ if (request.getAttribute("mess") != null && request.getAttribute("mess") != "") 
 			<br>
 			<table id="table" class="w3-table-all w3-hoverable">
 				<thead>
-					<tr class="w3-green">
-						<th class="w3-center">Stu ID</th>
-						<th>Stu Name</th>
-						<th>Stu Email</th>
+					<tr class="w3-blue">
 						<th class="w3-center">Sub ID</th>
 						<th>Sub Name</th>
+						<th class="w3-center">Sub Startdate</th>
+						<th class="w3-center">Sub Schedule</th>
+						<th class="w3-center">Sub Room</th>
+						<th class="w3-center">Sub Tuition</th>
 						<th class="w3-center">Score</th>
+						<th class="w3-center">Delete</th>
 					</tr>
 
 
-					<th:block th:each="stu : ${list_student_score}">
+					<th:block th:each="stu : ${listStudentScore}">
 						<tr>
-							<td class="w3-center" th:text="${stu.student.stuId}"></td>
-							<td th:text="${stu.student.stuName}"></td>
-							<td th:text="${stu.student.stuEmail}"></td>
 							<td class="w3-center" th:text="${stu.subject.subId}"></td>
 							<td th:text="${stu.subject.subName}"></td>
+							<td class="w3-center"
+								th:text="${#dates.format(stu.subject.subStartdate,'dd-MM-yyyy')}"></td>
+							<td class="w3-center" th:text="${stu.subject.subSchedule}"></td>
+							<td class="w3-center" th:text="${stu.subject.subRoom}"></td>
+							<td class="w3-center" th:text="${stu.subject.subTuition}"></td>
 							<td class="w3-center" th:text="${stu.score}"></td>
+							<td class="w3-center"><a><i
+									class="fas fa-minus-square"></i></a></td>
 						</tr>
 					</th:block>
 			</table>

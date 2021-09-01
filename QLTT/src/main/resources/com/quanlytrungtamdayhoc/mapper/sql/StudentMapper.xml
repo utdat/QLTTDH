@@ -32,8 +32,28 @@
 		resultMap="BaseResultMap">
 		SELECT * FROM STUDENTS WHERE STU_EMAIL = #{student_email}
 	</select>
-	
-	<update id="updateStudentById" >
-	
+
+	<update id="updateStudent" parameterType="map">
+		UPDATE STUDENTS
+		SET STU_NAME = #{student.stuName}
+		<if test="student.stuAddress != null">
+			, STU_ADDRESS = #{student.stuAddress}
+		</if>
+		<if test="student.stuSchool != null">
+			, STU_SCHOOL = #{student.stuSchool}
+		</if>
+		<if test="student.stuPhone != null">
+			, STU_PHONE = #{student.stuPhone}
+		</if>
+		<if test="student.stuGender != null">
+			, STU_GENDER = #{student.stuGender}
+		</if>
+		<if test="student.stuAvatar != null">
+			, STU_AVATAR = #{student.stuAvatar}
+		</if>
+		<if test="birthdate != null">
+			, STU_BIRTHDATE = #{birthdate}
+		</if>
+		WHERE STU_EMAIL = #{email}
 	</update>
 </mapper>

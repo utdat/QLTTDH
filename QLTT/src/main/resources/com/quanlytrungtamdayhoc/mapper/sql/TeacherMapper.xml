@@ -28,8 +28,9 @@
 		resultType="map">
 		SELECT * FROM TEACHERS WHERE TEA_EMAIL=#{tea_email}
 	</select>
-	
-		<select id="getTeacher" resultMap="BaseResultMap" parameterType="map">
+
+	<select id="getTeacher" resultMap="BaseResultMap"
+		parameterType="map">
 		SELECT *
 		FROM TEACHERS
 		WHERE TEA_ID = #{tea_id}

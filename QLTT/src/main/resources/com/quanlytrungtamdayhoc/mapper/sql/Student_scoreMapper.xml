@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper
-	namespace="com.quanlytrungtamdayhoc.mapper.Student_scoreMapper">
+	namespace="com.quanlytrungtamdayhoc.mapper.StudentScoreMapper">
 	<resultMap id="BaseResultMap"
-		type="com.quanlytrungtamdayhoc.dbo.Student_score">
+		type="com.quanlytrungtamdayhoc.dbo.StudentScore">
 		<result column="SCORE" jdbcType="REAL" property="score" />
 
 		<association property="student"
@@ -28,6 +28,7 @@
 			<result column="SUB_SCHEDULE" property="subSchedule" />
 			<result column="SUB_ROOM" property="subRoom" />
 			<result column="SUB_TUITION" property="subTuition" />
+
 		</association>
 
 	</resultMap>
@@ -35,10 +36,17 @@
 	<select id="getListStudentScore" resultMap="BaseResultMap"
 		parameterType="map">
 		SELECT *
-		FROM student_scores sc
-		JOIN students st ON
-		(sc.STU_ID = st.STU_ID)
-		JOIN subjects su ON (sc.SUB_ID = su.SUB_ID)
-		WHERE sc.STU_ID = #{stu_id}
+		FROM STUDENT_SCORES SC
+		JOIN STUDENTS ST ON
+		(SC.STU_ID = ST.STU_ID)
+		JOIN SUBJECTS SU ON (SC.SUB_ID = SU.SUB_ID)
+		WHERE SC.STU_ID = #{stu_id}
 	</select>
+
+	<insert id="insertSubjectScore" parameterType="map">
+		INSERT INTO
+		STUDENT_SCORES (STU_ID,SUB_ID,SCORE)
+		values (
+		#{stuId},#{sub_id},#{score})
+	</insert>
 </mapper>

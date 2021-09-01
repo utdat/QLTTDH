@@ -1,5 +1,6 @@
 package com.quanlytrungtamdayhoc.dbo;
 
+import java.beans.Transient;
 import java.util.Date;
 
 public class Student {
@@ -102,5 +103,12 @@ public class Student {
 				+ ", stuJoindate=" + stuJoindate + ", stuSchool=" + stuSchool + ", stuAvatar=" + stuAvatar + "]";
 	}
 
-	
+	@Transient
+	public String getAvatarPath() {
+		if (stuAvatar == null || stuId < 0) {
+			return "/images/default_user.png";
+		}
+		return "/images/" + stuId + "/" + stuAvatar;
+	}
+
 }
