@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeLeaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+
+
+</head>
+<body>
+
+<!-- <h1>Settings</h1>
+<div class="alert alert-primary" role="alert" th:text="${message}" th:if="${message}"></div> -->
+
+<th:block th:if="message != null">  
+	<script>
+		alert("${message}");
+	</script>
+ 
+</th:block>
+
+</body>
+</html>

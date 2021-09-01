@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.quanlytrungtamdayhoc.mapper.AccountMapper">
+	
+	<resultMap id="AccountMapper" type="com.quanlytrungtamdayhoc.dbo.Account">
+		<result property="accUsername" column="ACC_USERNAME"/>
+		<result property="accPassword" column="ACC_PASSWORD"/>
+		<result property="accIsactive" column="ACC_ISACTIVE"/>
+		<result property="accRole" column="ACC_ROLE"/>
+	</resultMap>
+	
+	<select id="getAllAccount" resultMap="AccountMapper">
+		SELECT
+			ACC_USERNAME,
+			ACC_PASSWORD,
+			ACC_ISACTIVE,
+			ACC_ROLE
+		FROM ACCOUNTS
+	</select>
+	
+	<select id="getAccount" resultMap="AccountMapper" parameterType="map">
+		SELECT
+			ACC_USERNAME,
+			ACC_PASSWORD,
+			ACC_ISACTIVE,
+			ACC_ROLE
+		FROM ACCOUNTS
+		WHERE ACC_USERNAME = #{username} AND ACC_ISACTIVE = 'T'
+	</select>
+	
+	<update id="updatePassword" parameterType="map">
+		UPDATE ACCOUNTS
+		SET ACC_PASSWORD = #{password}
+		WHERE ACC_USERNAME = #{username}
+	</update>
+	
+</mapper>

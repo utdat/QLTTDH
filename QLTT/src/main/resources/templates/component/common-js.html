@@ -1,0 +1,96 @@
+<html xmlns:th="http://www.thymeLeaf.org">
+<div th:fragment="common-js">
+<script
+	th:src="@{https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js}"></script>
+<script
+	th:src="@{https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js}"></script>
+<script
+	th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js}"></script>
+<script th:src="@{https://kit.fontawesome.com/a076d05399.js}"></script>
+
+
+<script>
+	function update_score(sub_id, stu_id) {
+		var score, link;
+
+		score = document.getElementById(sub_id + "_" + stu_id + "_i");
+		link = document.getElementById(sub_id + "_" + stu_id + "_a");
+		
+		link.href += "&score=" + score.value;
+	}
+
+	function w3_open() {
+		if (mySidebar.style.display === 'block') {
+			mySidebar.style.display = 'none';
+			overlayBg.style.display = "none";
+		} else {
+			mySidebar.style.display = 'block';
+			overlayBg.style.display = "block";
+		}
+	}
+
+	function w3_close() {
+		mySidebar.style.display = "none";
+		overlayBg.style.display = "none";
+	}
+
+	function myFunction() {
+		var input, filter, table, tr, td, i;
+		input = document.getElementById("myInput");
+		filter = input.value.toUpperCase();
+		table = document.getElementById("table");
+		tr = table.getElementsByTagName("tr");
+		for (i = 0; i < tr.length; i++) {
+			td = tr[i].getElementsByTagName("td")[1];
+			if (td) {
+				txtValue = td.textContent || td.innerText;
+				if (txtValue.toUpperCase().indexOf(filter) > -1) {
+					tr[i].style.display = "";
+				} else {
+					tr[i].style.display = "none";
+				}
+			}
+		}
+	}
+
+	function showPass(id) {
+		var x = document.getElementById(id);
+		if (x.type === "password") {
+			x.type = "text";
+		} else {
+			x.type = "password";
+		}
+	}
+
+	(function() {
+		'use strict';
+		window.addEventListener('load', function() {
+			// Get the forms we want to add validation styles to
+			var forms = document.getElementsByClassName('needs-validation');
+			// Loop over them and prevent submission
+			var validation = Array.prototype.filter.call(forms, function(form) {
+				form.addEventListener('submit', function(event) {
+					if (form.checkValidity() === false) {
+						event.preventDefault();
+						event.stopPropagation();
+					}
+					form.classList.add('was-validated');
+				}, false);
+			});
+		}, false);
+	})();
+
+	function myAccFunc() {
+		var x = document.getElementById("subject");
+		if (x.className.indexOf("w3-show") == -1) {
+			x.className += " w3-show";
+		} else {
+			x.className = x.className.replace(" w3-show", "");
+		}
+	}
+
+
+</script>
+
+</div>
+</html>
