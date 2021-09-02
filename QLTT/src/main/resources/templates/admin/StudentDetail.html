@@ -1,25 +1,7 @@
-<!-- <%@page import="java.util.HashMap"%>
-<%@page import="java.sql.SQLOutput"%>
-<%@page import="entity.Accounts"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
-<%
-Accounts acc_cur = (Accounts) session.getAttribute("acc_cur");
-HashMap<Integer, String> dep_map = (HashMap<Integer, String>) session.getAttribute("dep_map");
-
-String dir = "";
-if (acc_cur.getAvatar() == null) {
-	dir = "images/default_user.png";
-} else {
-	dir = "images/" + acc_cur.getAvatar();
-}
-%> -->
-
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeLeaf.org">
 <head>
-<title>Student</title>
-
+<title>Admin</title>
 <th:block th:insert="component/common-css :: common-css"></th:block>
 <th:block th:insert="component/common-js :: common-js"></th:block>
 <th:block th:insert="component/change_avatar :: change_avatar"></th:block>
@@ -58,7 +40,7 @@ html, body, h1, h2, h3, h4, h5 {
 			onclick="w3_open();">
 			<i class="fa fa-bars"></i> Menu
 		</button>
-		<span class="w3-bar-item w3-right"> Student </span>
+		<span class="w3-bar-item w3-right"> Admin </span>
 	</div>
 
 	<nav class="w3-sidebar w3-collapse w3-white"
@@ -66,15 +48,15 @@ html, body, h1, h2, h3, h4, h5 {
 		<br>
 		<div class="w3-container w3-row">
 			<div class="w3-col s4">
-				<img th:src="${student.getAvatarPath()}"
+				<img th:src="@{/images/admin_avatar.jpg}"
 					class="w3-circle w3-margin-right" style="width: 46px"
 					onclick="document.getElementById('my_avatar').style.display='block'">
 			</div>
 			<div class="w3-col s8 w3-bar">
-				<span>Welcome</span><br> <a class="w3-bar-item w3-button"><i
-					class="fa fa-envelope"></i></a> <a class="w3-bar-item w3-button"><i
-					class="fa fa-user"></i></a> <a class="w3-bar-item w3-button"><i
-					class="fa fa-cog"></i></a>
+				<span>Welcome, <strong>Admin</strong></span><br> <a
+					class="w3-bar-item w3-button"><i class="fa fa-envelope"></i></a> <a
+					class="w3-bar-item w3-button"><i class="fa fa-user"></i></a> <a
+					class="w3-bar-item w3-button"><i class="fa fa-cog"></i></a>
 			</div>
 		</div>
 		<hr>
@@ -82,20 +64,34 @@ html, body, h1, h2, h3, h4, h5 {
 			<h5>My Dashboard</h5>
 		</div>
 		<div class="w3-bar-block">
-			<a href="student_profile.html"
-				class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black"
+			<a th:href="@{/admin/account/student}"
+				class="w3-bar-item w3-button
+			w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black"
 				onclick="w3_close()" title="close menu"><i
-				class="fa fa-remove fa-fw"></i> Close Menu</a> <a
-				href="student_profile.html" th:href="@{/student/profile}"
-				class="w3-bar-item w3-button w3-padding w3-blue"> <i
-				class="fas fa-user-edit fa-fw"></i> Profile
-			</a> <a href="student_subject.html" th:href="@{/student/subject}"
+				class="fa fa-remove fa-fw"></i> Close Menu</a> 
+				
+			<a onclick="myAccFunc('account')" href="javascript:void(0)" id="myBtn"
+				class="w3-bar-item w3-button w3-padding w3-blue"> 
+				<i class="fas fa-address-book"></i> Account</a>
+			<div id="account" class="w3-bar-block w3-hide w3-padding w3-show">
+				<a th:href="@{/admin/account/student}" class="w3-bar-item w3-button w3-padding"> Student</a> 
+				<a th:href="@{/admin/account/teacher}" class="w3-bar-item w3-button w3-padding"> Teacher</a>
+				<a th:href="@{/admin/account/detail}" class="w3-bar-item w3-button w3-padding w3-blue"><i
+					class="fa fa-caret-right w3-margin-right"></i> Detail</a>
+			</div>
+			
+			<a onclick="myAccFunc('subject')" href="javascript:void(0)" id="myBtn"
 				class="w3-bar-item w3-button w3-padding"> <i
-				class="fas fa-book-reader fa-fw"></i> Subject
-			</a> <a href="student_score.html" th:href="@{/student/score}"
-				class="w3-bar-item w3-button w3-padding"> <i
-				class="fas fa-user-graduate fa-fw"></i> Score
+				class="fas fa-book-open"></i> Subject</a>
+			<div id="subject" class="w3-bar-block w3-hide w3-padding">
+				<a href="" class="w3-bar-item w3-button w3-padding"> Subject List</a> 
+				<a href="" class="w3-bar-item w3-button w3-padding"> Subject Detail</a>
+			</div>
+			
+			<a href="" class="w3-bar-item w3-button w3-padding"> <i
+				class="fas fa-chalkboard-teacher"></i> Student's Subject
 			</a>
+			 
 			<form th:action="@{/logout}" method="POST">
 				<span class="input-group-btn">
 					<button class="btn btn-default w3-button w3-padding w3-bar-item"
@@ -103,8 +99,7 @@ html, body, h1, h2, h3, h4, h5 {
 						<span class="fas fa-sign-out-alt fa-fw"></span> Logout
 					</button>
 				</span>
-			</form>
-			<br> <br>
+			</form><br> <br>
 		</div>
 	</nav>
 
@@ -124,50 +119,47 @@ html, body, h1, h2, h3, h4, h5 {
 		<!-- Header -->
 		<div class="panel-body">
 			<div class="card-body">
-				<form method="post" th:action="@{/student/profile}"
-					th:object=${student}>
+				<form method="POST" th:action="@{/teacher/profile}"
+					th:object="${student}">
 					<div class="row register-form">
 						<div class="col-md-6">
-
 							<div class="form-group">
 								<div class="input-group-prepend">
-									<span class="input-group-text">Full Name</span>
+									<span class="input-group-text">Name</span>
 								</div>
 								<input type="text" class="form-control" th:field="*{stuName}"
-									placeholder="Your Full Name *" name="name" />
+									placeholder="Your First Name *" name="firstname" required />
 							</div>
-
 							<div class="form-group">
 								<div class="input-group-prepend">
-									<span class="input-group-text">Email</span>
+									<span class="input-group-text">Phone Number</span>
 								</div>
-								<input type="email" class="form-control" th:field="*{stuEmail}"
-									placeholder="Your Email *" name="email" />
+								<input type="text" maxlength="10" name="phone"
+									th:field="*{stuPhone}" class="form-control"
+									placeholder="Your Phone *" />
 							</div>
-
 							<div class="form-group">
 								<div class="input-group-prepend">
 									<span class="input-group-text">New Password</span>
 								</div>
 								<div class="input-group">
-									<input type="password" class="form-control" id="newPass"
+									<input type="password" class="form-control" id="pass"
 										placeholder="New Password *" name="newPass" /> <span
 										class="input-group-btn">
 										<button class="btn btn-default form-control" type="button"
-											onclick="showPass('newPass')">
+											onclick="showPass('pass')">
 											<span class="fas fa-eye"></span>
 										</button>
 									</span>
 								</div>
 							</div>
-
 							<div class="form-group">
 								<div class="input-group-prepend">
 									<span class="input-group-text">Confirm Password</span>
 								</div>
 								<div class="input-group">
 									<input type="password" class="form-control" id="confirmPass"
-										placeholder="Confirm Password *" value="" name="confirmPass" /><span
+										placeholder="Confirm Password *" name="confirmPass" /><span
 										class="input-group-btn">
 										<button class="btn btn-default form-control" type="button"
 											onclick="showPass('confirmPass')">
@@ -176,15 +168,6 @@ html, body, h1, h2, h3, h4, h5 {
 									</span>
 								</div>
 							</div>
-
-							<div class="form-group">
-								<div class="input-group-prepend">
-									<span class="input-group-text">Phone Number</span>
-								</div>
-								<input type="number" class="form-control" th:field="*{stuPhone}"
-									placeholder="Your Phone *" name="phone" />
-							</div>
-
 							<div class="form-group">
 								<div class="input-group-prepend">
 									<span class="input-group-text">Address</span>
@@ -192,57 +175,56 @@ html, body, h1, h2, h3, h4, h5 {
 								<input type="text" class="form-control" th:field="*{stuAddress}"
 									placeholder="Your Address " name="address" />
 							</div>
-
+							<div class="form-group">
+								<div class="input-group-prepend">
+									<span class="input-group-text">School</span>
+								</div>
+								<input type="text" maxlength="10" name="school"
+									th:field="*{stuSchool}" class="form-control"
+									placeholder="Your School *" />
+							</div>
 						</div>
-
 						<div class="col-md-6">
-
 							<div class="form-group">
 								<div class="input-group-prepend">
 									<span class="input-group-text">Gender</span>
 								</div>
 								<select class="form-control" name="gender"
 									th:field="*{stuGender}">
-									<option th:value="M" th:text="Male"></option>
-									<option th:value="F" th:text="Female"></option>
+									<option th:value="'M'" th:text="Male"></option>
+									<option th:value="'F'" th:text="Female"></option>
 								</select>
 							</div>
-
 							<div class="form-group">
 								<div class="input-group-prepend">
-									<span class="input-group-text">Birthday</span>
+									<span class="input-group-text">BirthDate</span>
 								</div>
-								<input type="date" class="form-control"
-									th:value="${#dates.format(student.stuBirthdate, 'yyyy-MM-dd')}"
-									placeholder="Your Birthday *" name="birthdate" />
+								<input class="form-control" name="birthdate"
+									th:value="*{#dates.format(stuBirthdate, 'yyyy-MM-dd')}"
+									type="date">
 							</div>
-
 							<div class="form-group">
 								<div class="input-group-prepend">
-									<span class="input-group-text">School</span>
+									<span class="input-group-text">Email</span>
 								</div>
-								<input type="text" class="form-control" th:field=*{stuSchool}
-									placeholder="Your school *" name="school" />
+								<input type="email" class="form-control" th:field="*{stuEmail}"
+									placeholder="Your Email *" name="email" disabled />
 							</div>
-
-
 							<div class="form-group">
 								<div class="input-group-prepend">
-									<span class="input-group-text">Join Date</span>
+									<span class="input-group-text">JoinDate</span>
 								</div>
-								<input type="date" maxlength="10" name="joindate"
-									th:value="${#dates.format(student.stuJoindate, 'yyyy-MM-dd')}"
-									class="form-control" placeholder="Your Join Date *" disabled />
+								<input class="form-control" name="joindate"
+									th:value="*{#dates.format(stuJoindate, 'yyyy-MM-dd')}"
+									type="date" disabled>
 							</div>
-
 							<div class="form-group">
 								<div class="input-group-prepend">
 									<span class="input-group-text">ID</span>
 								</div>
-								<input type="text" class="form-control" th:field="*{stuId}"
-									placeholder="Your First Name *" name="id" disabled />
+								<input type="text" class="form-control" placeholder="Your ID *"
+									th:field="*{stuId}" name="id" disabled />
 							</div>
-
 							<div class="form-group">
 								<div class="input-group-prepend">
 									<span class="input-group-text">User Type</span>
@@ -251,7 +233,9 @@ html, body, h1, h2, h3, h4, h5 {
 							</div>
 						</div>
 					</div>
-					<button class="w3-btn w3-blue">Update</button>
+					<th:block th:if="*{stuId} != 0">  
+						<button class="w3-btn w3-blue">Update</button>
+					</th:block>
 				</form>
 			</div>
 		</div>

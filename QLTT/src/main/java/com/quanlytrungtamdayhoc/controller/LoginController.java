@@ -1,12 +1,13 @@
 package com.quanlytrungtamdayhoc.controller;
 
 import java.security.Principal;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.quanlytrungtamdayhoc.dbo.Account;
 import com.quanlytrungtamdayhoc.dbo.Student;
@@ -18,34 +19,38 @@ import com.quanlytrungtamdayhoc.mapper.TeacherMapper;
 public class LoginController {
 	@Autowired
 	private TeacherMapper teacherMapper;
-
+	
 	@Autowired
 	private StudentMapper studentMapper;
 
 	@GetMapping("/login")
-	public ModelAndView Login() {
+	public String Login(Model model) {
 
-		return new ModelAndView("login");
+		return "Login";
 	}
-
+	
 	@GetMapping("/userInfo")
-	public ModelAndView UserInfo(Principal principal) {
-		ModelAndView view = new ModelAndView();
-
+	public String UserInfo(Model model, Principal principal) {
+		String view = "";
+		
 		Account currentAccount = (Account) ((Authentication) principal).getPrincipal();
-
-		if (currentAccount.getAccRole() == 2) {
-			Teacher teacher = teacherMapper.getTeacher(1);
-			view.setViewName("teacher/teacher_profile");
-			view.addObject("teacher", teacher);
-
-		} else if (currentAccount.getAccRole() == 1) {
-			Student student = studentMapper.getStudentByEmail(currentAccount.getAccUsername());
-			view.setViewName("student/student_profile");
-			view.addObject("student", student);
+		
+		if(currentAccount.getAccRole() == 2) {
+			Teacher teacher = teacherMapper.getTeacher(0, currentAccount.getAccUsername());
+			view = "teacher/TeacherProfile";
+			model.addAttribute("teacher", teacher);
+		}else if(currentAccount.getAccRole() == 1) {
+			Student student = studentMapper.getStudent(0, currentAccount.getAccUsername());
+			view = "student/student_profile";
+			model.addAttribute("student", student);
+		}else {
+			List<Student> studentList = studentMapper.getAllStudent();
+			model.addAttribute("studentList", studentList);
+			view = "admin/AccountStudent";
 		}
-
-		view.addObject("account", currentAccount);
+		
+		model.addAttribute("message", "Successfully logged in");
+		
 		return view;
 	}
 }

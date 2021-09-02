@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.quanlytrungtamdayhoc.mapper.TeacherMapper">
-	<resultMap id="BaseResultMap"
+	<resultMap id="TeacherMapper"
 		type="com.quanlytrungtamdayhoc.dbo.Teacher">
 		<id column="TEA_ID" jdbcType="INTEGER" property="teaId" />
 		<result column="TEA_EMAIL" jdbcType="VARCHAR"
@@ -24,15 +24,60 @@
 		<result column="TEA_SALARYRATE" jdbcType="REAL"
 			property="teaSalaryrate" />
 	</resultMap>
-	<select id="getTeacherByEmail" resultMap="BaseResultMap"
+	<select id="getTeacherByEmail" resultMap="TeacherMapper"
 		resultType="map">
-		SELECT * FROM TEACHERS WHERE TEA_EMAIL=#{tea_email}
+		SELECT * FROM TEACHERS WHERE TEA_EMAIL=#{teaEmail}
 	</select>
 
-	<select id="getTeacher" resultMap="BaseResultMap"
+	<select id="getTeacherById" resultMap="TeacherMapper"
 		parameterType="map">
 		SELECT *
 		FROM TEACHERS
-		WHERE TEA_ID = #{tea_id}
+		WHERE TEA_ID = #{teaId}
 	</select>
+
+	<select id="getTeacher" resultMap="TeacherMapper"
+		parameterType="map">
+		SELECT *
+		FROM TEACHERS
+		WHERE
+		<choose>
+			<when test="teaId != 0">
+				TEA_ID = #{teaId}
+			</when>
+			<when test="teaEmail != null">
+				TEA_EMAIL = #{teaEmail}
+			</when>
+		</choose>
+	</select>
+
+	<select id="getAllTeacher" resultMap="TeacherMapper"
+		parameterType="map">
+		SELECT *
+		FROM TEACHERS
+	</select>
+
+	<update id="updateTeacher" parameterType="map">
+		UPDATE TEACHERS
+		SET TEA_NAME = #{teacher.teaName}
+		<if test="teacher.teaAddress != null">
+			, TEA_ADDRESS = #{teacher.teaAddress}
+		</if>
+		<if test="teacher.teaSchool != null">
+			, TEA_SCHOOL = #{teacher.teaSchool}
+		</if>
+		<if test="teacher.teaPhone != null">
+			, TEA_PHONE = #{teacher.teaPhone}
+		</if>
+		<if test="teacher.teaGender != null">
+			, TEA_GENDER = #{teacher.teaGender}
+		</if>
+		<if test="teacher.teaAvatar != null">
+			, TEA_AVATAR = #{teacher.teaAvatar}
+		</if>
+		<if test="birthdate != null">
+			, TEA_BIRTHDATE = #{birthdate}
+		</if>
+		WHERE TEA_EMAIL = #{email}
+	</update>
 </mapper>

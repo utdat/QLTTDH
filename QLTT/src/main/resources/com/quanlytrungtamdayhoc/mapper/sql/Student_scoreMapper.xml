@@ -29,6 +29,20 @@
 			<result column="SUB_ROOM" property="subRoom" />
 			<result column="SUB_TUITION" property="subTuition" />
 
+			<association property="teacher"
+				javaType="com.quanlytrungtamdayhoc.dbo.Teacher">
+				<id property="teaId" column="TEA_ID" />
+				<result property="teaEmail" column="TEA_EMAIL" />
+				<result property="teaName" column="TEA_NAME" />
+				<result property="teaPhone" column="TEA_PHONE" />
+				<result property="teaAddress" column="TEA_ADDRESS" />
+				<result property="teaGender" column="TEA_GENDER" />
+				<result property="teaBirthdate" column="TEA_BIRTHDATE" />
+				<result property="teaHiredate" column="TEA_HIREDATE" />
+				<result property="teaSchool" column="TEA_SCHOOL" />
+				<result property="teaAvatar" column="TEA_AVATAR" />
+				<result property="teaSalaryrate" column="TEA_SALARYRATE" />
+			</association>
 		</association>
 
 	</resultMap>
@@ -40,13 +54,17 @@
 		JOIN STUDENTS ST ON
 		(SC.STU_ID = ST.STU_ID)
 		JOIN SUBJECTS SU ON (SC.SUB_ID = SU.SUB_ID)
-		WHERE SC.STU_ID = #{stu_id}
+		WHERE SC.STU_ID = #{stuId}
 	</select>
 
 	<insert id="insertSubjectScore" parameterType="map">
 		INSERT INTO
 		STUDENT_SCORES (STU_ID,SUB_ID,SCORE)
 		values (
-		#{stuId},#{sub_id},#{score})
+		#{stuId},#{subId},#{score})
 	</insert>
+
+	<delete id="deleteStudentSubjectById" parameterType="map">
+		DELETE from STUDENT_SCORES WHERE SUB_ID = #{subId};
+	</delete>
 </mapper>

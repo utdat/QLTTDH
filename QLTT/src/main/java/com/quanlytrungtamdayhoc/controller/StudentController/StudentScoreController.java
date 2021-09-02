@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.quanlytrungtamdayhoc.dbo.Account;
 import com.quanlytrungtamdayhoc.dbo.Student;
@@ -34,10 +35,22 @@ public class StudentScoreController {
 
 		Student s = studentmapper.getStudentByEmail(email);
 		int stuId = s.getStuId();
-
+		
 		List<StudentScore> list = studentScoreMapper.getListStudentScore(stuId);
+		System.out.println(list.size());
+		
 		model.addAttribute("listStudentScore", list);
+		
 
+		return "student/student_score";
+	}
+
+	@GetMapping("/score/delete")
+	public String deleteStudentSubject(Model model, @RequestParam(name = "subId") int subId) {
+
+		if (studentScoreMapper.deleteStudentSubjectById(subId) > 0) {
+			return "redirect:/student/score";
+		}
 		return "student/student_score";
 	}
 }

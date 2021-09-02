@@ -101,9 +101,16 @@ if (request.getAttribute("mess") != null && request.getAttribute("mess") != "") 
 			</a> <a href="student_score.html" th:href="@{score}"
 				class="w3-bar-item w3-button w3-padding  w3-blue"> <i
 				class="fas fa-user-graduate fa-fw"></i> Score
-			</a> <a href="" class="w3-bar-item w3-button w3-padding"> <i
-				class="fas fa-sign-out-alt fa-fw"></i> Logout
-			</a><br> <br>
+			</a>
+			<form th:action="@{/logout}" method="POST">
+				<span class="input-group-btn">
+					<button class="btn btn-default w3-button w3-padding w3-bar-item"
+						type="submit">
+						<span class="fas fa-sign-out-alt fa-fw"></span> Logout
+					</button>
+				</span>
+			</form>
+			<br> <br>
 		</div>
 	</nav>
 
@@ -156,7 +163,8 @@ if (request.getAttribute("mess") != null && request.getAttribute("mess") != "") 
 							<td class="w3-center" th:text="${stu.subject.subRoom}"></td>
 							<td class="w3-center" th:text="${stu.subject.subTuition}"></td>
 							<td class="w3-center" th:text="${stu.score}"></td>
-							<td class="w3-center"><a><i
+							<td class="w3-center"><a
+								th:href="@{/student/score/delete(subId=${stu.subject.subId})}"><i
 									class="fas fa-minus-square"></i></a></td>
 						</tr>
 					</th:block>

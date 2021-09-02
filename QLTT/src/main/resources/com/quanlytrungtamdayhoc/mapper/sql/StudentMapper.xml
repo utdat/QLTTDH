@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.quanlytrungtamdayhoc.mapper.StudentMapper">
-	<resultMap id="BaseResultMap"
+	<resultMap id="StudentMapper"
 		type="com.quanlytrungtamdayhoc.dbo.Student">
 		<id column="STU_ID" jdbcType="INTEGER" property="stuId" />
 		<result column="STU_EMAIL" jdbcType="VARCHAR"
@@ -24,13 +24,34 @@
 	</resultMap>
 
 	<select id="getStudentById" parameterType="map"
-		resultMap="BaseResultMap">
-		SELECT * FROM STUDENTS WHERE STU_ID = #{student_id}
+		resultMap="StudentMapper">
+		SELECT * FROM STUDENTS WHERE STU_ID = #{studentId}
 	</select>
 
 	<select id="getStudentByEmail" parameterType="map"
-		resultMap="BaseResultMap">
-		SELECT * FROM STUDENTS WHERE STU_EMAIL = #{student_email}
+		resultMap="StudentMapper">
+		SELECT * FROM STUDENTS WHERE STU_EMAIL = #{studentEmail}
+	</select>
+
+	<select id="getAllStudent" resultMap="StudentMapper"
+		parameterType="map">
+		SELECT *
+		FROM STUDENTS
+	</select>
+
+	<select id="getStudent" resultMap="StudentMapper"
+		parameterType="map">
+		SELECT *
+		FROM STUDENTS
+		WHERE
+		<choose>
+			<when test="stuId != 0">
+				STU_ID = #{stuId}
+			</when>
+			<when test="stuEmail != null">
+				STU_EMAIL = #{stuEmail}
+			</when>
+		</choose>
 	</select>
 
 	<update id="updateStudent" parameterType="map">

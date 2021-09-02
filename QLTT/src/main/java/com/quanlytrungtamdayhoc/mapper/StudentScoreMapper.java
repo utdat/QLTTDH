@@ -12,9 +12,12 @@ public interface StudentScoreMapper {
 
 //	List<Student_Score> getTeacherMark(@Param("teaId") int teaId, @Param("subId") int subId);
 
-	List<StudentScore> getListStudentScore(@Param("stu_id") int id);
+
+	List<StudentScore> getListStudentScore(@Param("stuId") int stuId);
 
 	int updateScore(@Param("subId") int subId, @Param("stuId") int stuId, @Param("score") float score);
 
 	int insertSubjectScore(@Param("stuId") int stuId, @Param("subId") int subId, @Param("score") float score);
+
+	int deleteStudentSubjectById(@Param("subId") int subId);
 }

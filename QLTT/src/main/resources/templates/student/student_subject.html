@@ -88,9 +88,16 @@ if (request.getAttribute("mess") != null && request.getAttribute("mess") != "") 
 			</a> <a href="student_score.html" th:href="@{/student/score}"
 				class="w3-bar-item w3-button w3-padding"> <i
 				class="fas fa-user-graduate fa-fw"></i> Score
-			</a> <a href="" class="w3-bar-item w3-button w3-padding"> <i
-				class="fas fa-sign-out-alt fa-fw"></i> Logout
-			</a><br> <br>
+			</a>
+			<form th:action="@{/logout}" method="POST">
+				<span class="input-group-btn">
+					<button class="btn btn-default w3-button w3-padding w3-bar-item"
+						type="submit">
+						<span class="fas fa-sign-out-alt fa-fw"></span> Logout
+					</button>
+				</span>
+			</form>
+			<br> <br>
 		</div>
 	</nav>
 
@@ -120,7 +127,7 @@ if (request.getAttribute("mess") != null && request.getAttribute("mess") != "") 
 			</div>
 			<br>
 			<th:block th:if="${#lists.isEmpty(subjects.getPageList)}">
-				<h3>No employee</h3>
+				<h3>No subject</h3>
 			</th:block>
 			<th:block th:unless="${#lists.isEmpty(employees == null)}">
 				<table id="table" class="w3-table-all w3-hoverable">
@@ -149,9 +156,14 @@ if (request.getAttribute("mess") != null && request.getAttribute("mess") != "") 
 									onclick="document.getElementById('id01').style.display='block'"><a
 									th:href="@{/student/subject/showTeacher/{id}(id=${sub.teacher.teaId})}"><i
 										class="fas fa-address-card"></i></a></td>
-								<td class="w3-center"><a
-									th:href="@{/student/subject/insert(subId=${sub.subId}, teaId=${sub.teacher.teaId})}"><i
-										class="fas fa-paper-plane"></i></a></td>
+
+								<td class="w3-center"><th:block
+										th:if="${#dates.format(sub.subStartdate,'yyyy-MM-dd')} > ${#calendars.format(#calendars.createNow(),'yyyy-MM-dd')}">
+										<a th:href="@{/student/subject/insert(subId=${sub.subId})}"><i
+											class="fas fa-paper-plane"></i></a>
+									</th:block></td>
+
+
 							</tr>
 						</th:block>
 				</table>

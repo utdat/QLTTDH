@@ -48,7 +48,7 @@ public class StudentSubjectController {
 
 		int pagesize = 2;
 
-		Teacher teacher = teacherMapper.getTeacher(id);
+		Teacher teacher = teacherMapper.getTeacherById(id);
 		model.addAttribute("teachers", teacher);
 
 		Account currentAccount = (Account) ((Authentication) principal).getPrincipal();
@@ -98,8 +98,9 @@ public class StudentSubjectController {
 
 		Account currentAccount = (Account) ((Authentication) principal).getPrincipal();
 		Student student = studentMapper.getStudentByEmail(currentAccount.getAccUsername());
+		int stuId = student.getStuId();
 
-		List<Subject> list = subjectMapper.listSubject(student.getStuId());
+		List<Subject> list = subjectMapper.listSubject(stuId);
 
 		if (pages == null) {
 			pages = new PagedListHolder<>(list);
@@ -122,12 +123,13 @@ public class StudentSubjectController {
 		model.addAttribute("totalPageCount", totalPageCount);
 		model.addAttribute("baseUrl", baseUrl);
 		model.addAttribute("subjects", pages);
-		return "/student/student_subject";
+		return "student/student_subject";
 	}
 
 	@GetMapping("/subject/insert")
 	public String insertSubject(RedirectAttributes redirect, HttpServletRequest request, Model model,
-			@RequestParam(name = "subId") int subId, @RequestParam(name = "teaId") int teaId, Principal principal) {
+			@RequestParam(name = "subId") int subId, Principal principal) {
+
 		Account currentAccount = (Account) ((Authentication) principal).getPrincipal();
 		Student student = studentMapper.getStudentByEmail(currentAccount.getAccUsername());
 		int stuId = student.getStuId();
@@ -135,10 +137,10 @@ public class StudentSubjectController {
 		// mã giả
 		PagedListHolder<?> pages = (PagedListHolder<?>) request.getSession().getAttribute("subjectlist");
 		int pagesize = 2;
-		Teacher teacher = teacherMapper.getTeacher(0);
+		Teacher teacher = teacherMapper.getTeacherById(stuId);
 		model.addAttribute("teachers", teacher);
 
-		List<Subject> list = subjectMapper.listSubject(stuId);
+		List<Subject> list = subjectMapper.listSubject(0);
 		if (pages == null) {
 			pages = new PagedListHolder<>(list);
 			pages.setPageSize(pagesize);
@@ -164,12 +166,12 @@ public class StudentSubjectController {
 
 		// insert
 		if (studentScoreMapper.insertSubjectScore(stuId, subId, 0) > 0) {
-			redirect.addFlashAttribute("success", "Cập nhật thành công");
-		} else {
-			redirect.addFlashAttribute("error", "Cập nhật thất bại");
-		}
+			return "redirect:/student/subject";
 
-		return "/student/student_subject";
+		} else {
+			System.out.println("error");
+		}
+		return "student/student_subject";
 	}
 
 }

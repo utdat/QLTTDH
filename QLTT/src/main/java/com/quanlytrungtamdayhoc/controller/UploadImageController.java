@@ -19,7 +19,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.quanlytrungtamdayhoc.dbo.Account;
 import com.quanlytrungtamdayhoc.dbo.Student;
-import com.quanlytrungtamdayhoc.dbo.Teacher;
 import com.quanlytrungtamdayhoc.mapper.StudentMapper;
 import com.quanlytrungtamdayhoc.mapper.TeacherMapper;
 

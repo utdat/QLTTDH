@@ -45,22 +45,24 @@ public class StudentProfileController {
 	@PostMapping("/profile")
 	public String editProfile(Model model, Principal principal, @ModelAttribute(value = "student") Student student,
 			@RequestParam(name = "confirmPass") String confirmPass, @RequestParam(name = "newPass") String newPass,
-			@RequestParam(name = "birthdate") String birthdate, RedirectAttributes redirectAttributes) {
+			@RequestParam(name = "birthdate") String birthdate) {
 
 		Account currentAccount = (Account) ((Authentication) principal).getPrincipal();
+		String message = null;
 
 		if (studentMapper.updateStudent(student, currentAccount.getAccUsername(), birthdate) > 0) {
+			message = "Update information Successfully";
 			if (!newPass.equals("")) {
 				if (newPass.equals(confirmPass) && accountMapper.updatePassword(currentAccount.getAccUsername(),
 						passwordEncoder.encode(newPass)) > 0) {
-					redirectAttributes.addFlashAttribute("success", "Cập nhật thành công");
+					message = "Update password Successfully ";
 				} else {
-					redirectAttributes.addFlashAttribute("error", "Cập nhật thất bại");
+					message = "Update password Failed";
 				}
 			}
-			redirectAttributes.addFlashAttribute("success", "Cập nhật thành công");
+			
 		} else {
-			redirectAttributes.addFlashAttribute("error", "Cập nhật thất bại");
+			message = "Update information Failed";
 		}
 
 		student = studentMapper.getStudentByEmail(currentAccount.getAccUsername());

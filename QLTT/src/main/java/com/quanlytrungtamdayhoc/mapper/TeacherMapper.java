@@ -1,5 +1,7 @@
 package com.quanlytrungtamdayhoc.mapper;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -7,8 +9,16 @@ import com.quanlytrungtamdayhoc.dbo.Teacher;
 
 @Mapper
 public interface TeacherMapper {
- 
-	Teacher getTeacherByEmail(@Param("tea_email") String email);
+
+	Teacher getTeacher(@Param("teaId") int teaId, @Param("teaEmail") String teaEmail);
+
+	Teacher getTeacherByEmail(@Param("teaEmail") String email);
+
+	Teacher getTeacherById(@Param("teaId") int id);
+
+	List<Teacher> getAllTeacher();
 	
-	Teacher getTeacher(@Param("tea_id") int id);
+	int updateTeacher(@Param("teacher") Teacher teacher, 
+			  @Param("email") String email,
+			  @Param("birthdate") String birthdate);
 }

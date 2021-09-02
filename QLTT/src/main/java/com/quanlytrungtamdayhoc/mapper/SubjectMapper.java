@@ -12,6 +12,7 @@ public interface SubjectMapper {
   
 //	List<Subject> listSubjectById(@Param("tea_id") int id);
 	
-	List<Subject> listSubject(@Param("sub_id") int id);
+	List<Subject> listSubject(@Param("stuId") int id);
+	
 	
 }
