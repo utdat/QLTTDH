@@ -10,20 +10,12 @@
 	</resultMap>
 	
 	<select id="getAllAccount" resultMap="AccountMapper">
-		SELECT
-			ACC_USERNAME,
-			ACC_PASSWORD,
-			ACC_ISACTIVE,
-			ACC_ROLE
+		SELECT *
 		FROM ACCOUNTS
 	</select>
 	
 	<select id="getAccountByRole" resultMap="AccountMapper">
-		SELECT
-			ACC_USERNAME,
-			ACC_PASSWORD,
-			ACC_ISACTIVE,
-			ACC_ROLE
+		SELECT *
 		FROM ACCOUNTS
 		<choose>
 			<when test="role == 1">
@@ -38,11 +30,7 @@
 	</select>
 	
 	<select id="getAccount" resultMap="AccountMapper" parameterType="map">
-		SELECT
-			ACC_USERNAME,
-			ACC_PASSWORD,
-			ACC_ISACTIVE,
-			ACC_ROLE
+		SELECT *
 		FROM ACCOUNTS
 		WHERE ACC_USERNAME = #{username}
 	</select>

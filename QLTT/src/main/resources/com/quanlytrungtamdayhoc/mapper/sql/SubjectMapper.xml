@@ -26,9 +26,18 @@
 	</resultMap>
 	
 	<select id="getTeacherSubject" resultMap="SubjectMapper" parameterType="map">
-		SELECT SUB_ID, SUB_NAME, SUB_STARTDATE, SUB_SCHEDULE, SUB_ROOM, SUB_TUITION
+		SELECT *
 		FROM SUBJECTS
 		WHERE SUBJECTS.TEA_ID = #{teaId}
+	</select>
+	
+	<select id="listStudentSubject" resultMap="SubjectMapper" parameterType="map">
+		SELECT *
+		FROM SUBJECTS 
+        JOIN TEACHERS ON SUBJECTS.TEA_ID = TEACHERS.TEA_ID
+ 		WHERE SUB_ID NOT IN (SELECT SUB_ID FROM STUDENT_SCORES WHERE
+							 STUDENT_SCORES.STU_ID = #{stuId}) 
+		ORDER BY SUB_STARTDATE
 	</select>
 	
 </mapper>

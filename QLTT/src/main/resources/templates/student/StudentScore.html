@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeLeaf.org">
 <head>
-<title>Teacher</title>
+<title>Student</title>
+
 <th:block th:insert="component/common-css :: common-css"></th:block>
 <th:block th:insert="component/common-js :: common-js"></th:block>
 <th:block th:insert="component/change_avatar :: change_avatar"></th:block>
+
 
 <link rel="stylesheet" th:href="@{https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css}">
 </head>
@@ -23,18 +25,18 @@ html, body, h1, h2, h3, h4, h5 {
 			var mess = document.getElementById("mess");
 			if (mess.value !== "") {
 				alert(mess.value);
-				console.log("+" + mess.value + "+");
 			}
 		</script>
 	</th:block>
 
+	<!-- Top container -->
 	<div class="w3-bar w3-top w3-black w3-large" style="z-index: 4">
 		<button
 			class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey"
-			onclick="w3_open()">
+			onclick="w3_open();">
 			<i class="fa fa-bars"></i> Menu
 		</button>
-		<span class="w3-bar-item w3-right"> Teacher </span>
+		<span class="w3-bar-item w3-right"> Student </span>
 	</div>
 
 	<!-- Sidebar/menu -->
@@ -43,15 +45,15 @@ html, body, h1, h2, h3, h4, h5 {
 		<br>
 		<div class="w3-container w3-row">
 			<div class="w3-col s4">
-				<img th:src="@{${teacher.getAvatarPath()}}"
-					class="w3-circle w3-margin-right" style="width: 46px"
+				<img th:src="${student.getAvatarPath()}" class="w3-circle w3-margin-right"
+					style="width: 46px"
 					onclick="document.getElementById('my_avatar').style.display='block'">
 			</div>
 			<div class="w3-col s8 w3-bar">
-				<span>Welcome, <strong th:text="${teacher.teaName}"></strong></span><br>
-				<a class="w3-bar-item w3-button"><i class="fa fa-envelope"></i></a>
-				<a class="w3-bar-item w3-button"><i class="fa fa-user"></i></a> <a
-					class="w3-bar-item w3-button"><i class="fa fa-cog"></i></a>
+				<span>Welcome</span><br> <a class="w3-bar-item w3-button"><i
+					class="fa fa-envelope"></i></a> <a class="w3-bar-item w3-button"><i
+					class="fa fa-user"></i></a> <a class="w3-bar-item w3-button"><i
+					class="fa fa-cog"></i></a>
 			</div>
 		</div>
 		<hr>
@@ -59,26 +61,20 @@ html, body, h1, h2, h3, h4, h5 {
 			<h5>My Dashboard</h5>
 		</div>
 		<div class="w3-bar-block">
-			<a th:href="@{/teacher/mark}"
+			<a th:href="@{/student/score}"
 				class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black"
 				onclick="w3_close()" title="close menu"><i
 				class="fa fa-remove fa-fw"></i> Close Menu</a> <a
-				th:href="@{/teacher/profile}"
+				th:href="@{/student/profile}"
 				class="w3-bar-item w3-button w3-padding"> <i
 				class="fas fa-user-edit fa-fw"></i> Profile
-			</a> <a onclick="myAccFunc('subject')" href="javascript:void(0)" id="myBtn"
-				class="w3-bar-item w3-button w3-padding w3-blue"> <i
-				class="fas fa-book-open"></i> Subject
+			</a> <a th:href="@{/student/subject}"
+				class="w3-bar-item w3-button w3-padding"> <i
+				class="fas fa-book-reader fa-fw"></i> Subject
+			</a> <a th:href="@{/student/score}"
+				class="w3-bar-item w3-button w3-padding  w3-blue"> <i
+				class="fas fa-user-graduate fa-fw"></i> Score
 			</a>
-			<div id="subject" class="w3-bar-block w3-hide w3-padding w3-show">
-				<a th:href="@{/teacher/schedule}"
-					class="w3-bar-item
-				w3-button w3-padding"> Schedule</a> <a
-					th:href="@{/teacher/mark}"
-					class="w3-bar-item w3-button
-				w3-padding w3-blue"><i
-					class="fa fa-caret-right w3-margin-right"></i> Mark</a>
-			</div>
 			<form th:action="@{/logout}" method="POST">
 				<span class="input-group-btn">
 					<button class="btn btn-default w3-button w3-padding w3-bar-item"
@@ -102,7 +98,7 @@ html, body, h1, h2, h3, h4, h5 {
 		<!-- Header -->
 		<header class="w3-container" style="padding-top: 22px">
 			<h2>
-				<b><i class="fas fa-user-graduate fa-fw"></i> My Student Score</b>
+				<b><i class="fas fa-user-graduate fa-fw"></i> My Study Results</b>
 			</h2>
 		</header>
 		<div class="panel-body">
@@ -116,34 +112,33 @@ html, body, h1, h2, h3, h4, h5 {
 				</span>
 			</div>
 			<br>
-			<table id="table" class="w3-table-all w3-hoverable" cellpadding="0"
-				width="100%">
+			<table id="table" class="w3-table-all w3-hoverable">
 				<thead>
 					<tr class="w3-blue">
-						<th class="w3-center">Subject ID</th>
-						<th>Subject Name</th>
-						<th class="w3-center">Student ID</th>
-						<th>Student Name</th>
-						<th class="w3-center">Final Score</th>
-						<th class="w3-center">Update</th>
+						<th class="w3-center">Sub ID</th>
+						<th>Sub Name</th>
+						<th class="w3-center">Sub Startdate</th>
+						<th class="w3-center">Sub Schedule</th>
+						<th class="w3-center">Sub Room</th>
+						<th class="w3-center">Sub Tuition</th>
+						<th class="w3-center">Score</th>
+						<th class="w3-center">Delete</th>
 					</tr>
 
-					<th:block th:each="stuScore : ${studentScore}">
+
+					<th:block th:each="stu : ${listStudentScore}">
 						<tr>
-							<td th:text="${stuScore.subject.subId}" class="w3-center"></td>
-							<td th:text="${stuScore.subject.subName}"></td>
-							<td th:text="${stuScore.student.stuId}" class="w3-center"></td>
-							<td th:text="${stuScore.student.stuName}"></td>
-							<td class="w3-center"><input size="5" min="0" max="10"
-								step="0.1" class="w3-center" type="number" name="score"
-								th:id="${stuScore.subject.subId + '_' + stuScore.student.stuId + '_i'}"
-								th:value="*{stuScore.score}" /></td>
+							<td class="w3-center" th:text="${stu.subject.subId}"></td>
+							<td th:text="${stu.subject.subName}"></td>
+							<td class="w3-center"
+								th:text="${#dates.format(stu.subject.subStartdate,'dd-MM-yyyy')}"></td>
+							<td class="w3-center" th:text="${stu.subject.subSchedule}"></td>
+							<td class="w3-center" th:text="${stu.subject.subRoom}"></td>
+							<td class="w3-center" th:text="${stu.subject.subTuition}"></td>
+							<td class="w3-center" th:text="${stu.score}"></td>
 							<td class="w3-center"><a
-								th:onclick="|update_score(${stuScore.subject.subId},${stuScore.student.stuId})|"
-								th:href="@{/teacher/mark/update(subId=${stuScore.subject.subId}, stuId=${stuScore.student.stuId})}"
-								th:id="${stuScore.subject.subId + '_' + stuScore.student.stuId + '_a'}">
-									<i class="fas fa-paper-plane"></i>
-							</a></td>
+								th:href="@{/student/score/delete(subId=${stu.subject.subId})}"><i
+									class="fas fa-minus-square"></i></a></td>
 						</tr>
 					</th:block>
 			</table>
@@ -178,8 +173,7 @@ html, body, h1, h2, h3, h4, h5 {
 		<footer class="w3-container w3-padding-16 w3-light-grey">
 			<h4>FOOTER</h4>
 			<p>
-				Powered by <a
-					th:href="@{https://www.w3schools.com/w3css/default.asp}"
+				Powered by <a th:href="@{https://www.w3schools.com/w3css/default.asp}"
 					target="_blank">w3.css</a>
 			</p>
 		</footer>

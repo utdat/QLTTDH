@@ -62,4 +62,5 @@
 		INSERT INTO STUDENTS (STU_NAME, STU_PHONE, STU_SCHOOL, STU_EMAIL, STU_JOINDATE)
 		VALUES (#{stuName}, #{stuPhone}, #{stuSchool}, #{stuEmail}, CURDATE());
 	</insert>
+	
 </mapper>

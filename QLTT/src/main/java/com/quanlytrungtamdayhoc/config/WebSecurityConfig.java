@@ -38,7 +38,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 		.defaultSuccessUrl("/userInfo")
 		.failureUrl("/login?success=false")
 		.loginProcessingUrl("/spring_security_check").and()
-		.logout().logoutSuccessUrl("/login");
+		.logout().logoutSuccessUrl("/login").and()
+		.exceptionHandling().accessDeniedPage("/access-denied");
 	}
 	
 	@Override

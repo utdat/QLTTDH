@@ -22,7 +22,7 @@ public class AccountService implements UserDetailsService{
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		Account account = accountMapper.getAccount(username);
 		
-		if(account == null) {
+		if(account == null || account.getAccIsactive().equals("F")) {
 			 throw new UsernameNotFoundException("Not found");
 		}
 		else {

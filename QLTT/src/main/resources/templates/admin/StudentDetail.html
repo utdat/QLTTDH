@@ -4,10 +4,8 @@
 <title>Admin</title>
 <th:block th:insert="component/common-css :: common-css"></th:block>
 <th:block th:insert="component/common-js :: common-js"></th:block>
-<th:block th:insert="component/change_avatar :: change_avatar"></th:block>
 
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" th:href="@{https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css}">
 </head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -49,8 +47,7 @@ html, body, h1, h2, h3, h4, h5 {
 		<div class="w3-container w3-row">
 			<div class="w3-col s4">
 				<img th:src="@{/images/admin_avatar.jpg}"
-					class="w3-circle w3-margin-right" style="width: 46px"
-					onclick="document.getElementById('my_avatar').style.display='block'">
+					class="w3-circle w3-margin-right" style="width: 46px">
 			</div>
 			<div class="w3-col s8 w3-bar">
 				<span>Welcome, <strong>Admin</strong></span><br> <a
@@ -264,7 +261,7 @@ html, body, h1, h2, h3, h4, h5 {
 		<footer class="w3-container w3-padding-16 w3-light-grey">
 			<h4>FOOTER</h4>
 			<p>
-				Powered by <a href="https://www.w3schools.com/w3css/default.asp"
+				Powered by <a th:href="@{https://www.w3schools.com/w3css/default.asp}"
 					target="_blank">w3.css</a>
 			</p>
 		</footer>

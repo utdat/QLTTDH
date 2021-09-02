@@ -10,6 +10,22 @@
 
 
 <script type="text/javascript">
+	function get_info(id) {
+		var name, phone, school, email;
+		
+		document.getElementById('info').style.display = 'block';
+		
+		name = document.getElementById(id + '_name').value;
+		phone = document.getElementById(id + '_phone').value;
+		school = document.getElementById(id + '_school').value;
+		email = document.getElementById(id + '_email').value;
+		
+		document.getElementById('name').value = name;
+		document.getElementById('phone').value = phone;
+		document.getElementById('school').value = school;
+		document.getElementById('email').value = email;
+	}
+
 	function update_score(sub_id, stu_id) {
 		var score, link;
 

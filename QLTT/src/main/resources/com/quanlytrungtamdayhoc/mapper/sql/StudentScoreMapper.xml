@@ -42,7 +42,7 @@
 	</resultMap>
 	
 	<select id="getTeacherMark" resultMap="StudentScoreMapper" parameterType="map">
-		SELECT STUDENT_SCORES.SUB_ID, SUB_NAME, STUDENT_SCORES.STU_ID, STU_NAME, SCORE
+		SELECT *
 		FROM STUDENT_SCORES
 		INNER JOIN STUDENTS ON STUDENTS.STU_ID = STUDENT_SCORES.STU_ID
 		INNER JOIN SUBJECTS ON SUBJECTS.SUB_ID = STUDENT_SCORES.SUB_ID
@@ -53,9 +53,26 @@
 		ORDER BY SUBJECTS.SUB_ID DESC
 	</select>
 	
+	<select id="getStudentScore" resultMap="StudentScoreMapper" parameterType="map">
+		SELECT *
+		FROM STUDENT_SCORES SC
+		JOIN STUDENTS ST ON SC.STU_ID = ST.STU_ID
+		JOIN SUBJECTS SU ON SC.SUB_ID = SU.SUB_ID
+		WHERE SC.STU_ID = #{stuId}
+	</select>
+	
 	<update id="updateScore" parameterType="map">
 		UPDATE STUDENT_SCORES
 		SET SCORE = #{score}
 		WHERE SUB_ID = #{subId} AND STU_ID = #{stuId}
 	</update>
+	
+	<insert id="insertSubjectScore" parameterType="map">
+		INSERT INTO STUDENT_SCORES (STU_ID, SUB_ID)
+		VALUES (#{stuId}, #{subId})
+	</insert>
+	
+	<delete id="deleteStudentSubject" parameterType="map">
+		DELETE FROM STUDENT_SCORES WHERE SUB_ID = #{subId} AND STU_ID = #{stuId};
+	</delete>
 </mapper>

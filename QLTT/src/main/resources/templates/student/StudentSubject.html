@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeLeaf.org">
+<head>
+<title>Student</title>
+<th:block th:insert="component/common-css :: common-css"></th:block>
+<th:block th:insert="component/common-js :: common-js"></th:block>
+<th:block th:insert="component/change_avatar :: change_avatar"></th:block>
+
+<link rel="stylesheet" th:href="@{https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css}">
+</head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+html, body, h1, h2, h3, h4, h5 {
+	font-family: "Raleway", sans-serif
+}
+</style>
+<body class="w3-light-grey">
+	
+	<th:block th:if="message != null">
+		<input type="hidden" th:value="${message}" id="mess" />
+		<script>
+			var mess = document.getElementById("mess");
+			if (mess.value !== "") {
+				alert(mess.value);
+			}
+		</script>
+	</th:block>
+	
+	<!-- Top container -->
+	<div class="w3-bar w3-top w3-black w3-large" style="z-index: 4">
+		<button
+			class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey"
+			onclick="w3_open();">
+			<i class="fa fa-bars"></i> Menu
+		</button>
+		<span class="w3-bar-item w3-right"> Student </span>
+	</div>
+
+	<!-- Sidebar/menu -->
+	<nav class="w3-sidebar w3-collapse w3-white "
+		style="z-index: 3; width: 300px;" id="mySidebar">
+		<br>
+		<div class="w3-container w3-row">
+			<div class="w3-col s4">
+				<img th:src="${student.getAvatarPath()}" class="w3-circle w3-margin-right"
+					style="width: 46px"
+					onclick="document.getElementById('my_avatar').style.display='block'">
+			</div>
+			<div class="w3-col s8 w3-bar">
+				<span>Welcome</span><br> <a class="w3-bar-item w3-button"><i
+					class="fa fa-envelope"></i></a> <a class="w3-bar-item w3-button"><i
+					class="fa fa-user"></i></a> <a class="w3-bar-item w3-button"><i
+					class="fa fa-cog"></i></a>
+			</div>
+		</div>
+		<hr>
+		<div class="w3-container">
+			<h5>My Dashboard</h5>
+		</div>
+		<div class="w3-bar-block">
+			<a th:href="@{/student/subject}"
+				class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black"
+				onclick="w3_close()" title="close menu"><i
+				class="fa fa-remove fa-fw"></i> Close Menu</a> <a
+				th:href="@{/student/profile}"
+				class="w3-bar-item w3-button w3-padding "> <i
+				class="fas fa-user-edit fa-fw"></i> Profile
+			</a> <a th:href="@{/student/subject}"
+				class="w3-bar-item w3-button w3-padding w3-blue"> <i
+				class="fas fa-book-reader fa-fw"></i> Subject
+			</a> <a th:href="@{/student/score}"
+				class="w3-bar-item w3-button w3-padding"> <i
+				class="fas fa-user-graduate fa-fw"></i> Score
+			</a>
+			<form th:action="@{/logout}" method="POST">
+				<span class="input-group-btn">
+					<button class="btn btn-default w3-button w3-padding w3-bar-item"
+						type="submit">
+						<span class="fas fa-sign-out-alt fa-fw"></span> Logout
+					</button>
+				</span>
+			</form>
+			<br> <br>
+		</div>
+	</nav>
+
+
+	<!-- Overlay effect when opening sidebar on small screens -->
+	<div class="w3-overlay w3-hide-large w3-animate-opacity"
+		onclick="w3_close()" style="cursor: pointer" title="close side menu"
+		id="myOverlay"></div>
+
+	<!-- !PAGE CONTENT! -->
+	<div class="w3-main" style="margin-left: 300px; margin-top: 43px;">
+		<!-- Header -->
+		<header class="w3-container" style="padding-top: 22px">
+			<h2>
+				<b><i class="fas fa-book-reader fa-fw"></i> Subject Registration</b>
+			</h2>
+		</header>
+		<div class="panel-body">
+			<div class="input-group">
+				<input class="form-control" type="text"
+					placeholder="Search for subject names..." id="myInput"
+					onkeyup="myFunction()"> <span class="input-group-btn">
+					<button class="btn btn-default" type="button">
+						<span class="glyphicon glyphicon-search"></span>
+					</button>
+				</span>
+			</div>
+			<br>
+			<th:block th:if="${#lists.isEmpty(subjects.getPageList)}">
+				<h3>No subject</h3>
+			</th:block>
+			<th:block th:unless="${#lists.isEmpty(employees == null)}">
+				<table id="table" class="w3-table-all w3-hoverable">
+					<thead>
+						<tr class="w3-blue">
+							<th class="w3-center">Sub ID</th>
+							<th>Sub Name</th>
+							<th>Sub StartDate</th>
+							<th>Sub Schedule</th>
+							<th class="w3-center">Sub Room</th>
+							<th class="w3-center">Sub Tuition</th>
+							<th class="w3-center">Teacher Name</th>
+							<th class="w3-center">Teacher Info</th>
+							<th class="w3-center">Register</th>
+						</tr>
+						<th:block th:each="sub : ${subjects.getPageList}">
+							<tr>
+								<td th:text="${sub.subId}" class="w3-center"></td>
+								<td th:text="${sub.subName}"></td>
+								<td th:text="${#dates.format(sub.subStartdate,'dd-MM-yyyy')}"></td>
+								<td th:text="${sub.subSchedule}"></td>
+								<td class="w3-center" th:text="${sub.subRoom}"></td>
+								<td class="w3-center" th:text="${sub.subTuition}"></td>
+								<td class="w3-center" th:text="${sub.teacher.teaName}"></td>
+								<td class="w3-center">
+									<input type="hidden" th:id="${sub.subId + '_name'}"
+											th:value="${sub.teacher.teaName}" />
+									<input type="hidden" th:id="${sub.subId + '_phone'}"
+											th:value="${sub.teacher.teaPhone}" />
+									<input type="hidden" th:id="${sub.subId + '_school'}"
+											th:value="${sub.teacher.teaSchool}" />
+									<input type="hidden" th:id="${sub.subId + '_email'}"
+											th:value="${sub.teacher.teaEmail}" />
+									<i class="fas fa-address-card" 
+									   th:onclick="|get_info(${sub.subId})|"></i></td>
+
+								<td class="w3-center"><th:block
+										th:if="${#dates.format(sub.subStartdate,'yyyy-MM-dd')} > ${#calendars.format(#calendars.createNow(),'yyyy-MM-dd')}">
+										<a th:href="@{/student/subject/insert(subId=${sub.subId})}"><i
+											class="fas fa-paper-plane"></i></a>
+									</th:block></td>
+									
+							</tr>
+						</th:block>
+				</table>
+				<ul class="pagination">
+					<li
+						th:class="${currentIndex == 1}? 'page-item disabled' : 'page-item'">
+						<a class="page-link" th:href="@{/student/subject}">First</a>
+					</li>
+					<li
+						th:class="${currentIndex == 1}? 'page-item disabled': 'page-item' ">
+						<a class="page-link" aria-label="Previous"
+						th:href="@{|${baseUrl}${currentIndex - 1}|}"
+						title='Go to previous page'><span aria-hidden="true">«</span>
+							<span class="sr-only">Previous</span></a>
+					</li>
+					<li th:each="item : ${#numbers.sequence(beginIndex,endIndex)}"
+						th:class="${item == currentIndex ? 'page-item active' :'page-item' }">
+						<a class="page-link" th:href="@{|${baseUrl}${item}|}"> <span
+							th:text='${item}'>1</span>
+					</a>
+					</li>
+					<li
+						th:class="${currentIndex == totalPageCount}? 'page-item disabled': 'page-item'">
+						<a class="page-link" aria-label="Next"
+						th:href="@{|${baseUrl}${currentIndex + 1}|}"
+						title='Go to next page'><span aria-hidden="true">»</span> <span
+							class="sr-only">Next</span></a>
+					</li>
+					<li
+						th:class="${currentIndex == totalPageCount}? 'page-item disabled':'page-item'">
+						<a class="page-link" th:href="@{|${baseUrl}${totalPageCount}|}">Last</a>
+					</li>
+				</ul>
+		</div>
+		</th:block>
+		<hr>
+
+
+		<hr>
+		<div class="w3-container w3-dark-grey w3-padding-32">
+			<div class="w3-row">
+				<div class="w3-container w3-third">
+					<h5 class="w3-bottombar w3-border-green">User</h5>
+					<p>Student</p>
+					<p>Teacher</p>
+					<p>Manager</p>
+				</div>
+				<div class="w3-container w3-third">
+					<h5 class="w3-bottombar w3-border-red">System</h5>
+					<p>Browser</p>
+					<p>OS</p>
+					<p>More</p>
+				</div>
+				<div class="w3-container w3-third">
+					<h5 class="w3-bottombar w3-border-orange">Target</h5>
+					<p>School</p>
+					<p>Teaching Center</p>
+				</div>
+			</div>
+		</div>
+
+		<!--Show title teacher -->
+		<th:block th:if="teachers != null">
+			<div id="info" class="w3-modal">
+				<div class="w3-modal-content w3-animate-top w3-card-4">
+					<header class="w3-container w3-teal">
+						<span
+							onclick="document.getElementById('info').style.display='none'"
+							class="w3-button w3-display-topright">&times;</span>
+						<h2>Teacher Information</h2>
+					</header>
+					<div class="w3-container"> <br>
+						<div class="form-group">
+							<div class="input-group-prepend">
+								<span class="input-group-text">Full Name</span>
+							</div>
+							<input type="text" class="form-control" id="name"/>
+						</div> <br> 
+						<div class="form-group">
+							<div class="input-group-prepend">
+								<span class="input-group-text">Email</span>
+							</div>
+							<input type="text" class="form-control" id="email"/>
+						</div> <br>
+						<div class="form-group">
+							<div class="input-group-prepend">
+								<span class="input-group-text">Phone</span>
+							</div>
+							<input type="text" class="form-control" id="phone"/>
+						</div> <br>
+						<div class="form-group">
+							<div class="input-group-prepend">
+								<span class="input-group-text">School</span>
+							</div>
+							<input type="text" class="form-control" id="school"/>
+						</div> <br>
+					</div>
+					<footer class="w3-container w3-teal">
+						<p></p>
+					</footer>
+				</div>
+			</div>
+		</th:block>
+
+
+		<!-- Footer -->
+		<footer class="w3-container w3-padding-16 w3-light-grey">
+			<h4>FOOTER</h4>
+			<p>
+				Powered by <a th:href="@{https://www.w3schools.com/w3css/default.asp}"
+					target="_blank">w3.css</a>
+			</p>
+		</footer>
+	</div>
+	<script>
+		var mySidebar = document.getElementById("mySidebar");
+		var overlayBg = document.getElementById("myOverlay");
+	</script>
+</body>
+</html>

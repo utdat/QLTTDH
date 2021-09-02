@@ -1,4 +1,4 @@
-package com.quanlytrungtamdayhoc.controller.TeacherController;
+package com.quanlytrungtamdayhoc.controller.StudentController;
 
 import java.security.Principal;
 
@@ -14,62 +14,61 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.quanlytrungtamdayhoc.dbo.Account;
-import com.quanlytrungtamdayhoc.dbo.Teacher;
+import com.quanlytrungtamdayhoc.dbo.Student;
 import com.quanlytrungtamdayhoc.mapper.AccountMapper;
-import com.quanlytrungtamdayhoc.mapper.TeacherMapper;
+import com.quanlytrungtamdayhoc.mapper.StudentMapper;
 
 @Controller
-@RequestMapping("/teacher")
-public class TeacherProfileController {
-	
+@RequestMapping("/student")
+public class StudentProfileController {
+
 	@Autowired
-	private TeacherMapper teacherMapper;
-	
+	StudentMapper studentMapper;
+
 	@Autowired
-	private AccountMapper accountMapper;
-	
+	AccountMapper accountMapper;
+
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-	
+
 	@GetMapping("/profile")
 	public String getProfile(Model model, Principal principal) {
 		Account currentAccount = (Account) ((Authentication) principal).getPrincipal();
+
+		Student student = studentMapper.getStudent(0, currentAccount.getUsername());
 		
-		Teacher teacher = teacherMapper.getTeacher(0, currentAccount.getAccUsername());
-		
-		model.addAttribute("teacher", teacher);
-		return "teacher/TeacherProfile";
+		model.addAttribute("student", student);
+		return "student/StudentProfile";
 	}
-	
+
 	@PostMapping("/profile")
-	public String updateProfile(Model model, Principal principal,
-								@ModelAttribute(value="teacher") Teacher teacher, 
-								//@RequestBody Teacher teacher,
-								@RequestParam(name = "birthdate") String birthdate,
-								@RequestParam(name = "confirmPass") String confirmPass,
-								@RequestParam(name = "newPass") String newPass) {
-		String message = null;
+	public String updateProfile(Model model, Principal principal, 
+								@ModelAttribute(value = "student") Student student,
+								@RequestParam(name = "confirmPass") String confirmPass, 
+								@RequestParam(name = "newPass") String newPass,
+								@RequestParam(name = "birthdate") String birthdate) {
+
 		Account currentAccount = (Account) ((Authentication) principal).getPrincipal();
-		
-		
-		if(teacherMapper.updateTeacher(teacher, birthdate) > 0) {
+		String message = null;
+
+		if (studentMapper.updateStudent(student, birthdate) > 0) {
 			message = "Successfully update information";
 			
-			if(!newPass.equals("")){
-				if(newPass.equals(confirmPass) && accountMapper.updatePassword(currentAccount.getAccUsername(), passwordEncoder.encode(newPass)) > 0) {
+			if (!newPass.equals("")) {
+				if (newPass.equals(confirmPass) && accountMapper.updatePassword(currentAccount.getAccUsername(), passwordEncoder.encode(newPass)) > 0) {
 					message = "Successfully update password";
-				}else {
+				} else {
 					message = "Update password failed";
 				}
 			}
-		}else {
+		} else {
 			message = "Update information failed";
 		}
+
+		student = studentMapper.getStudent(0, currentAccount.getAccUsername());
 		
-		teacher = teacherMapper.getTeacher(0, currentAccount.getAccUsername());
-		
-		model.addAttribute("teacher", teacher);
+		model.addAttribute("student", student);
 		model.addAttribute("message", message);
-		return "teacher/TeacherProfile";
+		return "/student/StudentProfile";
 	}
 }

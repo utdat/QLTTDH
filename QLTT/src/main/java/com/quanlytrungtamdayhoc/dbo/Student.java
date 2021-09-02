@@ -1,5 +1,6 @@
 package com.quanlytrungtamdayhoc.dbo;
 
+import java.beans.Transient;
 import java.util.Date;
 
 import org.springframework.stereotype.Component;
@@ -76,5 +77,14 @@ public class Student {
 	}
 	public void setStuAvatar(String stuAvatar) {
 		this.stuAvatar = stuAvatar;
+	}
+	
+	@Transient
+	public String getAvatarPath() {
+		if(stuAvatar == null || stuId < 0) {
+			return "/images/default_user.png";
+		}
+		
+		return "/images/" + stuId + "/" + stuAvatar;
 	}
 }
