@@ -119,7 +119,7 @@ html, body, h1, h2, h3, h4, h5 {
 		<!-- Header -->
 		<div class="panel-body">
 			<div class="card-body">
-				<form method="POST" th:action="@{/teacher/profile}"
+				<form method="POST" th:action="@{/admin/account/teacher/{teaId}(teaId=${teacher.teaId})}"
 					th:object="${teacher}">
 					<div class="row register-form">
 						<div class="col-md-6">
@@ -183,6 +183,8 @@ html, body, h1, h2, h3, h4, h5 {
 									th:field="*{teaSchool}" class="form-control"
 									placeholder="Your School *" />
 							</div>
+						</div>
+						<div class="col-md-6">
 							<div class="form-group">
 								<div class="input-group-prepend">
 									<span class="input-group-text">Gender</span>
@@ -193,8 +195,6 @@ html, body, h1, h2, h3, h4, h5 {
 									<option th:value="'F'" th:text="Female"></option>
 								</select>
 							</div>
-						</div>
-						<div class="col-md-6">
 							<div class="form-group">
 								<div class="input-group-prepend">
 									<span class="input-group-text">BirthDate</span>
@@ -228,16 +228,13 @@ html, body, h1, h2, h3, h4, h5 {
 							</div>
 							<div class="form-group">
 								<div class="input-group-prepend">
-									<span class="input-group-text">ID</span>
-								</div>
-								<input type="text" class="form-control" placeholder="Your ID *"
-									th:field="*{teaId}" name="id" disabled />
-							</div>
-							<div class="form-group">
-								<div class="input-group-prepend">
 									<span class="input-group-text">User Type</span>
 								</div>
 								<input type="text" class="form-control" value="Teacher" disabled />
+							</div>
+							<div class="form-group">
+								<input type="hidden" class="form-control" th:field="*{teaEmail}"
+									 name="email"/>
 							</div>
 						</div>
 					</div>

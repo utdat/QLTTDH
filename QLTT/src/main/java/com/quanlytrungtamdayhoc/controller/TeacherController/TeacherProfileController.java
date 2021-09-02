@@ -56,13 +56,12 @@ public class TeacherProfileController {
 		Account currentAccount = (Account) ((Authentication) principal).getPrincipal();
 		
 		
-		if(teacherMapper.updateTeacher(teacher,currentAccount.getAccUsername() ,birthdate) > 0) {
+		if(teacherMapper.updateTeacher(teacher, birthdate) > 0) {
 			message = "Successfully update information";
 			
 			if(!newPass.equals("")){
 				if(newPass.equals(confirmPass) && accountMapper.updatePassword(currentAccount.getAccUsername(), passwordEncoder.encode(newPass)) > 0) {
 					message = "Successfully update password";
-					System.out.println("success");
 				}else {
 					message = "Update password failed";
 				}

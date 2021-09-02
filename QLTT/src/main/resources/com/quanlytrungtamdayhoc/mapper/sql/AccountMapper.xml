@@ -18,6 +18,25 @@
 		FROM ACCOUNTS
 	</select>
 	
+	<select id="getAccountByRole" resultMap="AccountMapper">
+		SELECT
+			ACC_USERNAME,
+			ACC_PASSWORD,
+			ACC_ISACTIVE,
+			ACC_ROLE
+		FROM ACCOUNTS
+		<choose>
+			<when test="role == 1">
+				INNER JOIN STUDENTS ON ACC_USERNAME = STU_EMAIL
+				ORDER BY STU_ID
+			</when>
+			<when test="role == 2">
+				INNER JOIN TEACHERS ON ACC_USERNAME = TEA_EMAIL
+				ORDER BY TEA_ID
+			</when>
+		</choose>
+	</select>
+	
 	<select id="getAccount" resultMap="AccountMapper" parameterType="map">
 		SELECT
 			ACC_USERNAME,
@@ -25,7 +44,7 @@
 			ACC_ISACTIVE,
 			ACC_ROLE
 		FROM ACCOUNTS
-		WHERE ACC_USERNAME = #{username} AND ACC_ISACTIVE = 'T'
+		WHERE ACC_USERNAME = #{username}
 	</select>
 	
 	<update id="updatePassword" parameterType="map">
@@ -33,5 +52,20 @@
 		SET ACC_PASSWORD = #{password}
 		WHERE ACC_USERNAME = #{username}
 	</update>
+	
+	<update id="activateAccount" parameterType="map">
+		UPDATE ACCOUNTS
+		SET ACC_ISACTIVE = #{isActive}
+		WHERE ACC_USERNAME = #{username}
+	</update>
+	
+	<insert id="addAccount" parameterType="map">
+		INSERT INTO ACCOUNTS (ACC_USERNAME, ACC_PASSWORD, ACC_ISACTIVE, ACC_ROLE) 
+		VALUES (#{username}, #{password}, 'T', #{role});
+	</insert>
+	
+	<delete id="deletaAccount" parameterType="map">
+		DELETE FROM ACCOUNTS WHERE ACC_USERNAME = #{username}
+	</delete>
 	
 </mapper>

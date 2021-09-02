@@ -32,6 +32,7 @@
 	<select id="getAllTeacher" resultMap="TeacherMapper" parameterType="map">
 		SELECT *
 		FROM TEACHERS
+		ORDER BY TEA_ID
 	</select>
 	
 	<update id="updateTeacher" parameterType="map">
@@ -55,7 +56,11 @@
 		<if test="birthdate != null">
 		, TEA_BIRTHDATE = #{birthdate}
 		</if>
-		WHERE TEA_EMAIL = #{email}
+		WHERE TEA_ID = #{teacher.teaId}
 	</update>
 	
+	<insert id="addTeacher" parameterType="map">
+		INSERT INTO TEACHERS (TEA_NAME, TEA_PHONE, TEA_SCHOOL, TEA_SALARYRATE, TEA_EMAIL, TEA_HIREDATE)
+		VALUES (#{teaName}, #{teaPhone}, #{teaSchool}, #{teaSalaryrate}, #{teaEmail}, CURDATE());
+	</insert>
 </mapper>

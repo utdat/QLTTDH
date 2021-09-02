@@ -119,7 +119,7 @@ html, body, h1, h2, h3, h4, h5 {
 		<!-- Header -->
 		<div class="panel-body">
 			<div class="card-body">
-				<form method="POST" th:action="@{/teacher/profile}"
+				<form method="POST" th:action="@{/admin/account/student/{stuId}(stuId=${student.stuId})}"
 					th:object="${student}">
 					<div class="row register-form">
 						<div class="col-md-6">
@@ -220,16 +220,13 @@ html, body, h1, h2, h3, h4, h5 {
 							</div>
 							<div class="form-group">
 								<div class="input-group-prepend">
-									<span class="input-group-text">ID</span>
-								</div>
-								<input type="text" class="form-control" placeholder="Your ID *"
-									th:field="*{stuId}" name="id" disabled />
-							</div>
-							<div class="form-group">
-								<div class="input-group-prepend">
 									<span class="input-group-text">User Type</span>
 								</div>
 								<input type="text" class="form-control" value="Student" disabled />
+							</div>
+							<div class="form-group">
+								<input type="hidden" class="form-control" th:field="*{stuEmail}"
+									name="email"/>
 							</div>
 						</div>
 					</div>

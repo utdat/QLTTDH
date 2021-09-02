@@ -17,6 +17,7 @@
 	<select id="getAllStudent" resultMap="StudentMapper" parameterType="map">
 		SELECT *
 		FROM STUDENTS
+		ORDER BY STU_ID
 	</select>
 	
 	<select id="getStudent" resultMap="StudentMapper" parameterType="map">
@@ -32,4 +33,33 @@
 			</when>
 		</choose>
 	</select>
+	
+	<update id="updateStudent" parameterType="map">
+		UPDATE STUDENTS
+		SET STU_NAME = #{student.stuName}
+		<if test="student.stuAddress != null">
+		, STU_ADDRESS = #{student.stuAddress}
+		</if>
+		<if test="student.stuSchool != null">
+		, STU_SCHOOL = #{student.stuSchool}
+		</if>
+		<if test="student.stuPhone != null">
+		, STU_PHONE = #{student.stuPhone}
+		</if>
+		<if test="student.stuGender != null">
+		, STU_GENDER = #{student.stuGender}
+		</if>
+		<if test="student.stuAvatar != null">
+		, STU_AVATAR = #{student.stuAvatar}
+		</if>
+		<if test="birthdate != null">
+		, STU_BIRTHDATE = #{birthdate}
+		</if>
+		WHERE STU_ID = #{student.stuId}
+	</update>
+	
+	<insert id="addStudent" parameterType="map">
+		INSERT INTO STUDENTS (STU_NAME, STU_PHONE, STU_SCHOOL, STU_EMAIL, STU_JOINDATE)
+		VALUES (#{stuName}, #{stuPhone}, #{stuSchool}, #{stuEmail}, CURDATE());
+	</insert>
 </mapper>

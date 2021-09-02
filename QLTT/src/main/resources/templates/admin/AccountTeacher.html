@@ -133,6 +133,7 @@ html, body, h1, h2, h3, h4, h5 {
 							<th>Name</th>
 							<th class="w3-center">Phone</th>
 							<th>School</th>
+							<th class="w3-center">Salary Rate</th>
 							<th>Email</th>
 							<th>Password</th>
 							<th class="w3-center">Detail</th>
@@ -144,13 +145,16 @@ html, body, h1, h2, h3, h4, h5 {
 							<td><input size="20"
 								class="form-control" type="text" name="name"
 								required /></td>
-							<td class="w3-center"><input size="15"
+							<td class="w3-center"><input size="10"
 								class="form-control w3-center" type="text" name="phone"
 								required /></td>
 							<td><input size="20"
 								class="form-control" type="text" name="school"
 								required /></td>
-							<td><input size="40" 
+							<td><input size="10"
+								class="form-control" type="text" name="salaryrate"
+								required /></td>
+							<td><input size="30" 
 								class="form-control" type="email" name="email" 
 								required /></td>
 							<td><input size="10" 
@@ -161,25 +165,26 @@ html, body, h1, h2, h3, h4, h5 {
 									<i class="fas fa-user-plus"></i>
 								</button></td>
 						</tr>
-						<th:block th:each="teacher : ${teacherList}">
+						<th:block th:each="teacher, iter : ${teacherList}">
 							<tr>
 								<td th:text="${teacher.teaId}" class="w3-center"></td>
 								<td th:text="${teacher.teaName}"></td>
 								<td th:text="${teacher.teaPhone}" class="w3-center"></td>
 								<td th:text="${teacher.teaSchool}"></td>
+								<td th:text="${teacher.teaSalaryrate}" class="w3-center"></td>
 								<td th:text="${teacher.teaEmail}"></td>
 								<td></td>
 								<td class="w3-center"><a
 									th:href="@{/admin/account/teacher/{teaId}(teaId=${teacher.teaId})}"><i
 										class="fas fa-paper-plane"></i></a></td>
-								<td class="w3-center"><a href="">
-									<th:block th:if="teacher.teaId != '2'"> 
-										<i class="fas fa-user-check"></i>
+								<td class="w3-center">
+									<th:block th:if="${accountList[iter.index].accIsactive} == 'T'"> 
+										<a th:href="@{/admin/account/active(username=${teacher.teaEmail})}"><i class="fas fa-user-slash"></i></a>
 									</th:block>
-									<th:block th:unless="teacher.teaId != '2'"> 
-										<i class="fas fa-user-slash"></i>
+									<th:block th:unless="${accountList[iter.index].accIsactive} == 'T'"> 
+										<a th:href="@{/admin/account/active(username=${teacher.teaEmail})}"><i class="fas fa-user-check"></i></a>
 									</th:block>
-								</a></td>
+								</td>
 							</tr>
 						</th:block>
 				</table>

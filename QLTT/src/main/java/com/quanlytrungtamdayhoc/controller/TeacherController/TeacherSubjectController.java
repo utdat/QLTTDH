@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.quanlytrungtamdayhoc.dbo.Account;
 import com.quanlytrungtamdayhoc.dbo.Student_Score;
@@ -74,9 +75,12 @@ public class TeacherSubjectController {
 	
 	@GetMapping("/mark/update")
 	public String updateScore(Model model, Principal principal,
+							  RedirectAttributes redirectAttributes,
 							  @RequestParam(name = "subId") int subId,
 							  @RequestParam(name = "stuId") int stuId,
 							  @RequestParam(name = "score") float score) {
+		
+		String message = null;
 		Account current_account = (Account) ((Authentication) principal).getPrincipal();
 		Teacher teacher = teacherMapper.getTeacher(0, current_account.getAccUsername());
 		
@@ -90,7 +94,13 @@ public class TeacherSubjectController {
 			return "teacher/TeacherMark";
 		}
 		
-		int kq = studentScoreMapper.updateScore(subId, stuId, score);
+		if(studentScoreMapper.updateScore(subId, stuId, score) > 0) {
+			message = "Update score successfully";
+		}else{
+			message = "Update score failed";
+		}
+		
+		redirectAttributes.addFlashAttribute("message", message);
 
 		return "redirect:/teacher/mark/" + subId;
 	}

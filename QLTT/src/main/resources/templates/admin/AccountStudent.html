@@ -161,7 +161,7 @@ html, body, h1, h2, h3, h4, h5 {
 									<i class="fas fa-user-plus"></i>
 								</button></td>
 						</tr>
-						<th:block th:each="student : ${studentList}">
+						<th:block th:each="student, iter : ${studentList}">
 							<tr>
 								<td th:text="${student.stuId}" class="w3-center"></td>
 								<td th:text="${student.stuName}"></td>
@@ -172,14 +172,14 @@ html, body, h1, h2, h3, h4, h5 {
 								<td class="w3-center"><a
 									th:href="@{/admin/account/student/{stuId}(stuId=${student.stuId})}"><i
 										class="fas fa-paper-plane"></i></a></td>
-								<td class="w3-center"><a href="">
-									<th:block th:if="student.stuId != '2'"> 
-										<i class="fas fa-user-check"></i>
+								<td class="w3-center">
+									<th:block th:if="${accountList[iter.index].accIsactive} == 'T'"> 
+										<a th:href="@{/admin/account/active(username=${student.stuEmail})}"><i class="fas fa-user-slash"></i></a>
 									</th:block>
-									<th:block th:unless="student.stuId != '2'"> 
-										<i class="fas fa-user-slash"></i>
+									<th:block th:unless="${accountList[iter.index].accIsactive} == 'T'"> 
+										<a th:href="@{/admin/account/active(username=${student.stuEmail})}"><i class="fas fa-user-check"></i></a>
 									</th:block>
-								</a></td>
+								</td>
 							</tr>
 						</th:block>
 				</table>

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import com.quanlytrungtamdayhoc.dbo.Account;
 import com.quanlytrungtamdayhoc.dbo.Student;
 import com.quanlytrungtamdayhoc.dbo.Teacher;
+import com.quanlytrungtamdayhoc.mapper.AccountMapper;
 import com.quanlytrungtamdayhoc.mapper.StudentMapper;
 import com.quanlytrungtamdayhoc.mapper.TeacherMapper;
 
@@ -22,6 +23,9 @@ public class LoginController {
 	
 	@Autowired
 	private StudentMapper studentMapper;
+	
+	@Autowired
+	private AccountMapper accountMapper;
 
 	@GetMapping("/login")
 	public String Login(Model model) {
@@ -43,7 +47,10 @@ public class LoginController {
 			view = "Login";
 		}else {
 			List<Student> studentList = studentMapper.getAllStudent();
+			List<Account> accountList = accountMapper.getAccountByRole(1);
+			
 			model.addAttribute("studentList", studentList);
+			model.addAttribute("accountList", accountList);
 			view = "admin/AccountStudent";
 		}
 		

@@ -42,7 +42,7 @@ public class UploadImageController {
 		}else if(currentAccount.getAccRole() == 2) {
 			Teacher teacher = teacherMapper.getTeacher(0, currentAccount.getAccUsername());
 			teacher.setTeaAvatar(filename);
-			int kq = teacherMapper.updateTeacher(teacher, currentAccount.getAccUsername(), null);
+			int kq = teacherMapper.updateTeacher(teacher, null);
 			uploadDir += teacher.getTeaId();
 			redirect = "redirect:/teacher/profile";
 			

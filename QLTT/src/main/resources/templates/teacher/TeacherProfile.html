@@ -175,6 +175,8 @@ html, body, h1, h2, h3, h4, h5 {
 									th:field="*{teaSchool}" class="form-control"
 									placeholder="Your School *" />
 							</div>
+						</div>
+						<div class="col-md-6">
 							<div class="form-group">
 								<div class="input-group-prepend">
 									<span class="input-group-text">Gender</span>
@@ -185,8 +187,6 @@ html, body, h1, h2, h3, h4, h5 {
 									<option th:value="'F'" th:text="Female"></option>
 								</select>
 							</div>
-						</div>
-						<div class="col-md-6">
 							<div class="form-group">
 								<div class="input-group-prepend">
 									<span class="input-group-text">BirthDate</span>
@@ -219,17 +219,8 @@ html, body, h1, h2, h3, h4, h5 {
 									type="date" disabled>
 							</div>
 							<div class="form-group">
-								<div class="input-group-prepend">
-									<span class="input-group-text">ID</span>
-								</div>
-								<input type="text" class="form-control" placeholder="Your ID *"
-									th:field="*{teaId}" name="id" disabled />
-							</div>
-							<div class="form-group">
-								<div class="input-group-prepend">
-									<span class="input-group-text">User Type</span>
-								</div>
-								<input type="text" class="form-control" value="Teacher" disabled />
+								<input type="hidden" class="form-control" placeholder="Your ID *"
+									th:field="*{teaId}" name="id"/>
 							</div>
 						</div>
 					</div>
