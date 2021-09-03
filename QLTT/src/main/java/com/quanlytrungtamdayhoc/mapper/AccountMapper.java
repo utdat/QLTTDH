@@ -9,10 +9,22 @@ import com.quanlytrungtamdayhoc.dbo.Account;
 
 @Mapper
 public interface AccountMapper {
-
+	
 	List<Account> getAllAccount();
-
+	
+	List<Account> getAccountByRole(@Param("role") int role);
+	
 	Account getAccount(@Param("username") String username);
-
-	int updatePassword(@Param("username") String username, @Param("password") String password);
+	
+	int updatePassword(@Param("username") String username,
+					   @Param("password") String password);
+	
+	int activateAccount(@Param("username") String username,
+			   			@Param("isActive") String isActive);
+	
+	int addAccount(@Param("username") String username,
+				   @Param("password") String password,
+				   @Param("role") int role);
+	
+	int deleteAccount(@Param("username") String username);
 }

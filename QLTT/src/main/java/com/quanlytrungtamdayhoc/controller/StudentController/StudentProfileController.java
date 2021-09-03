@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.quanlytrungtamdayhoc.dbo.Account;
 import com.quanlytrungtamdayhoc.dbo.Student;
@@ -35,39 +34,41 @@ public class StudentProfileController {
 	@GetMapping("/profile")
 	public String getProfile(Model model, Principal principal) {
 		Account currentAccount = (Account) ((Authentication) principal).getPrincipal();
-		String email = currentAccount.getUsername();
 
-		Student student = studentMapper.getStudentByEmail(email);
+		Student student = studentMapper.getStudent(0, currentAccount.getUsername());
+		
 		model.addAttribute("student", student);
-		return "student/student_profile";
+		return "student/StudentProfile";
 	}
 
 	@PostMapping("/profile")
-	public String editProfile(Model model, Principal principal, @ModelAttribute(value = "student") Student student,
-			@RequestParam(name = "confirmPass") String confirmPass, @RequestParam(name = "newPass") String newPass,
-			@RequestParam(name = "birthdate") String birthdate) {
+	public String updateProfile(Model model, Principal principal, 
+								@ModelAttribute(value = "student") Student student,
+								@RequestParam(name = "confirmPass") String confirmPass, 
+								@RequestParam(name = "newPass") String newPass,
+								@RequestParam(name = "birthdate") String birthdate) {
 
 		Account currentAccount = (Account) ((Authentication) principal).getPrincipal();
 		String message = null;
 
-		if (studentMapper.updateStudent(student, currentAccount.getAccUsername(), birthdate) > 0) {
-			message = "Update information Successfully";
+		if (studentMapper.updateStudent(student, birthdate) > 0) {
+			message = "Successfully update information";
+			
 			if (!newPass.equals("")) {
-				if (newPass.equals(confirmPass) && accountMapper.updatePassword(currentAccount.getAccUsername(),
-						passwordEncoder.encode(newPass)) > 0) {
-					message = "Update password Successfully ";
+				if (newPass.equals(confirmPass) && accountMapper.updatePassword(currentAccount.getAccUsername(), passwordEncoder.encode(newPass)) > 0) {
+					message = "Successfully update password";
 				} else {
-					message = "Update password Failed";
+					message = "Update password failed";
 				}
 			}
-			
 		} else {
-			message = "Update information Failed";
+			message = "Update information failed";
 		}
 
-		student = studentMapper.getStudentByEmail(currentAccount.getAccUsername());
+		student = studentMapper.getStudent(0, currentAccount.getAccUsername());
+		
 		model.addAttribute("student", student);
-		return "redirect:/student/profile";
+		model.addAttribute("message", message);
+		return "/student/StudentProfile";
 	}
-
 }

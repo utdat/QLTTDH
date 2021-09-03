@@ -1,39 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.quanlytrungtamdayhoc.mapper.AccountMapper">
-	<resultMap id="AccountMapper"
-		type="com.quanlytrungtamdayhoc.dbo.Account">
-		<result property="accUsername" column="ACC_USERNAME" />
-		<result property="accPassword" column="ACC_PASSWORD" />
-		<result property="accIsactive" column="ACC_ISACTIVE" />
-		<result property="accRole" column="ACC_ROLE" />
+	
+	<resultMap id="AccountMapper" type="com.quanlytrungtamdayhoc.dbo.Account">
+		<result property="accUsername" column="ACC_USERNAME"/>
+		<result property="accPassword" column="ACC_PASSWORD"/>
+		<result property="accIsactive" column="ACC_ISACTIVE"/>
+		<result property="accRole" column="ACC_ROLE"/>
 	</resultMap>
-
+	
 	<select id="getAllAccount" resultMap="AccountMapper">
-		SELECT
-		ACC_USERNAME,
-		ACC_PASSWORD,
-		ACC_ISACTIVE,
-		ACC_ROLE
+		SELECT *
 		FROM ACCOUNTS
 	</select>
-
-	<select id="getAccount" resultMap="AccountMapper"
-		parameterType="map">
-		SELECT
-		ACC_USERNAME,
-		ACC_PASSWORD,
-		ACC_ISACTIVE,
-		ACC_ROLE
+	
+	<select id="getAccountByRole" resultMap="AccountMapper">
+		SELECT *
 		FROM ACCOUNTS
-		WHERE ACC_USERNAME = #{username} AND ACC_ISACTIVE='T'
+		<choose>
+			<when test="role == 1">
+				INNER JOIN STUDENTS ON ACC_USERNAME = STU_EMAIL
+				ORDER BY STU_ID
+			</when>
+			<when test="role == 2">
+				INNER JOIN TEACHERS ON ACC_USERNAME = TEA_EMAIL
+				ORDER BY TEA_ID
+			</when>
+		</choose>
 	</select>
-
+	
+	<select id="getAccount" resultMap="AccountMapper" parameterType="map">
+		SELECT *
+		FROM ACCOUNTS
+		WHERE ACC_USERNAME = #{username}
+	</select>
+	
 	<update id="updatePassword" parameterType="map">
 		UPDATE ACCOUNTS
-		SET
-		ACC_PASSWORD = #{password}
+		SET ACC_PASSWORD = #{password}
 		WHERE ACC_USERNAME = #{username}
 	</update>
-
+	
+	<update id="activateAccount" parameterType="map">
+		UPDATE ACCOUNTS
+		SET ACC_ISACTIVE = #{isActive}
+		WHERE ACC_USERNAME = #{username}
+	</update>
+	
+	<insert id="addAccount" parameterType="map">
+		INSERT INTO ACCOUNTS (ACC_USERNAME, ACC_PASSWORD, ACC_ISACTIVE, ACC_ROLE) 
+		VALUES (#{username}, #{password}, 'T', #{role});
+	</insert>
+	
+	<delete id="deletaAccount" parameterType="map">
+		DELETE FROM ACCOUNTS WHERE ACC_USERNAME = #{username}
+	</delete>
+	
 </mapper>

@@ -9,16 +9,17 @@ import com.quanlytrungtamdayhoc.dbo.Teacher;
 
 @Mapper
 public interface TeacherMapper {
-
+   
 	Teacher getTeacher(@Param("teaId") int teaId, @Param("teaEmail") String teaEmail);
-
-	Teacher getTeacherByEmail(@Param("teaEmail") String email);
-
-	Teacher getTeacherById(@Param("teaId") int id);
+	
+	int updateTeacher(@Param("teacher") Teacher teacher,
+					  @Param("birthdate") String birthdate);
 
 	List<Teacher> getAllTeacher();
 	
-	int updateTeacher(@Param("teacher") Teacher teacher, 
-			  @Param("email") String email,
-			  @Param("birthdate") String birthdate);
+	int addTeacher(@Param("teaName") String teaName,
+			   	   @Param("teaPhone") String teaPhone,
+			   	   @Param("teaSchool") String teaSchool,
+			   	   @Param("teaSalaryrate") float teaSalaryrate,
+			   	   @Param("teaEmail") String teaEmail);
 }

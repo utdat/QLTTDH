@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.quanlytrungtamdayhoc.dbo.Account;
 import com.quanlytrungtamdayhoc.dbo.Student;
-import com.quanlytrungtamdayhoc.dbo.StudentScore;
+import com.quanlytrungtamdayhoc.dbo.Student_Score;
 import com.quanlytrungtamdayhoc.mapper.StudentMapper;
 import com.quanlytrungtamdayhoc.mapper.StudentScoreMapper;
 
@@ -31,26 +31,28 @@ public class StudentScoreController {
 	public String getStudentScore(Model model, Principal principal) {
 
 		Account currentAccount = (Account) ((Authentication) principal).getPrincipal();
-		String email = currentAccount.getAccUsername();
-
-		Student s = studentmapper.getStudentByEmail(email);
-		int stuId = s.getStuId();
+		Student student = studentmapper.getStudent(0, currentAccount.getAccUsername());
 		
-		List<StudentScore> list = studentScoreMapper.getListStudentScore(stuId);
-		System.out.println(list.size());
+		List<Student_Score> list = studentScoreMapper.getStudentScore(student.getStuId());
 		
 		model.addAttribute("listStudentScore", list);
+		model.addAttribute("student", student);
 		
-
-		return "student/student_score";
+		return "student/StudentScore";
 	}
 
 	@GetMapping("/score/delete")
-	public String deleteStudentSubject(Model model, @RequestParam(name = "subId") int subId) {
-
-		if (studentScoreMapper.deleteStudentSubjectById(subId) > 0) {
+	public String deleteStudentSubject(Model model, Principal principal,
+									   @RequestParam(name = "subId") int subId) {
+		
+		Account currentAccount = (Account) ((Authentication) principal).getPrincipal();
+		Student student = studentmapper.getStudent(0, currentAccount.getAccUsername());
+		
+		if (studentScoreMapper.deleteStudentSubject(subId, student.getStuId()) > 0) {
 			return "redirect:/student/score";
 		}
-		return "student/student_score";
+		
+		model.addAttribute("student", student);
+		return "student/StudentScore";
 	}
 }

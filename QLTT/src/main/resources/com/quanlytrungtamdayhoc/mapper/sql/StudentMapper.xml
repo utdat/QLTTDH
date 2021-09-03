@@ -1,49 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.quanlytrungtamdayhoc.mapper.StudentMapper">
-	<resultMap id="StudentMapper"
-		type="com.quanlytrungtamdayhoc.dbo.Student">
-		<id column="STU_ID" jdbcType="INTEGER" property="stuId" />
-		<result column="STU_EMAIL" jdbcType="VARCHAR"
-			property="stuEmail" />
-		<result column="STU_NAME" jdbcType="VARCHAR" property="stuName" />
-		<result column="STU_PHONE" jdbcType="VARCHAR"
-			property="stuPhone" />
-		<result column="STU_ADDRESS" jdbcType="VARCHAR"
-			property="stuAddress" />
-		<result column="STU_GENDER" jdbcType="CHAR"
-			property="stuGender" />
-		<result column="STU_BIRTHDATE" jdbcType="DATE"
-			property="stuBirthdate" />
-		<result column="STU_JOINDATE" jdbcType="DATE"
-			property="stuJoindate" />
-		<result column="STU_SCHOOL" jdbcType="VARCHAR"
-			property="stuSchool" />
-		<result column="STU_AVATAR" jdbcType="VARCHAR"
-			property="stuAvatar" />
+	<resultMap id="StudentMapper" type="com.quanlytrungtamdayhoc.dbo.Student">
+		<id property="stuId" column="STU_ID"/>
+		<result property="stuEmail" column="STU_EMAIL"/>
+		<result property="stuName" column="STU_NAME"/>
+		<result property="stuPhone" column="STU_PHONE"/>
+		<result property="stuAddress" column="STU_ADDRESS"/>
+		<result property="stuGender" column="STU_GENDER"/>
+		<result property="stuBirthdate" column="STU_BIRTHDATE"/>
+		<result property="stuJoindate" column="STU_JOINDATE"/>
+		<result property="stuSchool" column="STU_SCHOOL"/>
+		<result property="stuAvatar" column="STU_AVATAR"/>
 	</resultMap>
-
-	<select id="getStudentById" parameterType="map"
-		resultMap="StudentMapper">
-		SELECT * FROM STUDENTS WHERE STU_ID = #{studentId}
-	</select>
-
-	<select id="getStudentByEmail" parameterType="map"
-		resultMap="StudentMapper">
-		SELECT * FROM STUDENTS WHERE STU_EMAIL = #{studentEmail}
-	</select>
-
-	<select id="getAllStudent" resultMap="StudentMapper"
-		parameterType="map">
+	
+	<select id="getAllStudent" resultMap="StudentMapper" parameterType="map">
 		SELECT *
 		FROM STUDENTS
+		ORDER BY STU_ID
 	</select>
-
-	<select id="getStudent" resultMap="StudentMapper"
-		parameterType="map">
+	
+	<select id="getStudent" resultMap="StudentMapper" parameterType="map">
 		SELECT *
 		FROM STUDENTS
-		WHERE
+		WHERE 
 		<choose>
 			<when test="stuId != 0">
 				STU_ID = #{stuId}
@@ -53,28 +33,34 @@
 			</when>
 		</choose>
 	</select>
-
+	
 	<update id="updateStudent" parameterType="map">
 		UPDATE STUDENTS
 		SET STU_NAME = #{student.stuName}
 		<if test="student.stuAddress != null">
-			, STU_ADDRESS = #{student.stuAddress}
+		, STU_ADDRESS = #{student.stuAddress}
 		</if>
 		<if test="student.stuSchool != null">
-			, STU_SCHOOL = #{student.stuSchool}
+		, STU_SCHOOL = #{student.stuSchool}
 		</if>
 		<if test="student.stuPhone != null">
-			, STU_PHONE = #{student.stuPhone}
+		, STU_PHONE = #{student.stuPhone}
 		</if>
 		<if test="student.stuGender != null">
-			, STU_GENDER = #{student.stuGender}
+		, STU_GENDER = #{student.stuGender}
 		</if>
 		<if test="student.stuAvatar != null">
-			, STU_AVATAR = #{student.stuAvatar}
+		, STU_AVATAR = #{student.stuAvatar}
 		</if>
 		<if test="birthdate != null">
-			, STU_BIRTHDATE = #{birthdate}
+		, STU_BIRTHDATE = #{birthdate}
 		</if>
-		WHERE STU_EMAIL = #{email}
+		WHERE STU_ID = #{student.stuId}
 	</update>
+	
+	<insert id="addStudent" parameterType="map">
+		INSERT INTO STUDENTS (STU_NAME, STU_PHONE, STU_SCHOOL, STU_EMAIL, STU_JOINDATE)
+		VALUES (#{stuName}, #{stuPhone}, #{stuSchool}, #{stuEmail}, CURDATE());
+	</insert>
+	
 </mapper>

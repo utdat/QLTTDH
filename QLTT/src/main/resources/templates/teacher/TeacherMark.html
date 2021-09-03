@@ -1,30 +1,12 @@
-
 <!DOCTYPE html>
-
-<!-- <%
-Accounts acc_cur = (Accounts) session.getAttribute("acc_cur");
-ArrayList<StuSubject> mark_list = (ArrayList<StuSubject>) session.getAttribute("mark_list");
-HashMap<String, String> stu_map = (HashMap<String, String>) session.getAttribute("stu_map");
-HashMap<Integer, Subjects> sub_map = (HashMap<Integer, Subjects>) session.getAttribute("sub_map");
-
-String dir = "";
-if (acc_cur.getAvatar() == null) {
-	dir = "images/default_user.png";
-} else {
-	dir = "images/" + acc_cur.getAvatar();
-}
-%>
- -->
-
 <html xmlns:th="http://www.thymeLeaf.org">
 <head>
 <title>Teacher</title>
 <th:block th:insert="component/common-css :: common-css"></th:block>
 <th:block th:insert="component/common-js :: common-js"></th:block>
+<th:block th:insert="component/change_avatar :: change_avatar"></th:block>
 
-<!-- <jsp:include page="../../component/change_avatar.jsp"></jsp:include> -->
-<link rel="stylesheet"
-	th:href="@{https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css}">
+<link rel="stylesheet" th:href="@{https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css}">
 </head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -34,15 +16,18 @@ html, body, h1, h2, h3, h4, h5 {
 }
 </style>
 <body class="w3-light-grey">
-	<!-- <%
-if (request.getAttribute("mess") != null && request.getAttribute("mess") != "") {
-%>
-<script>
-	alert("<%=request.getAttribute("mess")%>");
-</script>
-<%
-}%> -->
-	<!-- Top container -->
+
+	<th:block th:if="message != null">
+		<input type="hidden" th:value="${message}" id="mess" />
+		<script>
+			var mess = document.getElementById("mess");
+			if (mess.value !== "") {
+				alert(mess.value);
+				console.log("+" + mess.value + "+");
+			}
+		</script>
+	</th:block>
+
 	<div class="w3-bar w3-top w3-black w3-large" style="z-index: 4">
 		<button
 			class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey"
@@ -58,15 +43,15 @@ if (request.getAttribute("mess") != null && request.getAttribute("mess") != "") 
 		<br>
 		<div class="w3-container w3-row">
 			<div class="w3-col s4">
-				<img src="" class="w3-circle w3-margin-right" style="width: 46px"
+				<img th:src="@{${teacher.getAvatarPath()}}"
+					class="w3-circle w3-margin-right" style="width: 46px"
 					onclick="document.getElementById('my_avatar').style.display='block'">
 			</div>
 			<div class="w3-col s8 w3-bar">
-				<span>Welcome, <strong> <!-- <%=acc_cur.getFirstname()%> -->
-				</strong></span><br> <a class="w3-bar-item w3-button"><i
-					class="fa fa-envelope"></i></a> <a class="w3-bar-item w3-button"><i
-					class="fa fa-user"></i></a> <a class="w3-bar-item w3-button"><i
-					class="fa fa-cog"></i></a>
+				<span>Welcome, <strong th:text="${teacher.teaName}"></strong></span><br>
+				<a class="w3-bar-item w3-button"><i class="fa fa-envelope"></i></a>
+				<a class="w3-bar-item w3-button"><i class="fa fa-user"></i></a> <a
+					class="w3-bar-item w3-button"><i class="fa fa-cog"></i></a>
 			</div>
 		</div>
 		<hr>
@@ -74,30 +59,35 @@ if (request.getAttribute("mess") != null && request.getAttribute("mess") != "") 
 			<h5>My Dashboard</h5>
 		</div>
 		<div class="w3-bar-block">
-			<a href="TeacherMark.html" th:href="@{/teacher/mark}"
+			<a th:href="@{/teacher/mark}"
 				class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black"
 				onclick="w3_close()" title="close menu"><i
 				class="fa fa-remove fa-fw"></i> Close Menu</a> <a
-				href="TeacherProfile.html" th:href="@{/teacher/profile}"
+				th:href="@{/teacher/profile}"
 				class="w3-bar-item w3-button w3-padding"> <i
 				class="fas fa-user-edit fa-fw"></i> Profile
-			</a> <a onclick="myAccFunc()" href="javascript:void(0)" id="myBtn"
+			</a> <a onclick="myAccFunc('subject')" href="javascript:void(0)" id="myBtn"
 				class="w3-bar-item w3-button w3-padding w3-blue"> <i
 				class="fas fa-book-open"></i> Subject
 			</a>
-			<div id="subject"
-				class="w3-bar-block w3-hide w3-padding w3-show">
-				<a href="TeacherSchedule.html" th:href="@{/teacher/schedule}"
+			<div id="subject" class="w3-bar-block w3-hide w3-padding w3-show">
+				<a th:href="@{/teacher/schedule}"
 					class="w3-bar-item
 				w3-button w3-padding"> Schedule</a> <a
-					href="TeacherMark.html" th:href="@{/teacher/mark}"
+					th:href="@{/teacher/mark}"
 					class="w3-bar-item w3-button
 				w3-padding w3-blue"><i
 					class="fa fa-caret-right w3-margin-right"></i> Mark</a>
 			</div>
-			<a href="" class="w3-bar-item w3-button w3-padding"> <i
-				class="fas fa-sign-out-alt fa-fw"></i> Logout
-			</a><br> <br>
+			<form th:action="@{/logout}" method="POST">
+				<span class="input-group-btn">
+					<button class="btn btn-default w3-button w3-padding w3-bar-item"
+						type="submit">
+						<span class="fas fa-sign-out-alt fa-fw"></span> Logout
+					</button>
+				</span>
+			</form>
+			<br> <br>
 		</div>
 	</nav>
 
@@ -148,13 +138,12 @@ if (request.getAttribute("mess") != null && request.getAttribute("mess") != "") 
 								step="0.1" class="w3-center" type="number" name="score"
 								th:id="${stuScore.subject.subId + '_' + stuScore.student.stuId + '_i'}"
 								th:value="*{stuScore.score}" /></td>
-							<td class="w3-center">
-								<a th:onclick="|update_score(${stuScore.subject.subId},${stuScore.student.stuId})|"
-									th:href="@{/teacher/mark/update(subId=${stuScore.subject.subId}, stuId=${stuScore.student.stuId})}"
-									th:id="${stuScore.subject.subId + '_' + stuScore.student.stuId + '_a'}">
+							<td class="w3-center"><a
+								th:onclick="|update_score(${stuScore.subject.subId},${stuScore.student.stuId})|"
+								th:href="@{/teacher/mark/update(subId=${stuScore.subject.subId}, stuId=${stuScore.student.stuId})}"
+								th:id="${stuScore.subject.subId + '_' + stuScore.student.stuId + '_a'}">
 									<i class="fas fa-paper-plane"></i>
-								</a>
-							</td>
+							</a></td>
 						</tr>
 					</th:block>
 			</table>

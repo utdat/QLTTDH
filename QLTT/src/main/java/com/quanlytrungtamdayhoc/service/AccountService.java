@@ -16,13 +16,13 @@ import com.quanlytrungtamdayhoc.mapper.AccountMapper;
 public class AccountService implements UserDetailsService{
 
 	@Autowired
-	private AccountMapper account_mapper;
+	private AccountMapper accountMapper;
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		Account account = account_mapper.getAccount(username);
+		Account account = accountMapper.getAccount(username);
 		
-		if(account == null) {
+		if(account == null || account.getAccIsactive().equals("F")) {
 			 throw new UsernameNotFoundException("Not found");
 		}
 		else {
@@ -36,8 +36,6 @@ public class AccountService implements UserDetailsService{
 				account.setAuthorities(Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN")));
 			}
 		}
-		
-		System.out.println(account.getAuthorities());
 
 		return account;
 	}

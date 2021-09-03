@@ -4,10 +4,9 @@
 <title>Teacher</title>
 <th:block th:insert="component/common-css :: common-css"></th:block>
 <th:block th:insert="component/common-js :: common-js"></th:block>
+<th:block th:insert="component/change_avatar :: change_avatar"></th:block>
 
-<!-- <th:block th:insert="component/change_avatar :: change_avatar"></th:block> -->
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" th:href="@{https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css}">
 </head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -22,14 +21,18 @@ html, body, h1, h2, h3, h4, h5 {
 }
 </style>
 <body class="w3-light-grey">
-	<!-- <%
-if (request.getAttribute("mess") != null && request.getAttribute("mess") != "") {
-%>
-<script>
-	alert("<%=request.getAttribute("mess")%>");
-</script>
-<%
-}%> -->
+
+	<th:block th:if="message != null">
+		<input type="hidden" th:value="${message}" id="mess" />
+		<script>
+			var mess = document.getElementById("mess");
+			if (mess.value !== "") {
+				alert(mess.value);
+				console.log("+" + mess.value + "+");
+			}
+		</script>
+	</th:block>
+
 	<div class="w3-bar w3-top w3-black w3-large" style="z-index: 4">
 		<button
 			class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey"
@@ -44,15 +47,15 @@ if (request.getAttribute("mess") != null && request.getAttribute("mess") != "") 
 		<br>
 		<div class="w3-container w3-row">
 			<div class="w3-col s4">
-				<img src="<%=dir%>" class="w3-circle w3-margin-right"
-					style="width: 46px"
+				<img th:src="@{${teacher.getAvatarPath()}}"
+					class="w3-circle w3-margin-right" style="width: 46px"
 					onclick="document.getElementById('my_avatar').style.display='block'">
 			</div>
 			<div class="w3-col s8 w3-bar">
-				<span>Welcome</span><br> <a class="w3-bar-item w3-button"><i
-					class="fa fa-envelope"></i></a> <a class="w3-bar-item w3-button"><i
-					class="fa fa-user"></i></a> <a class="w3-bar-item w3-button"><i
-					class="fa fa-cog"></i></a>
+				<span>Welcome, <strong th:text="${teacher.teaName}"></strong></span><br> <a
+					class="w3-bar-item w3-button"><i class="fa fa-envelope"></i></a> <a
+					class="w3-bar-item w3-button"><i class="fa fa-user"></i></a> <a
+					class="w3-bar-item w3-button"><i class="fa fa-cog"></i></a>
 			</div>
 		</div>
 		<hr>
@@ -60,28 +63,34 @@ if (request.getAttribute("mess") != null && request.getAttribute("mess") != "") 
 			<h5>My Dashboard</h5>
 		</div>
 		<div class="w3-bar-block">
-			<a href="TeacherProfile.html" th:href="@{/teacher/profile}"
+			<a th:href="@{/teacher/profile}"
 				class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black"
 				onclick="w3_close()" title="close menu"><i
 				class="fa fa-remove fa-fw"></i> Close Menu</a> <a
-				href="TeacherProfile.html" th:href="@{/teacher/profile}"
+				th:href="@{/teacher/profile}"
 				class="w3-bar-item w3-button w3-padding w3-blue"> <i
 				class="fas fa-user-edit fa-fw"></i> Profile
-			</a> <a onclick="myAccFunc()" href="javascript:void(0)" id="myBtn"
+			</a> <a onclick="myAccFunc('subject')" href="javascript:void(0)" id="myBtn"
 				class="w3-bar-item w3-button w3-padding"> <i
 				class="fas fa-book-open"></i> Subject
 			</a>
 			<div id="subject" class="w3-bar-block w3-hide w3-padding">
-				<a href="TeacherSchedule.html" th:href="@{/teacher/schedule}"
+				<a  th:href="@{/teacher/schedule}"
 					class="w3-bar-item
 				w3-button w3-padding"> Schedule</a> <a
-					href="TeacherMark.html" th:href="@{/teacher/mark}"
+					th:href="@{/teacher/mark}"
 					class="w3-bar-item 
 				w3-button w3-padding"> Mark</a>
 			</div>
-			<a href="" class="w3-bar-item w3-button w3-padding"> <i
-				class="fas fa-sign-out-alt fa-fw"></i> Logout
-			</a><br> <br>
+			<form th:action="@{/logout}" method="POST">
+				<span class="input-group-btn">
+					<button class="btn btn-default w3-button w3-padding w3-bar-item"
+						type="submit">
+						<span class="fas fa-sign-out-alt fa-fw"></span> Logout
+					</button>
+				</span>
+			</form>
+			<br> <br>
 		</div>
 	</nav>
 
@@ -101,16 +110,16 @@ if (request.getAttribute("mess") != null && request.getAttribute("mess") != "") 
 		<!-- Header -->
 		<div class="panel-body">
 			<div class="card-body">
-				<form method="POST" th:action="@{/teacher/profile}" th:object="${teacher}">
+				<form method="POST" th:action="@{/teacher/profile}"
+					th:object="${teacher}">
 					<div class="row register-form">
 						<div class="col-md-6">
 							<div class="form-group">
 								<div class="input-group-prepend">
-									<span class="input-group-text">Name</span>
+									<span class="input-group-text">Full Name</span>
 								</div>
-								<input type="text" class="form-control"
-									th:field="*{teaName}" placeholder="Your First Name *"
-									name="firstname" required/>
+								<input type="text" class="form-control" th:field="*{teaName}"
+									placeholder="Your First Name *" name="firstname" required />
 							</div>
 							<div class="form-group">
 								<div class="input-group-prepend">
@@ -126,7 +135,7 @@ if (request.getAttribute("mess") != null && request.getAttribute("mess") != "") 
 								</div>
 								<div class="input-group">
 									<input type="password" class="form-control" id="pass"
-										placeholder="New Password *" name="new_pass"/> <span
+										placeholder="New Password *" name="newPass" /> <span
 										class="input-group-btn">
 										<button class="btn btn-default form-control" type="button"
 											onclick="showPass('pass')">
@@ -154,9 +163,8 @@ if (request.getAttribute("mess") != null && request.getAttribute("mess") != "") 
 								<div class="input-group-prepend">
 									<span class="input-group-text">Address</span>
 								</div>
-								<input type="text" class="form-control"
-									th:field="*{teaAddress}" placeholder="Your Address "
-									name="address" />
+								<input type="text" class="form-control" th:field="*{teaAddress}"
+									placeholder="Your Address " name="address" />
 							</div>
 							<div class="form-group">
 								<div class="input-group-prepend">
@@ -166,17 +174,18 @@ if (request.getAttribute("mess") != null && request.getAttribute("mess") != "") 
 									th:field="*{teaSchool}" class="form-control"
 									placeholder="Your School *" />
 							</div>
+						</div>
+						<div class="col-md-6">
 							<div class="form-group">
 								<div class="input-group-prepend">
 									<span class="input-group-text">Gender</span>
 								</div>
-								<select class="form-control" name="gender" th:field="*{teaGender}">
+								<select class="form-control" name="gender"
+									th:field="*{teaGender}">
 									<option th:value="'M'" th:text="Male"></option>
 									<option th:value="'F'" th:text="Female"></option>
 								</select>
 							</div>
-						</div>
-						<div class="col-md-6">
 							<div class="form-group">
 								<div class="input-group-prepend">
 									<span class="input-group-text">BirthDate</span>
@@ -189,37 +198,28 @@ if (request.getAttribute("mess") != null && request.getAttribute("mess") != "") 
 								<div class="input-group-prepend">
 									<span class="input-group-text">Email</span>
 								</div>
-								<input type="email" class="form-control"
-									th:field="*{teaEmail}" placeholder="Your Email *"
-									name="email" disabled/>
+								<input type="email" class="form-control" th:field="*{teaEmail}"
+									placeholder="Your Email *" name="email" disabled />
 							</div>
 							<div class="form-group">
 								<div class="input-group-prepend">
 									<span class="input-group-text">Salary Rate</span>
 								</div>
-								<input type="text" class="form-control" placeholder="Your Salary Rate *"
-									th:field="*{teaSalaryrate}" name="salaryRate" disabled />
+								<input type="text" class="form-control"
+									placeholder="Your Salary Rate *" th:field="*{teaSalaryrate}"
+									name="salaryRate" disabled />
 							</div>
 							<div class="form-group">
 								<div class="input-group-prepend">
-									<span class="input-group-text">Hiredate</span>
+									<span class="input-group-text">HireDate</span>
 								</div>
 								<input class="form-control" name="hiredate"
 									th:value="*{#dates.format(teaHiredate, 'yyyy-MM-dd')}"
 									type="date" disabled>
 							</div>
 							<div class="form-group">
-								<div class="input-group-prepend">
-									<span class="input-group-text">ID</span>
-								</div>
-								<input type="text" class="form-control" placeholder="Your ID *"
-									th:field="*{teaId}" name="id" disabled />
-							</div>
-							<div class="form-group">
-								<div class="input-group-prepend">
-									<span class="input-group-text">User Type</span>
-								</div>
-								<input type="text" class="form-control" value="Teacher" disabled />
+								<input type="hidden" class="form-control" placeholder="Your ID *"
+									th:field="*{teaId}" name="id"/>
 							</div>
 						</div>
 					</div>
@@ -255,7 +255,7 @@ if (request.getAttribute("mess") != null && request.getAttribute("mess") != "") 
 		<footer class="w3-container w3-padding-16 w3-light-grey">
 			<h4>FOOTER</h4>
 			<p>
-				Powered by <a href="https://www.w3schools.com/w3css/default.asp"
+				Powered by <a th:href="@{https://www.w3schools.com/w3css/default.asp}"
 					target="_blank">w3.css</a>
 			</p>
 		</footer>

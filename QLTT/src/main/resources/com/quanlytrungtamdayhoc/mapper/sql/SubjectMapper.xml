@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.quanlytrungtamdayhoc.mapper.SubjectMapper">
-	<resultMap id="BaseResultMap"
+
+	<resultMap id="SubjectMapper"
 		type="com.quanlytrungtamdayhoc.dbo.Subject">
-		<id column="SUB_ID" jdbcType="INTEGER" property="subId" />
-		<result column="SUB_NAME" jdbcType="VARCHAR" property="subName" />
-		<result column="SUB_STARTDATE" jdbcType="DATE"
-			property="subStartdate" />
-		<result column="SUB_SCHEDULE" jdbcType="VARCHAR"
-			property="subSchedule" />
-		<result column="SUB_ROOM" jdbcType="VARCHAR" property="subRoom" />
-		<result column="SUB_TUITION" jdbcType="INTEGER"
-			property="subTuition" />
+		<id property="subId" column="SUB_ID" />
+		<result property="subName" column="SUB_NAME" />
+		<result property="subStartdate" column="SUB_STARTDATE" />
+		<result property="subSchedule" column="SUB_SCHEDULE" />
+		<result property="subRoom" column="SUB_ROOM" />
+		<result property="subTuition" column="SUB_TUITION" />
 
 		<association property="teacher"
 			javaType="com.quanlytrungtamdayhoc.dbo.Teacher">
@@ -27,23 +25,57 @@
 			<result property="teaAvatar" column="TEA_AVATAR" />
 			<result property="teaSalaryrate" column="TEA_SALARYRATE" />
 		</association>
-
 	</resultMap>
 
-<!-- 	<select id="listSubjectById" resultMap="BaseResultMap"
-		parameterType="map">
-		SELECT * FROM SUBJECTS
-		NATURAL JOIN TEACHERS WHERE
-		TEACHERS.TEA_ID=#{tea_id} ORDER BY SUB_STARTDATE
-	</select> -->
-
-	<select id="listSubject" resultMap="BaseResultMap"
+	<select id="getTeacherSubject" resultMap="SubjectMapper"
 		parameterType="map">
 		SELECT *
-		FROM SUBJECTS 
-        JOIN TEACHERS ON (SUBJECTS.TEA_ID = TEACHERS.TEA_ID)
- 		WHERE SUB_ID NOT IN (SELECT SUB_ID FROM STUDENT_SCORES WHERE
-		STUDENT_SCORES.STU_ID = #{stuId}) ORDER BY SUB_STARTDATE
+		FROM SUBJECTS NATURAL JOIN TEACHERS
+		WHERE SUBJECTS.TEA_ID = #{teaId}
 	</select>
 
+	<select id="listStudentSubject" resultMap="SubjectMapper"
+		parameterType="map">
+		SELECT *
+		FROM SUBJECTS
+		JOIN TEACHERS ON SUBJECTS.TEA_ID =
+		TEACHERS.TEA_ID
+		WHERE SUB_ID NOT IN (SELECT SUB_ID FROM STUDENT_SCORES
+		WHERE
+		STUDENT_SCORES.STU_ID = #{stuId})
+		ORDER BY SUB_STARTDATE
+	</select>
+
+	<select id="getListSubject" resultMap="SubjectMapper"
+		parameterType="map">
+		SELECT *
+		FROM SUBJECTS NATURAL JOIN TEACHERS
+	</select>
+
+	<select id="getSubjectById" resultMap="SubjectMapper"
+		parameterType="map">
+		SELECT *
+		FROM SUBJECTS NATURAL JOIN TEACHERS WHERE SUB_ID
+		= #{subId}
+	</select>
+
+	<insert id="insertSubject" parameterType="map">
+		INSERT INTO
+		SUBJECTS
+		(SUB_NAME,SUB_STARTDATE,SUB_SCHEDULE,SUB_ROOM,SUB_TUITION,TEA_ID)
+		VALUES
+		(#{subName},#{subStartdate},#{subSchedule},#{subRoom},#{subTuition},#{teaId})
+	</insert>
+
+	<delete id="deleteSubject" parameterType="map">
+		DELETE FROM
+		SUBJECTS WHERE SUB_ID = #{subId};
+	</delete>
+	
+	<update id="updateSubject" parameterType="map">
+		UPDATE SUBJECTS
+		SET SUB_NAME = #{subject.subName}, SUB_STARTDATE = #{subStartdate}, SUB_SCHEDULE = #{subject.subSchedule},
+			SUB_ROOM = #{subject.subRoom}, SUB_TUITION = #{subject.subTuition}, TEA_ID = #{teaId}
+			WHERE SUB_ID = #{subject.subId}
+	</update>
 </mapper>

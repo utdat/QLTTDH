@@ -2,6 +2,9 @@ package com.quanlytrungtamdayhoc.dbo;
 
 import java.util.Date;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class Tuition {
 	private Date tuiDate;
 	private Student student;

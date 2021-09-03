@@ -30,55 +30,15 @@ import com.quanlytrungtamdayhoc.mapper.TeacherMapper;
 public class StudentSubjectController {
 
 	@Autowired
-	SubjectMapper subjectMapper;
+	private SubjectMapper subjectMapper;
 
 	@Autowired
-	TeacherMapper teacherMapper;
+	private StudentMapper studentMapper;
 
 	@Autowired
-	StudentMapper studentMapper;
-
-	@Autowired
-	StudentScoreMapper studentScoreMapper;
-
-	@GetMapping("/subject/showTeacher/{id}")
-	public String getInfTeacher(@PathVariable("id") int id, Model model, HttpServletRequest request,
-			Principal principal) {
-		PagedListHolder<?> pages = (PagedListHolder<?>) request.getSession().getAttribute("subjectlist");
-
-		int pagesize = 2;
-
-		Teacher teacher = teacherMapper.getTeacherById(id);
-		model.addAttribute("teachers", teacher);
-
-		Account currentAccount = (Account) ((Authentication) principal).getPrincipal();
-		Student student = studentMapper.getStudentByEmail(currentAccount.getAccUsername());
-
-		List<Subject> list = subjectMapper.listSubject(student.getStuId());
-		if (pages == null) {
-			pages = new PagedListHolder<>(list);
-			pages.setPageSize(pagesize);
-		} else {
-			final int goToPage = 0;
-			if (goToPage <= pages.getPageCount() && goToPage >= 0) {
-				pages.setPage(goToPage);
-			}
-		}
-		request.getSession().setAttribute("subjectlist", pages);
-		int current = pages.getPage() + 1;
-		int begin = Math.max(1, current - list.size());
-		int end = Math.min(begin + 5, pages.getPageCount());
-		int totalPageCount = pages.getPageCount();
-		String baseUrl = "/student/subject/page/";
-		model.addAttribute("beginIndex", begin);
-		model.addAttribute("endIndex", end);
-		model.addAttribute("currentIndex", current);
-		model.addAttribute("totalPageCount", totalPageCount);
-		model.addAttribute("baseUrl", baseUrl);
-		model.addAttribute("list_subject", list);
-		model.addAttribute("subjects", pages);
-		return "student/student_subject";
-	}
+	private StudentScoreMapper studentScoreMapper;
+	
+	int pagesize = 10;
 
 	@GetMapping("/subject")
 	public String index(Model model, HttpServletRequest request, RedirectAttributes redirect) {
@@ -88,19 +48,23 @@ public class StudentSubjectController {
 
 	// phân trang
 	@GetMapping("/subject/page/{pageNumber}")
-	public String showEmployeePage(HttpServletRequest request, @PathVariable int pageNumber, Model model,
-			Principal principal) {
+	public String showEmployeePage(HttpServletRequest request, 
+								   @PathVariable int pageNumber,
+								   Principal principal, Model model) {
+		
 		PagedListHolder<?> pages = (PagedListHolder<?>) request.getSession().getAttribute("subjectlist");
-		int pagesize = 2;
 
 		Teacher teacher = new Teacher();
 		model.addAttribute("teachers", teacher);
 
 		Account currentAccount = (Account) ((Authentication) principal).getPrincipal();
-		Student student = studentMapper.getStudentByEmail(currentAccount.getAccUsername());
+		
+		Student student = studentMapper.getStudent(0, currentAccount.getAccUsername());
+		model.addAttribute("student", student);
+		
 		int stuId = student.getStuId();
 
-		List<Subject> list = subjectMapper.listSubject(stuId);
+		List<Subject> list = subjectMapper.listStudentSubject(stuId);
 
 		if (pages == null) {
 			pages = new PagedListHolder<>(list);
@@ -111,36 +75,42 @@ public class StudentSubjectController {
 				pages.setPage(goToPage);
 			}
 		}
+		
 		request.getSession().setAttribute("subjectlist", pages);
+		
 		int current = pages.getPage() + 1;
 		int begin = Math.max(1, current - list.size());
 		int end = Math.min(begin + 5, pages.getPageCount());
 		int totalPageCount = pages.getPageCount();
 		String baseUrl = "/student/subject/page/";
+		
 		model.addAttribute("beginIndex", begin);
 		model.addAttribute("endIndex", end);
 		model.addAttribute("currentIndex", current);
 		model.addAttribute("totalPageCount", totalPageCount);
 		model.addAttribute("baseUrl", baseUrl);
 		model.addAttribute("subjects", pages);
-		return "student/student_subject";
+		
+		return "student/StudentSubject";
 	}
 
 	@GetMapping("/subject/insert")
-	public String insertSubject(RedirectAttributes redirect, HttpServletRequest request, Model model,
-			@RequestParam(name = "subId") int subId, Principal principal) {
+	public String insertSubject(RedirectAttributes redirect, Model model, Principal principal,
+								HttpServletRequest request, 
+								@RequestParam(name = "subId") int subId) {
 
 		Account currentAccount = (Account) ((Authentication) principal).getPrincipal();
-		Student student = studentMapper.getStudentByEmail(currentAccount.getAccUsername());
+		Student student = studentMapper.getStudent(0, currentAccount.getAccUsername());
 		int stuId = student.getStuId();
 
 		// mã giả
 		PagedListHolder<?> pages = (PagedListHolder<?>) request.getSession().getAttribute("subjectlist");
-		int pagesize = 2;
-		Teacher teacher = teacherMapper.getTeacherById(stuId);
+		
+		Teacher teacher = null;
 		model.addAttribute("teachers", teacher);
 
-		List<Subject> list = subjectMapper.listSubject(0);
+		List<Subject> list = subjectMapper.listStudentSubject(0);
+		
 		if (pages == null) {
 			pages = new PagedListHolder<>(list);
 			pages.setPageSize(pagesize);
@@ -150,12 +120,15 @@ public class StudentSubjectController {
 				pages.setPage(goToPage);
 			}
 		}
+		
 		request.getSession().setAttribute("subjectlist", pages);
+		
 		int current = pages.getPage() + 1;
 		int begin = Math.max(1, current - list.size());
 		int end = Math.min(begin + 5, pages.getPageCount());
 		int totalPageCount = pages.getPageCount();
 		String baseUrl = "/student/subject/page/";
+		
 		model.addAttribute("beginIndex", begin);
 		model.addAttribute("endIndex", end);
 		model.addAttribute("currentIndex", current);
@@ -165,13 +138,12 @@ public class StudentSubjectController {
 		model.addAttribute("subjects", pages);
 
 		// insert
-		if (studentScoreMapper.insertSubjectScore(stuId, subId, 0) > 0) {
+		if (studentScoreMapper.insertSubjectScore(stuId, subId) > 0) {
 			return "redirect:/student/subject";
-
 		} else {
 			System.out.println("error");
 		}
-		return "student/student_subject";
+		return "student/StudentSubject";
 	}
 
 }

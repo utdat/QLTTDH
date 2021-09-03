@@ -2,14 +2,5 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper
 	namespace="com.quanlytrungtamdayhoc.mapper.AnnouncementMapper">
-	<resultMap id="BaseResultMap"
-		type="com.quanlytrungtamdayhoc.dbo.Announcement">
-		<id column="ANN_ID" jdbcType="INTEGER" property="annId" />
-		<result column="ANN_TITLE" jdbcType="VARCHAR"
-			property="annTitle" />
-		<result column="ANN_TYPE" jdbcType="INTEGER" property="annType" />
-		<result column="ANN_LINK" jdbcType="VARCHAR" property="annLink" />
-		<result column="SUB_ID" jdbcType="INTEGER" property="subId" />
-	</resultMap>
-
+	
 </mapper>

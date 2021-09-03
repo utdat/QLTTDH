@@ -9,10 +9,22 @@ import com.quanlytrungtamdayhoc.dbo.Subject;
 
 @Mapper
 public interface SubjectMapper {
-  
-//	List<Subject> listSubjectById(@Param("tea_id") int id);
-	
-	List<Subject> listSubject(@Param("stuId") int id);
-	
-	
+
+	List<Subject> getTeacherSubject(@Param("teaId") int id);
+
+	List<Subject> listStudentSubject(@Param("stuId") int id);
+
+	List<Subject> getListSubject();
+
+	Subject getSubjectById(@Param("subId") int subId);
+
+	int insertSubject(@Param("subName") String subName, @Param("subStartdate") String subStartdate,
+			@Param("subSchedule") String subSchedule, @Param("subRoom") String subRoom,
+			@Param("subTuition") int tuition, @Param("teaId") int teaId);
+
+	int deleteSubject(@Param("subId") int subId);
+
+	int updateSubject(@Param("subject") Subject subject,
+			@Param("teaId") int teaId,
+			@Param("subStartdate") String subStartdate);
 }

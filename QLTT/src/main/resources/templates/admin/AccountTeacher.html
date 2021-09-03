@@ -5,7 +5,6 @@
 
 <th:block th:insert="component/common-css :: common-css"></th:block>
 <th:block th:insert="component/common-js :: common-js"></th:block>
-<th:block th:insert="component/change_avatar :: change_avatar"></th:block>
 
 <link rel="stylesheet"
 	th:href="@{https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css}">
@@ -46,8 +45,7 @@ html, body, h1, h2, h3, h4, h5 {
 		<div class="w3-container w3-row">
 			<div class="w3-col s4">
 				<img th:src="@{/images/admin_avatar.jpg}"
-					class="w3-circle w3-margin-right" style="width: 46px"
-					onclick="document.getElementById('my_avatar').style.display='block'">
+					class="w3-circle w3-margin-right" style="width: 46px">
 			</div>
 			<div class="w3-col s8 w3-bar">
 				<span>Welcome, <strong>Admin</strong></span><br> <a
@@ -65,30 +63,38 @@ html, body, h1, h2, h3, h4, h5 {
 				class="w3-bar-item w3-button
 			w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black"
 				onclick="w3_close()" title="close menu"><i
-				class="fa fa-remove fa-fw"></i> Close Menu</a> 
-				
-			<a onclick="myAccFunc('account')" href="javascript:void(0)" id="myBtn"
-				class="w3-bar-item w3-button w3-padding w3-blue"> 
-				<i class="fas fa-address-book"></i> Account</a>
+				class="fa fa-remove fa-fw"></i> Close Menu</a> <a
+				onclick="myAccFunc('account')" href="javascript:void(0)" id="myBtn"
+				class="w3-bar-item w3-button w3-padding w3-blue"> <i
+				class="fas fa-address-book"></i> Account
+			</a>
 			<div id="account" class="w3-bar-block w3-hide w3-padding w3-show">
-				<a th:href="@{/admin/account/student}" class="w3-bar-item w3-button w3-padding"> Student</a> 
-				<a th:href="@{/admin/account/teacher}" class="w3-bar-item w3-button w3-padding w3-blue"><i
-					class="fa fa-caret-right w3-margin-right"></i> Teacher</a>
-				<a th:href="@{/admin/account/detail}" class="w3-bar-item w3-button w3-padding"> Detail</a>
+				<a th:href="@{/admin/account/student}"
+					class="w3-bar-item w3-button w3-padding"> Student</a> <a
+					th:href="@{/admin/account/teacher}"
+					class="w3-bar-item w3-button w3-padding w3-blue"><i
+					class="fa fa-caret-right w3-margin-right"></i> Teacher</a> <a
+					th:href="@{/admin/account/detail}"
+					class="w3-bar-item w3-button w3-padding"> Detail</a>
 			</div>
-			
-			<a onclick="myAccFunc('subject')" href="javascript:void(0)" id="myBtn"
-				class="w3-bar-item w3-button w3-padding"> <i
-				class="fas fa-book-open"></i> Subject</a>
-			<div id="subject" class="w3-bar-block w3-hide w3-padding">
-				<a href="" class="w3-bar-item w3-button w3-padding"> Subject List</a> 
-				<a href="" class="w3-bar-item w3-button w3-padding"> Subject Detail</a>
-			</div>
-			
+
+			<a onclick="myAccFunc('subject')" href="javascript:void(0)"
+				id="myBtn" class="w3-bar-item w3-button w3-padding"> <i
+				class="fas fa-book-open"></i> Subject
+			</a>
+<!-- 			<div id="subject" class="w3-bar-block w3-hide w3-padding">
+				<a href="" class="w3-bar-item w3-button w3-padding"
+					th:href="@{/admin/subject}"> Subject List</a> <a href=""
+					class="w3-bar-item w3-button w3-padding "
+					th:href="@{/admin/subject/detail}"> <i
+					class="fa fa-caret-right w3-margin-right"></i> Subject Detail
+				</a>
+			</div> -->
+
 			<a href="" class="w3-bar-item w3-button w3-padding"> <i
 				class="fas fa-chalkboard-teacher"></i> Student's Subject
 			</a>
-			 
+
 			<form th:action="@{/logout}" method="POST">
 				<span class="input-group-btn">
 					<button class="btn btn-default w3-button w3-padding w3-bar-item"
@@ -96,7 +102,8 @@ html, body, h1, h2, h3, h4, h5 {
 						<span class="fas fa-sign-out-alt fa-fw"></span> Logout
 					</button>
 				</span>
-			</form><br> <br>
+			</form>
+			<br> <br>
 		</div>
 	</nav>
 
@@ -133,6 +140,7 @@ html, body, h1, h2, h3, h4, h5 {
 							<th>Name</th>
 							<th class="w3-center">Phone</th>
 							<th>School</th>
+							<th class="w3-center">Salary Rate</th>
 							<th>Email</th>
 							<th>Password</th>
 							<th class="w3-center">Detail</th>
@@ -140,46 +148,47 @@ html, body, h1, h2, h3, h4, h5 {
 						</tr>
 						<tr>
 							<td class="w3-center"><input size="3"
-								class="form-control w3-center" type="hidden" name="id"/></td>
-							<td><input size="20"
-								class="form-control" type="text" name="name"
-								required /></td>
-							<td class="w3-center"><input size="15"
-								class="form-control w3-center" type="text" name="phone"
-								required /></td>
-							<td><input size="20"
-								class="form-control" type="text" name="school"
-								required /></td>
-							<td><input size="40" 
-								class="form-control" type="email" name="email" 
-								required /></td>
-							<td><input size="10" 
-								class="form-control" type="password" name="password" 
-								required /></td>
+								class="form-control w3-center" type="hidden" name="id" /></td>
+							<td><input size="20" class="form-control" type="text"
+								name="name" required /></td>
+							<td class="w3-center"><input size="10"
+								class="form-control w3-center" type="text" name="phone" required /></td>
+							<td><input size="20" class="form-control" type="text"
+								name="school" required /></td>
+							<td><input size="10" class="form-control" type="text"
+								name="salaryrate" required /></td>
+							<td><input size="30" class="form-control" type="email"
+								name="email" required /></td>
+							<td><input size="10" class="form-control" type="password"
+								name="password" required /></td>
 							<td class="w3-center"></td>
 							<td class="w3-center"><button class="form-control w3-center">
 									<i class="fas fa-user-plus"></i>
 								</button></td>
 						</tr>
-						<th:block th:each="teacher : ${teacherList}">
+						<th:block th:each="teacher, iter : ${teacherList}">
 							<tr>
 								<td th:text="${teacher.teaId}" class="w3-center"></td>
 								<td th:text="${teacher.teaName}"></td>
 								<td th:text="${teacher.teaPhone}" class="w3-center"></td>
 								<td th:text="${teacher.teaSchool}"></td>
+								<td th:text="${teacher.teaSalaryrate}" class="w3-center"></td>
 								<td th:text="${teacher.teaEmail}"></td>
 								<td></td>
 								<td class="w3-center"><a
 									th:href="@{/admin/account/teacher/{teaId}(teaId=${teacher.teaId})}"><i
 										class="fas fa-paper-plane"></i></a></td>
-								<td class="w3-center"><a href="">
-									<th:block th:if="teacher.teaId != '2'"> 
-										<i class="fas fa-user-check"></i>
-									</th:block>
-									<th:block th:unless="teacher.teaId != '2'"> 
-										<i class="fas fa-user-slash"></i>
-									</th:block>
-								</a></td>
+								<td class="w3-center"><th:block
+										th:if="${accountList[iter.index].accIsactive} == 'T'">
+										<a
+											th:href="@{/admin/account/active(username=${teacher.teaEmail})}"><i
+											class="fas fa-user-slash"></i></a>
+									</th:block> <th:block
+										th:unless="${accountList[iter.index].accIsactive} == 'T'">
+										<a
+											th:href="@{/admin/account/active(username=${teacher.teaEmail})}"><i
+											class="fas fa-user-check"></i></a>
+									</th:block></td>
 							</tr>
 						</th:block>
 				</table>
@@ -215,7 +224,8 @@ html, body, h1, h2, h3, h4, h5 {
 		<footer class="w3-container w3-padding-16 w3-light-grey">
 			<h4>FOOTER</h4>
 			<p>
-				Powered by <a href="https://www.w3schools.com/w3css/default.asp"
+				Powered by <a
+					th:href="@{https://www.w3schools.com/w3css/default.asp}"
 					target="_blank">w3.css</a>
 			</p>
 		</footer>

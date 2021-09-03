@@ -1,21 +1,3 @@
-<!-- <%@page import="entity.Subjects"%>
-<%@page import="java.util.HashMap"%>
-<%@page import="entity.Accounts"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
-
-<%
-Accounts acc_cur = (Accounts) session.getAttribute("acc_cur");
-HashMap<Subjects, String> sub_regis = (HashMap<Subjects, String>) session.getAttribute("sub_regis");
-
-String dir = "";
-if (acc_cur.getAvatar() == null) {
-dir = "images/default_user.png";
-} else {
-dir = "images/" + acc_cur.getAvatar();
-}
-%> -->
-
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeLeaf.org">
 <head>
@@ -25,7 +7,7 @@ dir = "images/" + acc_cur.getAvatar();
 <th:block th:insert="component/change_avatar :: change_avatar"></th:block>
 
 <link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+	th:href="@{https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css}">
 </head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -35,14 +17,17 @@ html, body, h1, h2, h3, h4, h5 {
 }
 </style>
 <body class="w3-light-grey">
-	<!-- <%
-if (request.getAttribute("mess") != null && request.getAttribute("mess") != "") {
-%>
-<script>
-	alert("<%=request.getAttribute("mess")%>");
-</script>
-<%
-}%> -->
+
+	<th:block th:if="message != null">
+		<input type="hidden" th:value="${message}" id="mess" />
+		<script>
+			var mess = document.getElementById("mess");
+			if (mess.value !== "") {
+				alert(mess.value);
+			}
+		</script>
+	</th:block>
+
 	<!-- Top container -->
 	<div class="w3-bar w3-top w3-black w3-large" style="z-index: 4">
 		<button
@@ -59,15 +44,15 @@ if (request.getAttribute("mess") != null && request.getAttribute("mess") != "") 
 		<br>
 		<div class="w3-container w3-row">
 			<div class="w3-col s4">
-				<img src="<%=dir%>" class="w3-circle w3-margin-right"
-					style="width: 46px"
+				<img th:src="${student.getAvatarPath()}"
+					class="w3-circle w3-margin-right" style="width: 46px"
 					onclick="document.getElementById('my_avatar').style.display='block'">
 			</div>
 			<div class="w3-col s8 w3-bar">
-				<span>Welcome</span><br> <a class="w3-bar-item w3-button"><i
-					class="fa fa-envelope"></i></a> <a class="w3-bar-item w3-button"><i
-					class="fa fa-user"></i></a> <a class="w3-bar-item w3-button"><i
-					class="fa fa-cog"></i></a>
+				<span>Welcome <br> <strong th:text="${student.stuName}"></strong></span><br>
+				<a class="w3-bar-item w3-button"><i class="fa fa-envelope"></i></a>
+				<a class="w3-bar-item w3-button"><i class="fa fa-user"></i></a> <a
+					class="w3-bar-item w3-button"><i class="fa fa-cog"></i></a>
 			</div>
 		</div>
 		<hr>
@@ -75,17 +60,17 @@ if (request.getAttribute("mess") != null && request.getAttribute("mess") != "") 
 			<h5>My Dashboard</h5>
 		</div>
 		<div class="w3-bar-block">
-			<a href=""
+			<a th:href="@{/student/subject}"
 				class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black"
 				onclick="w3_close()" title="close menu"><i
 				class="fa fa-remove fa-fw"></i> Close Menu</a> <a
-				href="student_profile.html" th:href="@{/student/profile}"
+				th:href="@{/student/profile}"
 				class="w3-bar-item w3-button w3-padding "> <i
 				class="fas fa-user-edit fa-fw"></i> Profile
-			</a> <a href="student_subject.html" th:href="@{/student/subject}"
+			</a> <a th:href="@{/student/subject}"
 				class="w3-bar-item w3-button w3-padding w3-blue"> <i
 				class="fas fa-book-reader fa-fw"></i> Subject
-			</a> <a href="student_score.html" th:href="@{/student/score}"
+			</a> <a th:href="@{/student/score}"
 				class="w3-bar-item w3-button w3-padding"> <i
 				class="fas fa-user-graduate fa-fw"></i> Score
 			</a>
@@ -140,29 +125,35 @@ if (request.getAttribute("mess") != null && request.getAttribute("mess") != "") 
 							<th class="w3-center">Sub Room</th>
 							<th class="w3-center">Sub Tuition</th>
 							<th class="w3-center">Teacher Name</th>
-							<th class="w3-center">Teacher Inf</th>
-							<th class="w3-center">Submit</th>
+							<th class="w3-center">Teacher Info</th>
+							<th class="w3-center">Register</th>
 						</tr>
 						<th:block th:each="sub : ${subjects.getPageList}">
 							<tr>
-								<td th:text="${sub.subId}"></td>
+								<td th:text="${sub.subId}" class="w3-center"></td>
 								<td th:text="${sub.subName}"></td>
 								<td th:text="${#dates.format(sub.subStartdate,'dd-MM-yyyy')}"></td>
 								<td th:text="${sub.subSchedule}"></td>
 								<td class="w3-center" th:text="${sub.subRoom}"></td>
 								<td class="w3-center" th:text="${sub.subTuition}"></td>
 								<td class="w3-center" th:text="${sub.teacher.teaName}"></td>
-								<td class="w3-center"
-									onclick="document.getElementById('id01').style.display='block'"><a
-									th:href="@{/student/subject/showTeacher/{id}(id=${sub.teacher.teaId})}"><i
-										class="fas fa-address-card"></i></a></td>
+								<td class="w3-center"><input type="hidden"
+									th:id="${sub.subId + '_name'}"
+									th:value="${sub.teacher.teaName}" /> <input type="hidden"
+									th:id="${sub.subId + '_phone'}"
+									th:value="${sub.teacher.teaPhone}" /> <input type="hidden"
+									th:id="${sub.subId + '_school'}"
+									th:value="${sub.teacher.teaSchool}" /> <input type="hidden"
+									th:id="${sub.subId + '_email'}"
+									th:value="${sub.teacher.teaEmail}" /> <i
+									class="fas fa-address-card"
+									th:onclick="|get_info(${sub.subId})|"></i></td>
 
 								<td class="w3-center"><th:block
 										th:if="${#dates.format(sub.subStartdate,'yyyy-MM-dd')} > ${#calendars.format(#calendars.createNow(),'yyyy-MM-dd')}">
 										<a th:href="@{/student/subject/insert(subId=${sub.subId})}"><i
 											class="fas fa-paper-plane"></i></a>
 									</th:block></td>
-
 
 							</tr>
 						</th:block>
@@ -227,21 +218,44 @@ if (request.getAttribute("mess") != null && request.getAttribute("mess") != "") 
 
 		<!--Show title teacher -->
 		<th:block th:if="teachers != null">
-			<div id="id01" class="w3-modal">
+			<div id="info" class="w3-modal">
 				<div class="w3-modal-content w3-animate-top w3-card-4">
 					<header class="w3-container w3-teal">
 						<span
-							onclick="document.getElementById('id01').style.display='none'"
+							onclick="document.getElementById('info').style.display='none'"
 							class="w3-button w3-display-topright">&times;</span>
 						<h2>Teacher Information</h2>
 					</header>
 					<div class="w3-container">
-						<span>Teacher ID: </span><span th:utext=${teachers.teaId}></span>
-						<br> <span>Teacher name: </span><span
-							th:utext=${teachers.teaName}></span> <br> <span>Teacher
-							email: </span><span th:utext=${teachers.teaEmail}></span> <br> <span>Teacher
-							phone: </span><span th:utext=${teachers.teaPhone}></span> <br> <span>Teacher
-							school: </span><span th:utext=${teachers.teaSchool}></span> <br>
+						<br>
+						<div class="form-group">
+							<div class="input-group-prepend">
+								<span class="input-group-text">Full Name</span>
+							</div>
+							<input type="text" class="form-control" id="name" />
+						</div>
+						<br>
+						<div class="form-group">
+							<div class="input-group-prepend">
+								<span class="input-group-text">Email</span>
+							</div>
+							<input type="text" class="form-control" id="email" />
+						</div>
+						<br>
+						<div class="form-group">
+							<div class="input-group-prepend">
+								<span class="input-group-text">Phone</span>
+							</div>
+							<input type="text" class="form-control" id="phone" />
+						</div>
+						<br>
+						<div class="form-group">
+							<div class="input-group-prepend">
+								<span class="input-group-text">School</span>
+							</div>
+							<input type="text" class="form-control" id="school" />
+						</div>
+						<br>
 					</div>
 					<footer class="w3-container w3-teal">
 						<p></p>
@@ -255,7 +269,8 @@ if (request.getAttribute("mess") != null && request.getAttribute("mess") != "") 
 		<footer class="w3-container w3-padding-16 w3-light-grey">
 			<h4>FOOTER</h4>
 			<p>
-				Powered by <a href="https://www.w3schools.com/w3css/default.asp"
+				Powered by <a
+					th:href="@{https://www.w3schools.com/w3css/default.asp}"
 					target="_blank">w3.css</a>
 			</p>
 		</footer>

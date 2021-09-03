@@ -18,7 +18,7 @@ import com.quanlytrungtamdayhoc.service.AccountService;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	@Autowired
-	AccountService account_service;
+	private AccountService accountService;
 	
 	@Bean
 	public PasswordEncoder passwordEncoder() {
@@ -29,16 +29,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 	protected void configure(HttpSecurity http) throws Exception {
 		
 		http.authorizeRequests()
-	    .antMatchers("/css/**","/images/**").permitAll()
+	    .antMatchers("/css/**", "/images/**").permitAll()
 	    .antMatchers("/admin/**").hasRole("ADMIN")
 	    .antMatchers("/teacher/**").hasRole("TEACHER")
 	    .antMatchers("/student/**").hasRole("STUDENT")
-	    .anyRequest().authenticated()
-	    .and()
+	    .anyRequest().authenticated().and()
 		.formLogin().loginPage("/login").permitAll()
 		.defaultSuccessUrl("/userInfo")
 		.failureUrl("/login?success=false")
-		.loginProcessingUrl("/spring_security_check");
+		.loginProcessingUrl("/spring_security_check").and()
+		.logout().logoutSuccessUrl("/login").and()
+		.exceptionHandling().accessDeniedPage("/access-denied");
 	}
 	
 	@Override
@@ -49,6 +50,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 		 * .authorities("ROLE_USER");
 		 */
 		
-		auth.userDetailsService(account_service).passwordEncoder(passwordEncoder());
+		auth.userDetailsService(accountService).passwordEncoder(passwordEncoder());
 	}
 }

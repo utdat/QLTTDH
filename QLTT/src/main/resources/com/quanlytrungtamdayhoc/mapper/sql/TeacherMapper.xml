@@ -1,46 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.quanlytrungtamdayhoc.mapper.TeacherMapper">
-	<resultMap id="TeacherMapper"
-		type="com.quanlytrungtamdayhoc.dbo.Teacher">
-		<id column="TEA_ID" jdbcType="INTEGER" property="teaId" />
-		<result column="TEA_EMAIL" jdbcType="VARCHAR"
-			property="teaEmail" />
-		<result column="TEA_NAME" jdbcType="VARCHAR" property="teaName" />
-		<result column="TEA_PHONE" jdbcType="VARCHAR"
-			property="teaPhone" />
-		<result column="TEA_ADDRESS" jdbcType="VARCHAR"
-			property="teaAddress" />
-		<result column="TEA_GENDER" jdbcType="CHAR"
-			property="teaGender" />
-		<result column="TEA_BIRTHDATE" jdbcType="DATE"
-			property="teaBirthdate" />
-		<result column="TEA_HIREDATE" jdbcType="DATE"
-			property="teaHiredate" />
-		<result column="TEA_SCHOOL" jdbcType="VARCHAR"
-			property="teaSchool" />
-		<result column="TEA_AVATAR" jdbcType="VARCHAR"
-			property="teaAvatar" />
-		<result column="TEA_SALARYRATE" jdbcType="REAL"
-			property="teaSalaryrate" />
-	</resultMap>
-	<select id="getTeacherByEmail" resultMap="TeacherMapper"
-		resultType="map">
-		SELECT * FROM TEACHERS WHERE TEA_EMAIL=#{teaEmail}
-	</select>
-
-	<select id="getTeacherById" resultMap="TeacherMapper"
-		parameterType="map">
+	<resultMap id="TeacherMapper" type="com.quanlytrungtamdayhoc.dbo.Teacher">
+		<id property="teaId" column="TEA_ID"/>
+		<result property="teaEmail" column="TEA_EMAIL"/>
+		<result property="teaName" column="TEA_NAME"/>
+		<result property="teaPhone" column="TEA_PHONE"/>
+		<result property="teaAddress" column="TEA_ADDRESS"/>
+		<result property="teaGender" column="TEA_GENDER"/>
+		<result property="teaBirthdate" column="TEA_BIRTHDATE"/>
+		<result property="teaHiredate" column="TEA_HIREDATE"/>
+		<result property="teaSchool" column="TEA_SCHOOL"/>
+		<result property="teaAvatar" column="TEA_AVATAR"/>
+		<result property="teaSalaryrate" column="TEA_SALARYRATE"/>
+	</resultMap>	
+	
+	<select id="getTeacher" resultMap="TeacherMapper" parameterType="map">
 		SELECT *
 		FROM TEACHERS
-		WHERE TEA_ID = #{teaId}
-	</select>
-
-	<select id="getTeacher" resultMap="TeacherMapper"
-		parameterType="map">
-		SELECT *
-		FROM TEACHERS
-		WHERE
+		WHERE 
 		<choose>
 			<when test="teaId != 0">
 				TEA_ID = #{teaId}
@@ -50,34 +28,39 @@
 			</when>
 		</choose>
 	</select>
-
-	<select id="getAllTeacher" resultMap="TeacherMapper"
-		parameterType="map">
+	
+	<select id="getAllTeacher" resultMap="TeacherMapper" parameterType="map">
 		SELECT *
 		FROM TEACHERS
+		ORDER BY TEA_ID
 	</select>
-
+	
 	<update id="updateTeacher" parameterType="map">
 		UPDATE TEACHERS
 		SET TEA_NAME = #{teacher.teaName}
 		<if test="teacher.teaAddress != null">
-			, TEA_ADDRESS = #{teacher.teaAddress}
+		, TEA_ADDRESS = #{teacher.teaAddress}
 		</if>
 		<if test="teacher.teaSchool != null">
-			, TEA_SCHOOL = #{teacher.teaSchool}
+		, TEA_SCHOOL = #{teacher.teaSchool}
 		</if>
 		<if test="teacher.teaPhone != null">
-			, TEA_PHONE = #{teacher.teaPhone}
+		, TEA_PHONE = #{teacher.teaPhone}
 		</if>
 		<if test="teacher.teaGender != null">
-			, TEA_GENDER = #{teacher.teaGender}
+		, TEA_GENDER = #{teacher.teaGender}
 		</if>
 		<if test="teacher.teaAvatar != null">
-			, TEA_AVATAR = #{teacher.teaAvatar}
+		, TEA_AVATAR = #{teacher.teaAvatar}
 		</if>
 		<if test="birthdate != null">
-			, TEA_BIRTHDATE = #{birthdate}
+		, TEA_BIRTHDATE = #{birthdate}
 		</if>
-		WHERE TEA_EMAIL = #{email}
+		WHERE TEA_ID = #{teacher.teaId}
 	</update>
+	
+	<insert id="addTeacher" parameterType="map">
+		INSERT INTO TEACHERS (TEA_NAME, TEA_PHONE, TEA_SCHOOL, TEA_SALARYRATE, TEA_EMAIL, TEA_HIREDATE)
+		VALUES (#{teaName}, #{teaPhone}, #{teaSchool}, #{teaSalaryrate}, #{teaEmail}, CURDATE());
+	</insert>
 </mapper>
