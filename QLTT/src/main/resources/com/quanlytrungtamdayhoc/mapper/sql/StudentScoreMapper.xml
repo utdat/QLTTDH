@@ -72,6 +72,16 @@
 		SC.STU_ID = #{stuId}
 	</select>
 
+	<select id="getStudentScoreById" resultMap="StudentScoreMapper"
+		parameterType="map">
+		SELECT *
+		FROM STUDENT_SCORES SC
+		JOIN STUDENTS ST ON
+		SC.STU_ID = ST.STU_ID
+		JOIN SUBJECTS SU ON SC.SUB_ID = SU.SUB_ID
+		WHERE
+		SC.STU_ID = #{stuId} AND SC.SUB_ID = #{subId}
+	</select>
 	<select id="getListStudentScore" resultMap="StudentScoreMapper"
 		parameterType="map">
 		SELECT *
@@ -86,6 +96,13 @@
 		SET
 		SCORE = #{score}
 		WHERE SUB_ID = #{subId} AND STU_ID = #{stuId}
+	</update>
+	
+	<update id="updateScoreById" parameterType="map">
+		UPDATE STUDENT_SCORES
+		SET
+		SUB_ID = #{studentSubject.subId}
+		WHERE SUB_ID = #{studentSubject.subId} AND STU_ID = #{studentSubject.stuId}
 	</update>
 
 	<insert id="insertSubjectScore" parameterType="map">

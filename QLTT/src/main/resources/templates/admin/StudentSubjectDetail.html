@@ -88,9 +88,8 @@ html, body, h1, h2, h3, h4, h5 {
 			<div id="subject" class="w3-bar-block w3-hide w3-padding">
 				<a href="" class="w3-bar-item w3-button w3-padding"
 					th:href="@{/admin/subject}"> Subject List</a> <a href=""
-					class="w3-bar-item w3-button w3-padding w3-blue"
-					th:href="@{/admin/subject/detail}"><i
-					class="fa fa-caret-right w3-margin-right"></i>Subject Detail </a>
+					class="w3-bar-item w3-button w3-padding"
+					th:href="@{/admin/subject/detail}">Subject Detail </a>
 			</div>
 
 			<a onclick="myAccFunc('studentSubject')" href="javascript:void(0)"
@@ -136,7 +135,8 @@ html, body, h1, h2, h3, h4, h5 {
 		<!-- Header -->
 		<div class="panel-body">
 			<div class="card-body">
-				<form method="POST">
+				<form method="POST" th:object="${studentSubject}"
+					th:action="@{/admin/student/subject/detail(stuId=${studentSubject.student.stuId}, subId=${studentSubject.subject.subId})}">
 					<div class="row register-form">
 						<div class="col-md-6">
 							<div class="form-group">
@@ -144,22 +144,17 @@ html, body, h1, h2, h3, h4, h5 {
 									<span class="input-group-text">Student ID</span>
 								</div>
 								<input type="text" class="form-control"
-									placeholder="Student ID *" name="stuid" required />
+									placeholder="Student ID *"
+									th:value=${studentSubject.student.stuId} name="stuid" required
+									disabled />
 							</div>
 							<div class="form-group">
 								<div class="input-group-prepend">
 									<span class="input-group-text">Student Name</span>
 								</div>
-								<input type="text" name="stuname" class="form-control"
+								<input type="text" name="stuname" class="form-control" disabled
+									th:value=${studentSubject.student.stuName}
 									placeholder="Student Name *" />
-							</div>
-
-							<div class="form-group">
-								<div class="input-group-prepend">
-									<span class="input-group-text">Subject ID</span>
-								</div>
-								<input type="text" class="form-control"
-									placeholder="Subject ID " name="subtid" />
 							</div>
 
 						</div>
@@ -169,17 +164,22 @@ html, body, h1, h2, h3, h4, h5 {
 								<div class="input-group-prepend">
 									<span class="input-group-text">Subject Name</span>
 								</div>
-								<input type="text" name="subname" class="form-control"
-									placeholder="Subject Name *" />
+								<select class="form-control" name="subId">
+									<option th:value="${studentSubject.subject.subId}"
+										th:utext="${studentSubject.subject.subName}"
+										selected="selected" disabled="disabled"></option>
+									<option th:each="sub : ${subjectList}" th:value="${sub.subId}"
+										th:utext="${sub.subName}" />
+								</select>
 							</div>
 
-							<div class="form-group">
+							<!-- 							<div class="form-group">
 								<div class="input-group-prepend">
 									<span class="input-group-text">Score</span>
 								</div>
 								<input class="form-control" name="score" type="number"
 									placeholder="Subject Score *">
-							</div>
+							</div> -->
 
 						</div>
 					</div>

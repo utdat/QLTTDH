@@ -23,7 +23,6 @@ import com.quanlytrungtamdayhoc.dbo.Teacher;
 import com.quanlytrungtamdayhoc.mapper.StudentMapper;
 import com.quanlytrungtamdayhoc.mapper.StudentScoreMapper;
 import com.quanlytrungtamdayhoc.mapper.SubjectMapper;
-import com.quanlytrungtamdayhoc.mapper.TeacherMapper;
 
 @Controller
 @RequestMapping("/student")
