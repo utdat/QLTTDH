@@ -47,14 +47,13 @@ public class AdminSubjectController {
 	public String getAdminSubject(Model model, HttpServletRequest request, @PathVariable int pageNumber,
 			Principal principal) {
 
-
 		PagedListHolder<?> pages = (PagedListHolder<?>) request.getSession().getAttribute("subjectlist");
 
-		Teacher teacher = new Teacher();
-		model.addAttribute("teachers", teacher);
+		List<Teacher> teacher = teacherMapper.getAllTeacher();
+		model.addAttribute("teacherList", teacher);
 
 		List<Subject> list = subjectMapper.getListSubject();
-		
+
 		if (pages == null) {
 			pages = new PagedListHolder<>(list);
 			pages.setPageSize(PAGE_SIZE);
@@ -64,22 +63,22 @@ public class AdminSubjectController {
 				pages.setPage(goToPage);
 			}
 		}
-		
+
 		request.getSession().setAttribute("subjectlist", pages);
-		
+
 		int current = pages.getPage() + 1;
 		int begin = Math.max(1, current - list.size());
 		int end = Math.min(begin + 5, pages.getPageCount());
 		int totalPageCount = pages.getPageCount();
 		String baseUrl = "/admin/subject/page/";
-		
+
 		model.addAttribute("beginIndex", begin);
 		model.addAttribute("endIndex", end);
 		model.addAttribute("currentIndex", current);
 		model.addAttribute("totalPageCount", totalPageCount);
 		model.addAttribute("baseUrl", baseUrl);
 		model.addAttribute("subjects", pages);
-				
+
 		return "admin/Subject";
 	}
 
@@ -108,6 +107,7 @@ public class AdminSubjectController {
 			@RequestParam(name = "startdate") String startdate) {
 
 		String message = null;
+		System.out.println(teaId);
 		if (subjectMapper.updateSubject(subject, teaId, startdate) > 0) {
 			message = "Update Subject Success";
 			return "redirect:/admin/subject/detail/" + subId;
@@ -145,8 +145,10 @@ public class AdminSubjectController {
 		Subject subject = subjectMapper.getSubjectById(subId);
 		int teaId = subject.getTeacher().getTeaId();
 
+		List<Teacher> list = teacherMapper.getAllTeacher();
 		Teacher teacher = teacherMapper.getTeacher(teaId, null);
 
+		model.addAttribute("teacherList", list);
 		model.addAttribute("teacher", teacher);
 		model.addAttribute("subject", subject);
 

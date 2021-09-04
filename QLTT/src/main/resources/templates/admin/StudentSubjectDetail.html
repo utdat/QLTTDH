@@ -2,7 +2,6 @@
 <html xmlns:th="http://www.thymeLeaf.org">
 <head>
 <title>Admin</title>
-
 <th:block th:insert="component/common-css :: common-css"></th:block>
 <th:block th:insert="component/common-js :: common-js"></th:block>
 
@@ -14,6 +13,11 @@
 <style>
 html, body, h1, h2, h3, h4, h5 {
 	font-family: "Raleway", sans-serif
+}
+
+.sel {
+	height: 34px;
+	padding: 6px 12px;
 }
 </style>
 <body class="w3-light-grey">
@@ -38,8 +42,7 @@ html, body, h1, h2, h3, h4, h5 {
 		<span class="w3-bar-item w3-right"> Admin </span>
 	</div>
 
-	<!-- Sidebar/menu -->
-	<nav class="w3-sidebar w3-collapse w3-white "
+	<nav class="w3-sidebar w3-collapse w3-white"
 		style="z-index: 3; width: 300px;" id="mySidebar">
 		<br>
 		<div class="w3-container w3-row">
@@ -59,48 +62,50 @@ html, body, h1, h2, h3, h4, h5 {
 			<h5>My Dashboard</h5>
 		</div>
 		<div class="w3-bar-block">
-			<a th:href="@{/admin/account/teacher}"
+			<a th:href="@{/admin/account/student}"
 				class="w3-bar-item w3-button
 			w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black"
 				onclick="w3_close()" title="close menu"><i
 				class="fa fa-remove fa-fw"></i> Close Menu</a> <a
 				onclick="myAccFunc('account')" href="javascript:void(0)" id="myBtn"
-				class="w3-bar-item w3-button w3-padding w3-blue"> <i
+				class="w3-bar-item w3-button w3-padding"> <i
 				class="fas fa-address-book"></i> Account
 			</a>
-			<div id="account" class="w3-bar-block w3-hide w3-padding w3-show">
+			<div id="account" class="w3-bar-block w3-hide w3-padding ">
 				<a th:href="@{/admin/account/student}"
 					class="w3-bar-item w3-button w3-padding"> Student</a> <a
 					th:href="@{/admin/account/teacher}"
-					class="w3-bar-item w3-button w3-padding w3-blue"><i
-					class="fa fa-caret-right w3-margin-right"></i> Teacher</a> <a
+					class="w3-bar-item w3-button w3-padding"> Teacher</a> <a
 					th:href="@{/admin/account/detail}"
-					class="w3-bar-item w3-button w3-padding"> Detail</a>
+					class="w3-bar-item w3-button w3-padding "><i
+					class="fa fa-caret-right w3-margin-right"></i> Detail</a>
 			</div>
 
 			<a onclick="myAccFunc('subject')" href="javascript:void(0)"
 				id="myBtn" class="w3-bar-item w3-button w3-padding"> <i
 				class="fas fa-book-open"></i> Subject
 			</a>
-<!-- 			<div id="subject" class="w3-bar-block w3-hide w3-padding">
+			<div id="subject" class="w3-bar-block w3-hide w3-padding">
 				<a href="" class="w3-bar-item w3-button w3-padding"
 					th:href="@{/admin/subject}"> Subject List</a> <a href=""
-					class="w3-bar-item w3-button w3-padding "
-					th:href="@{/admin/subject/detail}"> <i
-					class="fa fa-caret-right w3-margin-right"></i> Subject Detail
-				</a>
-			</div> -->
+					class="w3-bar-item w3-button w3-padding w3-blue"
+					th:href="@{/admin/subject/detail}"><i
+					class="fa fa-caret-right w3-margin-right"></i>Subject Detail </a>
+			</div>
 
-			<a onclick="myAccFunc('subject')" href="javascript:void(0)"
+			<a onclick="myAccFunc('studentSubject')" href="javascript:void(0)"
 				id="myBtn" class="w3-bar-item w3-button w3-padding w3-blue"> <i
 				class="fas fa-chalkboard-teacher"></i> Student's Subject
 			</a>
-			<div id="subject" class="w3-bar-block w3-hide w3-padding">
+			<div id="studentSubject"
+				class="w3-bar-block w3-hide w3-padding w3-show">
 				<a class="w3-bar-item w3-button w3-padding"
-					th:href="@{/admin/student/subject}"> Student List Subject</a>
-				<a class="w3-bar-item w3-button w3-padding"
-					th:href="@{/admin/student/subject/detail}"> Student Subject
-					Detail </a>
+					th:href="@{/admin/student/subject}"> Student List Subject</a> <a
+					class="w3-bar-item w3-button w3-padding w3-blue"
+					th:href="@{/admin/student/subject/detail}"> <i
+					class="fa fa-caret-right w3-margin-right"></i>Student Subject
+					Detail
+				</a>
 			</div>
 
 			<form th:action="@{/logout}" method="POST">
@@ -115,6 +120,7 @@ html, body, h1, h2, h3, h4, h5 {
 		</div>
 	</nav>
 
+
 	<!-- Overlay effect when opening sidebar on small screens -->
 	<div class="w3-overlay w3-hide-large w3-animate-opacity"
 		onclick="w3_close()" style="cursor: pointer" title="close side menu"
@@ -122,89 +128,66 @@ html, body, h1, h2, h3, h4, h5 {
 
 	<!-- !PAGE CONTENT! -->
 	<div class="w3-main" style="margin-left: 300px; margin-top: 43px;">
-		<!-- Header -->
 		<header class="w3-container" style="padding-top: 22px">
 			<h2>
-				<b><i class="fas fa-address-book"></i> Teacher List</b>
+				<b><i class="fas fa-user-edit fa-fw"></i> Edit Subject</b>
 			</h2>
 		</header>
+		<!-- Header -->
 		<div class="panel-body">
-			<div class="input-group">
-				<input class="form-control" type="text"
-					placeholder="Search for names..." id="myInput"
-					onkeyup="myFunction()"> <span class="input-group-btn">
-					<button class="btn btn-default" type="button">
-						<span class="glyphicon glyphicon-search"></span>
-					</button>
-				</span>
+			<div class="card-body">
+				<form method="POST">
+					<div class="row register-form">
+						<div class="col-md-6">
+							<div class="form-group">
+								<div class="input-group-prepend">
+									<span class="input-group-text">Student ID</span>
+								</div>
+								<input type="text" class="form-control"
+									placeholder="Student ID *" name="stuid" required />
+							</div>
+							<div class="form-group">
+								<div class="input-group-prepend">
+									<span class="input-group-text">Student Name</span>
+								</div>
+								<input type="text" name="stuname" class="form-control"
+									placeholder="Student Name *" />
+							</div>
+
+							<div class="form-group">
+								<div class="input-group-prepend">
+									<span class="input-group-text">Subject ID</span>
+								</div>
+								<input type="text" class="form-control"
+									placeholder="Subject ID " name="subtid" />
+							</div>
+
+						</div>
+						<div class="col-md-6">
+
+							<div class="form-group">
+								<div class="input-group-prepend">
+									<span class="input-group-text">Subject Name</span>
+								</div>
+								<input type="text" name="subname" class="form-control"
+									placeholder="Subject Name *" />
+							</div>
+
+							<div class="form-group">
+								<div class="input-group-prepend">
+									<span class="input-group-text">Score</span>
+								</div>
+								<input class="form-control" name="score" type="number"
+									placeholder="Subject Score *">
+							</div>
+
+						</div>
+					</div>
+					<button class="w3-btn w3-blue">Update</button>
+				</form>
 			</div>
-			<br>
-			<form th:action="@{/admin/account/teacher}" method="post">
-				<table id="table" class="w3-table-all w3-hoverable" cellpadding="0"
-					width="100%">
-					<thead>
-						<tr class="w3-blue">
-							<th class="w3-center">ID</th>
-							<th>Name</th>
-							<th class="w3-center">Phone</th>
-							<th>School</th>
-							<th class="w3-center">Salary Rate</th>
-							<th>Email</th>
-							<th>Password</th>
-							<th class="w3-center">Detail</th>
-							<th class="w3-center">Active/InActive</th>
-						</tr>
-						<tr>
-							<td class="w3-center"><input size="3"
-								class="form-control w3-center" type="hidden" name="id" /></td>
-							<td><input size="20" class="form-control" type="text"
-								name="name" required /></td>
-							<td class="w3-center"><input size="10"
-								class="form-control w3-center" type="text" name="phone" required /></td>
-							<td><input size="20" class="form-control" type="text"
-								name="school" required /></td>
-							<td><input size="10" class="form-control" type="text"
-								name="salaryrate" required /></td>
-							<td><input size="30" class="form-control" type="email"
-								name="email" required /></td>
-							<td><input size="10" class="form-control" type="password"
-								name="password" required /></td>
-							<td class="w3-center"></td>
-							<td class="w3-center"><button class="form-control w3-center">
-									<i class="fas fa-user-plus"></i>
-								</button></td>
-						</tr>
-						<th:block th:each="teacher, iter : ${teacherList}">
-							<tr>
-								<td th:text="${teacher.teaId}" class="w3-center"></td>
-								<td th:text="${teacher.teaName}"></td>
-								<td th:text="${teacher.teaPhone}" class="w3-center"></td>
-								<td th:text="${teacher.teaSchool}"></td>
-								<td th:text="${teacher.teaSalaryrate}" class="w3-center"></td>
-								<td th:text="${teacher.teaEmail}"></td>
-								<td></td>
-								<td class="w3-center"><a
-									th:href="@{/admin/account/teacher/{teaId}(teaId=${teacher.teaId})}"><i
-										class="fas fa-paper-plane"></i></a></td>
-								<td class="w3-center"><th:block
-										th:if="${accountList[iter.index].accIsactive} == 'T'">
-										<a
-											th:href="@{/admin/account/active(username=${teacher.teaEmail})}"><i
-											class="fas fa-user-slash"></i></a>
-									</th:block> <th:block
-										th:unless="${accountList[iter.index].accIsactive} == 'T'">
-										<a
-											th:href="@{/admin/account/active(username=${teacher.teaEmail})}"><i
-											class="fas fa-user-check"></i></a>
-									</th:block></td>
-							</tr>
-						</th:block>
-				</table>
-			</form>
 		</div>
 		<hr>
-
-
 		<hr>
 		<div class="w3-container w3-dark-grey w3-padding-32">
 			<div class="w3-row">
@@ -238,6 +221,8 @@ html, body, h1, h2, h3, h4, h5 {
 			</p>
 		</footer>
 	</div>
+
+
 	<script>
 		var mySidebar = document.getElementById("mySidebar");
 		var overlayBg = document.getElementById("myOverlay");

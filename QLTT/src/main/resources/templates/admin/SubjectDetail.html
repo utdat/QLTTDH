@@ -93,9 +93,17 @@ html, body, h1, h2, h3, h4, h5 {
 					class="fa fa-caret-right w3-margin-right"></i>Subject Detail </a>
 			</div>
 
-			<a href="" class="w3-bar-item w3-button w3-padding"> <i
+			<a onclick="myAccFunc('studentSubject')" href="javascript:void(0)"
+				id="myBtn" class="w3-bar-item w3-button w3-padding"> <i
 				class="fas fa-chalkboard-teacher"></i> Student's Subject
 			</a>
+			<div id="studentSubject" class="w3-bar-block w3-hide w3-padding">
+				<a class="w3-bar-item w3-button w3-padding"
+					th:href="@{/admin/student/subject}"> Student List Subject</a> <a
+					class="w3-bar-item w3-button w3-padding"
+					th:href="@{/admin/student/subject/detail}"> Student Subject
+					Detail </a>
+			</div>
 
 			<form th:action="@{/logout}" method="POST">
 				<span class="input-group-btn">
@@ -177,11 +185,14 @@ html, body, h1, h2, h3, h4, h5 {
 								<div class="input-group-prepend">
 									<span class="input-group-text">Teacher Name</span>
 								</div>
-								<input type="text" class="form-control"
-									th:value=${subject.teacher.teaId}
-									placeholder="Subject Teacher Name *" name="teaId" />
+								<select class="form-control" name="teaId">
+									<option th:value="${teacher.teaId}"
+										th:utext="${teacher.teaName}" selected="selected"
+										disabled="disabled"></option>
+									<option th:each="tea : ${teacherList}" th:value="${tea.teaId}"
+										th:utext="${tea.teaName}" />
+								</select>
 							</div>
-
 						</div>
 					</div>
 					<button class="w3-btn w3-blue">Update</button>

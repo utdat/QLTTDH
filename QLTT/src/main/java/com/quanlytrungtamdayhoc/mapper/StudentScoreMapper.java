@@ -14,6 +14,8 @@ public interface StudentScoreMapper {
 	
 	List<Student_Score> getStudentScore(@Param("stuId") int stuId);
 	
+	List<Student_Score> getListStudentScore();
+	
 	int updateScore(@Param("subId") int subId, @Param("stuId") int stuId, @Param("score") float score);
 	
 	int insertSubjectScore(@Param("stuId") int stuId, @Param("subId") int subId);

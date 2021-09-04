@@ -78,25 +78,26 @@ html, body, h1, h2, h3, h4, h5 {
 			</div>
 
 			<a onclick="myAccFunc('subject')" href="javascript:void(0)"
-				id="myBtn" class="w3-bar-item w3-button w3-padding w3-blue"> <i
+				id="myBtn" class="w3-bar-item w3-button w3-padding"> <i
 				class="fas fa-book-open"></i> Subject
 			</a>
-			<div id="subject" class="w3-bar-block w3-hide w3-padding w3-show">
-				<a class="w3-bar-item w3-button w3-padding w3-blue"
-					th:href="@{/admin/subject}"><i
-					class="fa fa-caret-right w3-margin-right"></i> Subject List</a> <a
+			<div id="subject" class="w3-bar-block w3-hide w3-padding">
+				<a class="w3-bar-item w3-button w3-padding"
+					th:href="@{/admin/subject}"> Subject List</a> <a
 					class="w3-bar-item w3-button w3-padding"
 					th:href="@{/admin/subject/detail}"> Subject Detail </a>
 			</div>
 
 			<a onclick="myAccFunc('studentSubject')" href="javascript:void(0)"
-				id="myBtn" class="w3-bar-item w3-button w3-padding"> <i
+				id="myBtn" class="w3-bar-item w3-button w3-padding w3-blue"> <i
 				class="fas fa-chalkboard-teacher"></i> Student's Subject
 			</a>
-			<div id="studentSubject" class="w3-bar-block w3-hide w3-padding">
+			<div id="studentSubject"
+				class="w3-bar-block w3-hide w3-padding w3-show">
+				<a class="w3-bar-item w3-button w3-padding w3-blue"
+					th:href="@{/admin/student/subject}"><i
+					class="fa fa-caret-right w3-margin-right"></i> Student List Subject</a>
 				<a class="w3-bar-item w3-button w3-padding"
-					th:href="@{/admin/student/subject}"> Student List Subject</a> <a
-					class="w3-bar-item w3-button w3-padding"
 					th:href="@{/admin/student/subject/detail}"> Student Subject
 					Detail </a>
 			</div>
@@ -137,71 +138,62 @@ html, body, h1, h2, h3, h4, h5 {
 				</span>
 			</div>
 			<br>
-			<form th:action="@{/admin/subject}" method="post">
+			<form th:action="@{/admin/student/subject}" method="post">
 				<table id="table" class="w3-table-all w3-hoverable">
 					<thead>
 						<tr class="w3-blue">
-							<th class="w3-center">Sub ID</th>
-							<th class="w3-center">Sub Name</th>
-							<th class="w3-center">Sub Startdate</th>
-							<th>Sub Schedule</th>
-							<th class="w3-center">Sub Room</th>
-							<th>Sub Tuition</th>
-							<th>Teacher Name</th>
+							<th class="w3-center">Student ID</th>
+							<th class="w3-center">Student Name</th>
+							<th class="w3-center">Subject ID</th>
+							<th class="w3-center">Subject Name</th>
+							<th class="w3-center">Score</th>
 							<th class="w3-center">Detail</th>
 							<th class="w3-center">Delete</th>
 							<th class="w3-center">Add</th>
 						</tr>
 						<tr>
-							<td class="w3-center"><input size="3"
-								class="form-control w3-center" type="hidden" name="id" /></td>
-							<td><input size="20" class="form-control" type="text"
-								name="name" required /></td>
-							<td class="w3-center"><input size="15"
-								class="form-control w3-center" type="date" name="startdate"
-								required /></td>
-							<td><input size="20" class="form-control" type="text"
-								name="schedule" required /></td>
-							<td><input size="40" class="form-control" type="text"
-								name="room" required /></td>
-							<td><input size="40" class="form-control" type="number"
-								name="tuition" required /></td>
-							<td><select style="height: 30px" name="teaId">
-									<option selected="selected" disabled="disabled">Select
-										Name</option>
-									<option th:each="tea : ${teacherList}" th:value="${tea.teaId}"
-										th:utext="${tea.teaName}" />
+							<td></td>
+							<td class="w3-center"><select style="height: 30px"
+								name="stuId">
+									<option th:each="stu : ${listStudent}" th:value="${stu.stuId}"
+										th:utext="${stu.stuName}" />
 							</select></td>
+							<td></td>
+							<td class="w3-center"><select style="height: 30px"
+								name="subId">
+									<option selected="selected" disabled="disabled">Select
+										Subject Name</option>
+									<option th:each="sub : ${listSubject}" th:value="${sub.subId}"
+										th:utext="${sub.subName}" />
+							</select></td>
+							<td></td>
 							<td class="w3-center"></td>
 							<td class="w3-center"></td>
 							<td class="w3-center"><button class="form-control w3-center">
 									<i class="fas fa-user-plus"></i>
 								</button></td>
 						</tr>
-						<th:block th:each="sub : ${subjects.getPageList}">
+						<th:block th:each="sub : ${listStudentSubject}">
 							<tr>
-								<td th:text="${sub.subId}" class="w3-center"></td>
-								<td class="w3-center" th:text="${sub.subName}"></td>
-								<td class="w3-center"
-									th:text="${#dates.format(sub.subStartdate,'MM-dd-yyyy')}"></td>
-								<td th:text="${sub.subSchedule}"></td>
-								<td class="w3-center" th:text="${sub.subRoom}"></td>
-								<td class="w3-center" th:text="${sub.subTuition}"></td>
-								<td class="w3-center" th:text="${sub.teacher.teaName}"></td>
+								<td th:text="${sub.student.stuId}" class="w3-center"></td>
+								<td class="w3-center" th:text="${sub.student.stuName}"></td>
+								<td class="w3-center" th:text="${sub.subject.subId}"></td>
+								<td class="w3-center" th:text="${sub.subject.subName}"></td>
+								<td class="w3-center" th:text="${sub.score}"></td>
 								<td class="w3-center"><a
-									th:href="@{/admin/subject/detail/{subId}(subId=${sub.subId})}"><i
+									th:href="@{/admin/student/subject/detail/{subId}(subId=${sub.subject.subId})}"><i
 										class="fas fa-paper-plane"></i></a></td>
 								<td class="w3-center"><a
-									th:href="@{/admin/subject/delete(subId=${sub.subId})}"><i
+									th:href="@{/admin/student/subject/delete(subId=${sub.subject.subId})}"><i
 										class="fas fa-minus-square"></i></a></td>
 								<td></td>
 							</tr>
 						</th:block>
 				</table>
-				<ul class="pagination">
+				<!-- <ul class="pagination">
 					<li
 						th:class="${currentIndex == 1}? 'page-item disabled' : 'page-item'">
-						<a class="page-link" th:href="@{/admin/subject}">First</a>
+						<a class="page-link" th:href="@{/admin/student/subject}">First</a>
 					</li>
 					<li
 						th:class="${currentIndex == 1}? 'page-item disabled': 'page-item' ">
@@ -227,7 +219,7 @@ html, body, h1, h2, h3, h4, h5 {
 						th:class="${currentIndex == totalPageCount}? 'page-item disabled':'page-item'">
 						<a class="page-link" th:href="@{|${baseUrl}${totalPageCount}|}">Last</a>
 					</li>
-				</ul>
+				</ul> -->
 			</form>
 		</div>
 		<hr>
