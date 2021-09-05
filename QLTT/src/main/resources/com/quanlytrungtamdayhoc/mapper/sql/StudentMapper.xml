@@ -17,7 +17,7 @@
 	<select id="getAllStudent" resultMap="StudentMapper" parameterType="map">
 		SELECT *
 		FROM STUDENTS
-		ORDER BY STU_ID
+		ORDER BY STU_JOINDATE DESC
 	</select>
 	
 	<select id="getStudentByFilter" resultMap="StudentMapper" parameterType="map">

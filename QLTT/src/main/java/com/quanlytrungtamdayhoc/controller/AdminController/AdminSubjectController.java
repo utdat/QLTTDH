@@ -41,8 +41,7 @@ public class AdminSubjectController {
 
 	// phân trang
 	@GetMapping("/subject")
-	public String index(Model model, HttpServletRequest request, 
-						RedirectAttributes redirect) {
+	public String index(Model model, HttpServletRequest request) {
 		request.getSession().setAttribute("pageList", null);
 		return "redirect:/admin/subject/page/1";
 	}
@@ -57,7 +56,7 @@ public class AdminSubjectController {
 		String message = (String) request.getSession().getAttribute("mess");
 		PagedListHolder<?> pages = (PagedListHolder<?>) request.getSession().getAttribute("pageList");
 
-		List<Teacher> teacher = teacherMapper.getAllTeacher();
+		List<Teacher> teacherList = teacherMapper.getAllTeacher();
 		List<Subject> subjectList = subjectMapper.getAllSubject(teaName, year);
 
 		if (pages == null || year != null || teaName != null) {
@@ -86,7 +85,7 @@ public class AdminSubjectController {
 		model.addAttribute("pagedListHolder", pages);
 		
 		model.addAttribute("message", message);
-		model.addAttribute("teacherList", teacher);
+		model.addAttribute("teacherList", teacherList);
 
 		return "admin/Subject";
 	}

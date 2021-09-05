@@ -41,6 +41,30 @@
 		</association>
 	</resultMap>
 	
+	<select id="getStudentScoreById" resultMap="StudentScoreMapper" parameterType="map">
+		SELECT *
+		FROM STUDENT_SCORES SC
+		JOIN STUDENTS ST ON SC.STU_ID = ST.STU_ID
+		JOIN SUBJECTS SU ON SC.SUB_ID = SU.SUB_ID
+		WHERE SC.STU_ID = #{stuId} AND 
+			  SC.SUB_ID = #{subId}
+	</select>
+	
+	<select id="getAllStudentScore" resultMap="StudentScoreMapper" parameterType="map">
+		SELECT *
+		FROM STUDENT_SCORES SC
+		JOIN STUDENTS ST ON SC.STU_ID = ST.STU_ID
+		JOIN SUBJECTS SU ON SC.SUB_ID = SU.SUB_ID
+		WHERE 1=1 
+		<if test="stuName != null and stuName != ''">
+			AND STU_NAME = #{stuName}
+		</if>
+		<if test="subName != null and subName != ''">
+			AND SUB_NAME = #{subName}
+		</if>
+		ORDER BY SU.SUB_STARTDATE, ST.STU_JOINDATE DESC
+	</select>
+	
 	<select id="getScoreBySubject" resultMap="StudentScoreMapper" parameterType="map">
 		SELECT *
 		FROM STUDENT_SCORES

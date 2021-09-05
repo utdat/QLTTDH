@@ -10,6 +10,9 @@ import com.quanlytrungtamdayhoc.dbo.Student_Score;
 @Mapper
 public interface StudentScoreMapper {
 	
+	List<Student_Score> getAllStudentScore(@Param("stuName") String stuName, 
+										   @Param("subName") String subName);
+	
 	List<Student_Score> getScoreBySubject(@Param("subId") int subId);
 
 	List<Student_Score> getTeacherMark(@Param("teaId") int teaId, 
@@ -18,6 +21,9 @@ public interface StudentScoreMapper {
 	List<Student_Score> getStudentScore(@Param("stuId") int stuId, 
 										@Param("subName") String subName, 
 										@Param("year") String year);
+	
+	Student_Score getStudentScoreById(@Param("stuId") int stuId,
+									  @Param("subId") int subId);
 	
 	int updateScore(@Param("subId") int subId, 
 					@Param("stuId") int stuId, 

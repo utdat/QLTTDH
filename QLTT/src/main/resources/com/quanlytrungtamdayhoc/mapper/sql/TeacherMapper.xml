@@ -32,7 +32,7 @@
 	<select id="getAllTeacher" resultMap="TeacherMapper" parameterType="map">
 		SELECT *
 		FROM TEACHERS
-		ORDER BY TEA_ID
+		ORDER BY TEA_HIREDATE DESC
 	</select>
 	
 	<select id="getTeacherByFilter" resultMap="TeacherMapper" parameterType="map">
