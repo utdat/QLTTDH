@@ -9,6 +9,8 @@ import com.quanlytrungtamdayhoc.dbo.Student_Score;
 
 @Mapper
 public interface StudentScoreMapper {
+	
+	List<Student_Score> getScoreBySubject(@Param("subId") int subId);
 
 	List<Student_Score> getTeacherMark(@Param("teaId") int teaId, 
 									   @Param("subId") int subId);

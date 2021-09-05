@@ -66,7 +66,7 @@ public class StudentSubjectController {
 		Student student = studentMapper.getStudent(0, currentAccount.getAccUsername());
 		
 		List<Teacher> teacherList = teacherMapper.getAllTeacher();
-		List<Subject> subjectList = subjectMapper.getAllSubject();
+		List<Subject> subjectList = subjectMapper.getAllSubject(null, null);
 		List<Subject> studentSubject = subjectMapper.listStudentSubject(student.getStuId(), teaName, subName);
 		
 		if (pages == null || teaName != null || subName != null) {

@@ -60,7 +60,7 @@ public class StudentScoreController {
 		Account currentAccount = (Account) ((Authentication) principal).getPrincipal();
 
 		Student student = studentMapper.getStudent(0, currentAccount.getAccUsername());
-		List<Subject> subjectList = subjectMapper.getAllSubject();
+		List<Subject> subjectList = subjectMapper.getAllSubject(null, null);
 		List<Student_Score> studentScore = studentScoreMapper.getStudentScore(student.getStuId(), subName, year);
 		
 		if (pages == null || year != null || subName != null) {

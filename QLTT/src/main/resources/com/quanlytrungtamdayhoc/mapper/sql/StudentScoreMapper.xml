@@ -41,6 +41,12 @@
 		</association>
 	</resultMap>
 	
+	<select id="getScoreBySubject" resultMap="StudentScoreMapper" parameterType="map">
+		SELECT *
+		FROM STUDENT_SCORES
+		WHERE SUB_ID = #{subId}
+	</select>
+	
 	<select id="getTeacherMark" resultMap="StudentScoreMapper" parameterType="map">
 		SELECT *
 		FROM STUDENT_SCORES

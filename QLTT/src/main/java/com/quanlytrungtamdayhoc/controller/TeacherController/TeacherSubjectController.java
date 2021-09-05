@@ -58,7 +58,7 @@ public class TeacherSubjectController {
 		Account current_account = (Account) ((Authentication) principal).getPrincipal();
 		Teacher teacher = teacherMapper.getTeacher(0, current_account.getAccUsername());
 		
-		List<Subject> subjectList = subjectMapper.getAllSubject();
+		List<Subject> subjectList = subjectMapper.getAllSubject(null, null);
 		List<Subject> teacherSubject = subjectMapper.getTeacherSubject(teacher.getTeaId(), year, subName);
 		
 		if (pages == null || year != null || subName != null) {
