@@ -9,7 +9,6 @@ import org.springframework.beans.support.PagedListHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -125,59 +124,56 @@ public class AdminStudentSubjectController {
 		model.addAttribute("listSubject", listSubject);
 		model.addAttribute("listStudentSubject", listStudentScore);
 		model.addAttribute("message", message);
-		return "admin/StudentSubject";
+		return "redirect:/admin/student/subject";
 	}
 
-	@PostMapping("/subject/detail")
-	public String updateStudentSubject(Model model, @ModelAttribute("studentSubject") Student_Score studentSubject,
-			@RequestParam(name = "subId") int subId, @RequestParam(name = "stuId") int stuId) {
-		Student_Score studentScore = studentScoreMapper.getStudentScoreById(stuId, subId);
-		Student student = studentMapper.getStudent(stuId, null);
-		Subject subject = subjectMapper.getSubjectById(subId);
-
-		List<Subject> listSubject = subjectMapper.getListSubject();
-
-		String message = null;
-		if (studentScoreMapper.updateScoreById(studentSubject, subId, stuId) > 0) {
-			message = "Update Student Subject Success";
-		}
-		model.addAttribute("subjectList", listSubject);
-		model.addAttribute("student", student);
-		model.addAttribute("subject", subject);
-		model.addAttribute("studentSubject", studentScore);
-		model.addAttribute("message", message);
-		return "admin/StudentSubjectDetail";
-	}
-
-	@GetMapping("/subject/detail")
-	public String getSubjectDetailById(Model model, @RequestParam(name = "subId") int subId,
-			@RequestParam(name = "stuId") int stuId) {
-
-		Student_Score studentScore = studentScoreMapper.getStudentScoreById(stuId, subId);
-
-		Student student = studentMapper.getStudent(stuId, null);
-
-		List<Subject> listSubject = subjectMapper.getListSubject();
-		Subject subject = subjectMapper.getSubjectById(subId);
-
-		model.addAttribute("subjectList", listSubject);
-		model.addAttribute("student", student);
-		model.addAttribute("subject", subject);
-		model.addAttribute("studentSubject", studentScore);
-
-		return "admin/StudentSubjectDetail";
-	}
-
-//	@GetMapping("/subject/detail")
-//	public String getSubjectDetail(Model model) {
+//	@PostMapping("/subject/detail")
+//	public String updateStudentSubject(Model model, @ModelAttribute("studentSubject") Student_Score studentSubject,
+//			@RequestParam(name = "subId") int subId, @RequestParam(name = "stuId") int stuId,
+//			@RequestParam(name = "subjectId", required = false) int subjectId) {
+//		Student_Score studentScore = studentScoreMapper.getStudentScoreById(stuId, subId);
+//		Student student = studentMapper.getStudent(stuId, null);
+//		Subject subject = subjectMapper.getSubjectById(subjectId);
 //
-//		Student_Score studentScore = new Student_Score();
-//		Student student = new Student();
-//		Subject subject = new Subject();
+//		List<Subject> listSubject = subjectMapper.getListSubject();
 //
+//		System.out.println();
+//		System.out.println(subId); 
+//		System.out.println(subjectId); 
+//
+//		String message = null;
+//		if (studentScoreMapper.updateScoreById(studentSubject, subjectId, subId, stuId) > 0) {
+//			message = "Update Student Subject Success";
+//		}
+//		model.addAttribute("subjectList", listSubject);
 //		model.addAttribute("student", student);
 //		model.addAttribute("subject", subject);
 //		model.addAttribute("studentSubject", studentScore);
+//		model.addAttribute("message", message);
+//		
+//		return "redirect:/admin/student/subject/detail?stuId=" + stuId + "&subId=" + subjectId;
+//	}
+
+//	@GetMapping("/subject/detail")
+//	public String getSubjectDetailById(Model model, @RequestParam(name = "subId") int subId,
+//			@RequestParam(name = "stuId") int stuId) {
+//
+//		Student_Score studentScore = studentScoreMapper.getStudentScoreById(stuId, subId);
+//
+//		Student student = studentMapper.getStudent(stuId, null);
+//
+//		List<Subject> listSubject = subjectMapper.getListSubject();
+//		Subject subject = subjectMapper.getSubjectById(subId);
+//
+//		System.out.println();
+//		System.out.println(stuId);
+//		System.out.println(subId);
+//
+//		model.addAttribute("subjectList", listSubject);
+//		model.addAttribute("student", student);
+//		model.addAttribute("subject", subject);
+//		model.addAttribute("studentSubject", studentScore);
+//
 //		return "admin/StudentSubjectDetail";
 //	}
 

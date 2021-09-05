@@ -92,17 +92,10 @@ html, body, h1, h2, h3, h4, h5 {
 					th:href="@{/admin/subject/detail}"> Subject Detail </a>
 			</div>
 
-			<a onclick="myAccFunc('studentSubject')" href="javascript:void(0)"
-				id="myBtn" class="w3-bar-item w3-button w3-padding"> <i
-				class="fas fa-chalkboard-teacher"></i> Student's Subject
+			<a class="w3-bar-item w3-button w3-padding"
+				th:href="@{/admin/student/subject}"> <i
+				class="fas fa-chalkboard-teacher"></i>Student List Subject
 			</a>
-			<div id="studentSubject" class="w3-bar-block w3-hide w3-padding">
-				<a class="w3-bar-item w3-button w3-padding"
-					th:href="@{/admin/student/subject}"> Student List Subject</a> <a
-					class="w3-bar-item w3-button w3-padding"
-					th:href="@{/admin/student/subject/detail}"> Student Subject
-					Detail </a>
-			</div>
 
 			<form th:action="@{/logout}" method="POST">
 				<span class="input-group-btn">

@@ -82,7 +82,7 @@ html, body, h1, h2, h3, h4, h5 {
 				id="myBtn" class="w3-bar-item w3-button w3-padding"> <i
 				class="fas fa-book-open"></i> Subject
 			</a>
-<!-- 			<div id="subject" class="w3-bar-block w3-hide w3-padding">
+			<!-- 			<div id="subject" class="w3-bar-block w3-hide w3-padding">
 				<a href="" class="w3-bar-item w3-button w3-padding"
 					th:href="@{/admin/subject}"> Subject List</a> <a href=""
 					class="w3-bar-item w3-button w3-padding "
@@ -91,17 +91,10 @@ html, body, h1, h2, h3, h4, h5 {
 				</a>
 			</div> -->
 
-			<a onclick="myAccFunc('subject')" href="javascript:void(0)"
-				id="myBtn" class="w3-bar-item w3-button w3-padding w3-blue"> <i
-				class="fas fa-chalkboard-teacher"></i> Student's Subject
+			<a class="w3-bar-item w3-button w3-padding"
+				th:href="@{/admin/student/subject}"> <i
+				class="fas fa-chalkboard-teacher"></i>Student List Subject
 			</a>
-			<div id="subject" class="w3-bar-block w3-hide w3-padding">
-				<a class="w3-bar-item w3-button w3-padding"
-					th:href="@{/admin/student/subject}"> Student List Subject</a>
-				<a class="w3-bar-item w3-button w3-padding"
-					th:href="@{/admin/student/subject/detail}"> Student Subject
-					Detail </a>
-			</div>
 
 			<form th:action="@{/logout}" method="POST">
 				<span class="input-group-btn">

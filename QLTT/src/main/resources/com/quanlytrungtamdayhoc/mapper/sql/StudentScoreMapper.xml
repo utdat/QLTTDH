@@ -13,7 +13,7 @@
 			<result property="subStartdate" column="SUB_STARTDATE" />
 			<result property="subSchedule" column="SUB_SCHEDULE" />
 			<result property="subRoom" column="SUB_ROOM" />
-			<result property="subTuition" column="SUB_TUITION"/>
+			<result property="subTuition" column="SUB_TUITION" />
 
 			<association property="teacher"
 				javaType="com.quanlytrungtamdayhoc.dbo.Teacher">
@@ -96,13 +96,6 @@
 		SET
 		SCORE = #{score}
 		WHERE SUB_ID = #{subId} AND STU_ID = #{stuId}
-	</update>
-	
-	<update id="updateScoreById" parameterType="map">
-		UPDATE STUDENT_SCORES
-		SET
-		SUB_ID = #{studentSubject.subId}
-		WHERE SUB_ID = #{studentSubject.subId} AND STU_ID = #{studentSubject.stuId}
 	</update>
 
 	<insert id="insertSubjectScore" parameterType="map">

@@ -88,19 +88,10 @@ html, body, h1, h2, h3, h4, h5 {
 					th:href="@{/admin/subject/detail}"> Subject Detail </a>
 			</div>
 
-			<a onclick="myAccFunc('studentSubject')" href="javascript:void(0)"
-				id="myBtn" class="w3-bar-item w3-button w3-padding w3-blue"> <i
-				class="fas fa-chalkboard-teacher"></i> Student's Subject
+			<a class="w3-bar-item w3-button w3-padding w3-blue"
+				th:href="@{/admin/student/subject}"> <i
+				class="fas fa-chalkboard-teacher"></i>Student List Subject
 			</a>
-			<div id="studentSubject"
-				class="w3-bar-block w3-hide w3-padding w3-show">
-				<a class="w3-bar-item w3-button w3-padding w3-blue"
-					th:href="@{/admin/student/subject}"><i
-					class="fa fa-caret-right w3-margin-right"></i> Student List Subject</a>
-				<a class="w3-bar-item w3-button w3-padding"
-					th:href="@{/admin/student/subject/detail}"> Student Subject
-					Detail </a>
-			</div>
 
 			<form th:action="@{/logout}" method="POST">
 				<span class="input-group-btn">
@@ -147,7 +138,7 @@ html, body, h1, h2, h3, h4, h5 {
 							<th class="w3-center">Subject ID</th>
 							<th class="w3-center">Subject Name</th>
 							<th class="w3-center">Score</th>
-							<th class="w3-center">Detail</th>
+							<!-- <th class="w3-center">Detail</th> -->
 							<th class="w3-center">Delete</th>
 							<th class="w3-center">Add</th>
 						</tr>
@@ -170,7 +161,6 @@ html, body, h1, h2, h3, h4, h5 {
 							</select></td>
 							<td></td>
 							<td class="w3-center"></td>
-							<td class="w3-center"></td>
 							<td class="w3-center"><button class="form-control w3-center">
 									<i class="fas fa-user-plus"></i>
 								</button></td>
@@ -182,9 +172,9 @@ html, body, h1, h2, h3, h4, h5 {
 								<td class="w3-center" th:text="${sub.subject.subId}"></td>
 								<td class="w3-center" th:text="${sub.subject.subName}"></td>
 								<td class="w3-center" th:text="${sub.score}"></td>
-								<td class="w3-center"><a
+								<!-- 								<td class="w3-center"><a
 									th:href="@{/admin/student/subject/detail(stuId=${sub.student.stuId}, subId=${sub.subject.subId})}"><i
-										class="fas fa-paper-plane"></i></a></td>
+										class="fas fa-paper-plane"></i></a></td> -->
 								<td class="w3-center"><a
 									th:href="@{/admin/student/subject/delete(stuId=${sub.student.stuId}, subId=${sub.subject.subId})}"><i
 										class="fas fa-minus-square"></i></a></td>

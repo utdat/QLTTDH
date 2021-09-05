@@ -20,8 +20,6 @@ public interface StudentScoreMapper {
 
 	int updateScore(@Param("subId") int subId, @Param("stuId") int stuId, @Param("score") float score);
 
-	int updateScoreById(@Param("studentSubject") Student_Score studentSubject,@Param("subId") int subId, @Param("stuId") int stuId);
-
 	int insertSubjectScore(@Param("stuId") int stuId, @Param("subId") int subId);
 
 	int deleteStudentSubject(@Param("subId") int subId, @Param("stuId") int stuId);
