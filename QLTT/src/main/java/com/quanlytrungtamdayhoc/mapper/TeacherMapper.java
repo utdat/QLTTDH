@@ -17,6 +17,9 @@ public interface TeacherMapper {
 
 	List<Teacher> getAllTeacher();
 	
+	List<Teacher> getTeacherByFilter(@Param("teaName") String teaName,
+									 @Param("teaPhone") String teaPhone);
+	
 	int addTeacher(@Param("teaName") String teaName,
 			   	   @Param("teaPhone") String teaPhone,
 			   	   @Param("teaSchool") String teaSchool,

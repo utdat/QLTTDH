@@ -35,6 +35,19 @@
 		ORDER BY TEA_ID
 	</select>
 	
+	<select id="getTeacherByFilter" resultMap="TeacherMapper" parameterType="map">
+		SELECT *
+		FROM TEACHERS
+		WHERE 1=1
+		<if test="teaName != null and teaName != ''">
+			AND TEA_NAME = #{teaName}
+		</if>
+		<if test="teaPhone != null and teaPhone != ''">
+			AND TEA_PHONE = #{teaPhone}
+		</if>
+		ORDER BY TEA_HIREDATE DESC
+	</select>
+	
 	<update id="updateTeacher" parameterType="map">
 		UPDATE TEACHERS
 		SET TEA_NAME = #{teacher.teaName}

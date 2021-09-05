@@ -47,14 +47,14 @@ public class UploadImageController {
 			Student student = studentMapper.getStudent(0, currentAccount.getAccUsername());
 			student.setStuAvatar(filename);
 			studentMapper.updateStudent(student, null);
-			uploadDir += student.getStuId();
+			uploadDir += "student/" + student.getStuId();
 			redirect = "redirect:/student/profile";
 			
 		}else if(currentAccount.getAccRole() == 2) {
 			Teacher teacher = teacherMapper.getTeacher(0, currentAccount.getAccUsername());
 			teacher.setTeaAvatar(filename);
 			teacherMapper.updateTeacher(teacher, null);
-			uploadDir += teacher.getTeaId();
+			uploadDir += "teacher/" + teacher.getTeaId();
 			redirect = "redirect:/teacher/profile";
 			
 		}

@@ -85,6 +85,6 @@ public class Student {
 			return "/images/default_user.png";
 		}
 		
-		return "/images/" + stuId + "/" + stuAvatar;
+		return "/images/student/" + stuId + "/" + stuAvatar;
 	}
 }

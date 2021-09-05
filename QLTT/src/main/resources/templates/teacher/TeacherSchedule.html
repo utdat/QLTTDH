@@ -14,6 +14,13 @@
 html, body, h1, h2, h3, h4, h5 {
 	font-family: "Raleway", sans-serif
 }
+div.scroll {
+    overflow: auto;
+    height: 110px;
+}
+div.w3-card {
+	width: 275px;
+}
 </style>
 <body class="w3-light-grey">
 	<!-- Top container -->
@@ -94,45 +101,103 @@ html, body, h1, h2, h3, h4, h5 {
 			</h2>
 		</header>
 		<div class="panel-body">
-			<div class="input-group">
-				<input class="form-control" type="text"
-					placeholder="Search for subject names..." id="myInput"
-					onkeyup="myFunction()"> <span class="input-group-btn">
-					<button class="btn btn-default" type="button">
-						<span class="glyphicon glyphicon-search"></span>
-					</button>
-				</span>
+		
+			<div class="row register-form">
+				<div class="col-md-3" >
+					<div class="form-group">
+						<input class="w3-input w3-padding" type="text" placeholder="Search for subject name..." 
+							id="subInput" onkeyup="filterFunction('subInput','subDiv')" onclick="myAccFunc('subDiv')">
+						<div class="w3-dropdown-content w3-bar-block w3-card w3-light-grey scroll" id="subDiv">
+							<th:block th:each="subject : ${subjectList}">
+								<a class="w3-bar-item w3-button" th:id="${subject.subId} + '_sub'" 
+									th:text="${subject.subName}"
+									th:onclick="getValueFilter([[${subject.subId}]]+'_sub', 'subInput', 'subDiv')"></a>
+							</th:block>
+					    </div>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="form-group">
+						<input class="w3-input w3-padding" type="text" placeholder="Search for start year..." id="yearInput" >
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="form-group">
+						<span class="input-group-btn">
+							<a class="btn btn-default" onclick="submitSearch('subName=', 'subInput', 'year=', 'yearInput')" id="search"
+								th:href="@{/teacher/schedule/page/1}">
+								<span class="glyphicon glyphicon-search"></span>
+							</a>
+						</span>
+					</div>
+				</div>
 			</div>
+			
 			<br>
-			<table id="table" class="w3-table-all w3-hoverable" cellpadding="0"
-				width="100%">
-				<thead>
-					<tr class="w3-blue">
-						<th class="w3-center">Sub ID</th>
-						<th>Sub Name</th>
-						<th>Sub Schedule</th>
-						<th class="w3-center">Sub Room</th>
-						<th class="w3-center">Start Date</th>
-						<th class="w3-center">Tuition</th>
-						<th class="w3-center">Mark</th>
-					</tr>
-
-					<th:block th:each="subject : ${teacherSubject}">
-						<tr>
-							<td th:text="${subject.subId}" class="w3-center"></td>
-							<td th:text="${subject.subName}"></td>
-							<td th:text="${subject.subSchedule}"></td>
-							<td th:text="${subject.subRoom}" class="w3-center"></td>
-							<td
-								th:text="${#dates.format(subject.subStartdate, 'dd-MM-yyyy')}"
-								class="w3-center"></td>
-							<td th:text="${subject.subTuition}" class="w3-center"></td>
-							<td class="w3-center"><a
-								th:href="@{/teacher/mark/{id}(id=${subject.subId})}"><i
-									class="fas fa-paper-plane"></i></a></td>
+			<th:block th:if="${#lists.isEmpty(pagedListHolder.getPageList)}">
+				<h3>No subject</h3>
+			</th:block>
+			<th:block th:unless="${#lists.isEmpty(pagedListHolder == null)}">
+				<table id="table" class="w3-table-all w3-hoverable" cellpadding="0"
+					width="100%">
+					<thead>
+						<tr class="w3-blue">
+							<th class="w3-center">Sub ID</th>
+							<th>Sub Name</th>
+							<th>Sub Schedule</th>
+							<th class="w3-center">Sub Room</th>
+							<th class="w3-center">Start Date</th>
+							<th class="w3-center">Tuition</th>
+							<th class="w3-center">Mark</th>
 						</tr>
-					</th:block>
-			</table>
+	
+						<th:block th:each="subject : ${pagedListHolder.getPageList}">
+							<tr>
+								<td th:text="${subject.subId}" class="w3-center"></td>
+								<td th:text="${subject.subName}"></td>
+								<td th:text="${subject.subSchedule}"></td>
+								<td th:text="${subject.subRoom}" class="w3-center"></td>
+								<td
+									th:text="${#dates.format(subject.subStartdate, 'dd-MM-yyyy')}"
+									class="w3-center"></td>
+								<td th:text="${subject.subTuition}" class="w3-center"></td>
+								<td class="w3-center"><a
+									th:href="@{/teacher/mark/{id}(id=${subject.subId})}"><i
+										class="fas fa-paper-plane"></i></a></td>
+							</tr>
+						</th:block>
+				</table>
+				<ul class="pagination">
+					<li
+						th:class="${currentIndex == 1}? 'page-item disabled' : 'page-item'">
+						<a class="page-link" th:href="@{/teacher/schedule}">First</a>
+					</li>
+					<li
+						th:class="${currentIndex == 1}? 'page-item disabled': 'page-item' ">
+						<a class="page-link" aria-label="Previous"
+						th:href="@{|${baseUrl}${currentIndex - 1}|}"
+						title='Go to previous page'><span aria-hidden="true">«</span>
+							<span class="sr-only">Previous</span></a>
+					</li>
+					<li th:each="item : ${#numbers.sequence(beginIndex,endIndex)}"
+						th:class="${item == currentIndex ? 'page-item active' :'page-item' }">
+						<a class="page-link" th:href="@{|${baseUrl}${item}|}"> <span
+							th:text='${item}'>1</span>
+					</a>
+					</li>
+					<li
+						th:class="${currentIndex == totalPageCount}? 'page-item disabled': 'page-item'">
+						<a class="page-link" aria-label="Next"
+						th:href="@{|${baseUrl}${currentIndex + 1}|}"
+						title='Go to next page'><span aria-hidden="true">»</span> <span
+							class="sr-only">Next</span></a>
+					</li>
+					<li
+						th:class="${currentIndex == totalPageCount}? 'page-item disabled':'page-item'">
+						<a class="page-link" th:href="@{|${baseUrl}${totalPageCount}|}">Last</a>
+					</li>
+				</ul>
+			</th:block>
 		</div>
 		<hr>
 

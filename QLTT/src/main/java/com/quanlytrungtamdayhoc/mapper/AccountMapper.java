@@ -12,7 +12,9 @@ public interface AccountMapper {
 	
 	List<Account> getAllAccount();
 	
-	List<Account> getAccountByRole(@Param("role") int role);
+	List<Account> getAccountByRole(@Param("role") int role,
+								   @Param("name") String name,
+								   @Param("phone") String phone);
 	
 	Account getAccount(@Param("username") String username);
 	

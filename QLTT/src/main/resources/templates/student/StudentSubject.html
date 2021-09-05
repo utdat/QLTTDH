@@ -14,6 +14,13 @@
 html, body, h1, h2, h3, h4, h5 {
 	font-family: "Raleway", sans-serif
 }
+div.scroll {
+    overflow: auto;
+    height: 110px;
+}
+div.w3-card {
+	width: 275px;
+}
 </style>
 <body class="w3-light-grey">
 	
@@ -26,6 +33,8 @@ html, body, h1, h2, h3, h4, h5 {
 			}
 		</script>
 	</th:block>
+	
+	
 	
 	<!-- Top container -->
 	<div class="w3-bar w3-top w3-black w3-large" style="z-index: 4">
@@ -48,7 +57,7 @@ html, body, h1, h2, h3, h4, h5 {
 					onclick="document.getElementById('my_avatar').style.display='block'">
 			</div>
 			<div class="w3-col s8 w3-bar">
-				<span>Welcome</span><br> <a class="w3-bar-item w3-button"><i
+				<span>Welcome, <strong th:text="${student.stuName}"></strong></span><br> <a class="w3-bar-item w3-button"><i
 					class="fa fa-envelope"></i></a> <a class="w3-bar-item w3-button"><i
 					class="fa fa-user"></i></a> <a class="w3-bar-item w3-button"><i
 					class="fa fa-cog"></i></a>
@@ -100,17 +109,49 @@ html, body, h1, h2, h3, h4, h5 {
 			</h2>
 		</header>
 		<div class="panel-body">
-			<div class="input-group">
-				<input class="form-control" type="text"
-					placeholder="Search for subject names..." id="myInput"
-					onkeyup="myFunction()"> <span class="input-group-btn">
-					<button class="btn btn-default" type="button">
-						<span class="glyphicon glyphicon-search"></span>
-					</button>
-				</span>
+				
+			<div class="row register-form">
+				<div class="col-md-3" >
+					<div class="form-group">
+						<input class="w3-input w3-padding" type="text" placeholder="Search for teacher name..." 
+							id="teaInput" onkeyup="filterFunction('teaInput','teaDiv')" onclick="myAccFunc('teaDiv')">
+						<div class="w3-dropdown-content w3-bar-block w3-card w3-light-grey scroll" id="teaDiv">
+							<th:block th:each="teacher : ${teacherList}">
+								<a class="w3-bar-item w3-button" th:id="${teacher.teaId} + '_tea'" 
+									th:text="${teacher.teaName}"
+									th:onclick="getValueFilter([[${teacher.teaId}]]+'_tea', 'teaInput', 'teaDiv')"></a>
+							</th:block>
+					    </div>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="form-group">
+						<input class="w3-input w3-padding" type="text" placeholder="Search for subject name..." 
+							id="subInput" onkeyup="filterFunction('subInput','subDiv')" onclick="myAccFunc('subDiv')">
+						<div class="w3-dropdown-content w3-bar-block w3-card w3-light-grey scroll" id="subDiv">
+							<th:block th:each="subject : ${subjectList}">
+								<a class="w3-bar-item w3-button" th:id="${subject.subId} + '_sub'" 
+									th:text="${subject.subName}"
+									th:onclick="getValueFilter([[${subject.subId}]]+'_sub', 'subInput', 'subDiv')"></a>
+							</th:block>
+					    </div>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="form-group">
+						<span class="input-group-btn">
+							<a class="btn btn-default" onclick="submitSearch('teaName=', 'teaInput', 'subName=', 'subInput')" id="search"
+								th:href="@{/student/subject/page/1}">
+								<span class="glyphicon glyphicon-search"></span>
+							</a>
+						</span>
+					</div>
+				</div>
 			</div>
+	
+			
 			<br>
-			<th:block th:if="${#lists.isEmpty(subjects.getPageList)}">
+			<th:block th:if="${#lists.isEmpty(pagedListHolder.getPageList)}">
 				<h3>No subject</h3>
 			</th:block>
 			<th:block th:unless="${#lists.isEmpty(employees == null)}">
@@ -124,10 +165,9 @@ html, body, h1, h2, h3, h4, h5 {
 							<th class="w3-center">Sub Room</th>
 							<th class="w3-center">Sub Tuition</th>
 							<th class="w3-center">Teacher Name</th>
-							<th class="w3-center">Teacher Info</th>
 							<th class="w3-center">Register</th>
 						</tr>
-						<th:block th:each="sub : ${subjects.getPageList}">
+						<th:block th:each="sub : ${pagedListHolder.getPageList}">
 							<tr>
 								<td th:text="${sub.subId}" class="w3-center"></td>
 								<td th:text="${sub.subName}"></td>
@@ -135,24 +175,22 @@ html, body, h1, h2, h3, h4, h5 {
 								<td th:text="${sub.subSchedule}"></td>
 								<td class="w3-center" th:text="${sub.subRoom}"></td>
 								<td class="w3-center" th:text="${sub.subTuition}"></td>
-								<td class="w3-center" th:text="${sub.teacher.teaName}"></td>
+								<td class="w3-center" th:text="${sub.teacher.teaName}" th:onclick="|get_info(${sub.subId}, 0)|"></td>
 								<td class="w3-center">
-									<input type="hidden" th:id="${sub.subId + '_name'}"
+									<input type="hidden" th:id="${sub.subId + '_0_name'}"
 											th:value="${sub.teacher.teaName}" />
-									<input type="hidden" th:id="${sub.subId + '_phone'}"
+									<input type="hidden" th:id="${sub.subId + '_0_phone'}"
 											th:value="${sub.teacher.teaPhone}" />
-									<input type="hidden" th:id="${sub.subId + '_school'}"
+									<input type="hidden" th:id="${sub.subId + '_0_school'}"
 											th:value="${sub.teacher.teaSchool}" />
-									<input type="hidden" th:id="${sub.subId + '_email'}"
+									<input type="hidden" th:id="${sub.subId + '_0_email'}"
 											th:value="${sub.teacher.teaEmail}" />
-									<i class="fas fa-address-card" 
-									   th:onclick="|get_info(${sub.subId})|"></i></td>
-
-								<td class="w3-center"><th:block
-										th:if="${#dates.format(sub.subStartdate,'yyyy-MM-dd')} > ${#calendars.format(#calendars.createNow(),'yyyy-MM-dd')}">
-										<a th:href="@{/student/subject/insert(subId=${sub.subId})}"><i
-											class="fas fa-paper-plane"></i></a>
-									</th:block></td>
+									<th:block th:if="${#dates.format(sub.subStartdate,'yyyy-MM-dd')} > ${#calendars.format(#calendars.createNow(),'yyyy-MM-dd')}">
+										<a th:href="@{/student/subject/insert(subId=${sub.subId})}">
+											<i class="fas fa-paper-plane"></i>
+										</a>
+									</th:block>
+								</td>
 									
 							</tr>
 						</th:block>
@@ -187,8 +225,8 @@ html, body, h1, h2, h3, h4, h5 {
 						<a class="page-link" th:href="@{|${baseUrl}${totalPageCount}|}">Last</a>
 					</li>
 				</ul>
+			</th:block>
 		</div>
-		</th:block>
 		<hr>
 
 
@@ -216,47 +254,45 @@ html, body, h1, h2, h3, h4, h5 {
 		</div>
 
 		<!--Show title teacher -->
-		<th:block th:if="teachers != null">
-			<div id="info" class="w3-modal">
-				<div class="w3-modal-content w3-animate-top w3-card-4">
-					<header class="w3-container w3-teal">
-						<span
-							onclick="document.getElementById('info').style.display='none'"
-							class="w3-button w3-display-topright">&times;</span>
-						<h2>Teacher Information</h2>
-					</header>
-					<div class="w3-container"> <br>
-						<div class="form-group">
-							<div class="input-group-prepend">
-								<span class="input-group-text">Full Name</span>
-							</div>
-							<input type="text" class="form-control" id="name"/>
-						</div> <br> 
-						<div class="form-group">
-							<div class="input-group-prepend">
-								<span class="input-group-text">Email</span>
-							</div>
-							<input type="text" class="form-control" id="email"/>
-						</div> <br>
-						<div class="form-group">
-							<div class="input-group-prepend">
-								<span class="input-group-text">Phone</span>
-							</div>
-							<input type="text" class="form-control" id="phone"/>
-						</div> <br>
-						<div class="form-group">
-							<div class="input-group-prepend">
-								<span class="input-group-text">School</span>
-							</div>
-							<input type="text" class="form-control" id="school"/>
-						</div> <br>
-					</div>
-					<footer class="w3-container w3-teal">
-						<p></p>
-					</footer>
+		<div id="info" class="w3-modal">
+			<div class="w3-modal-content w3-animate-top w3-card-4">
+				<header class="w3-container w3-blue">
+					<span
+						onclick="document.getElementById('info').style.display='none'"
+						class="w3-button w3-display-topright">&times;</span>
+					<h2>Teacher Information</h2>
+				</header>
+				<div class="w3-container"> <br>
+					<div class="form-group">
+						<div class="input-group-prepend">
+							<span class="input-group-text">Full Name</span>
+						</div>
+						<input type="text" class="form-control" id="name"/>
+					</div> <br> 
+					<div class="form-group">
+						<div class="input-group-prepend">
+							<span class="input-group-text">Email</span>
+						</div>
+						<input type="text" class="form-control" id="email"/>
+					</div> <br>
+					<div class="form-group">
+						<div class="input-group-prepend">
+							<span class="input-group-text">Phone</span>
+						</div>
+						<input type="text" class="form-control" id="phone"/>
+					</div> <br>
+					<div class="form-group">
+						<div class="input-group-prepend">
+							<span class="input-group-text">School</span>
+						</div>
+						<input type="text" class="form-control" id="school"/>
+					</div> <br>
 				</div>
+				<footer class="w3-container w3-blue">
+					<p></p>
+				</footer>
 			</div>
-		</th:block>
+		</div>
 
 
 		<!-- Footer -->

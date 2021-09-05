@@ -92,7 +92,7 @@ public class Teacher {
 			return "/images/default_user.png";
 		}
 		
-		return "/images/" + teaId + "/" + teaAvatar;
+		return "/images/teacher/" + teaId + "/" + teaAvatar;
 	}
 	
 }

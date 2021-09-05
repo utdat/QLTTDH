@@ -3,7 +3,10 @@ package com.quanlytrungtamdayhoc.controller.TeacherController;
 import java.security.Principal;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.support.PagedListHolder;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,17 +37,108 @@ public class TeacherSubjectController {
 	@Autowired
 	private TeacherMapper teacherMapper;
 	
+	private static final int PAGE_SIZE = 5;
+	
 	@GetMapping("/schedule")
-	public String getSubject(Model model, Principal principal) {
+	public String indexSubject(Model model, HttpServletRequest request) {
+		request.getSession().setAttribute("pageList", null);
+		return "redirect:/teacher/schedule/page/1";
+	}
+	
+	@GetMapping("/schedule/page/{pageNumber}")
+	public String getSchedule(Model model, Principal principal,
+							  HttpServletRequest request,
+							  @PathVariable int pageNumber,
+							  @RequestParam(name = "year", required = false) String year,
+							  @RequestParam(name = "subName", required = false) String subName) {
+		
+		String baseUrl = "/teacher/schedule/page/";
+		
+		PagedListHolder<?> pages = (PagedListHolder<?>) request.getSession().getAttribute("pageList");
 		Account current_account = (Account) ((Authentication) principal).getPrincipal();
 		Teacher teacher = teacherMapper.getTeacher(0, current_account.getAccUsername());
 		
-		List<Subject> teacherSubject = subjectMapper.getTeacherSubject(teacher.getTeaId());
+		List<Subject> subjectList = subjectMapper.getAllSubject();
+		List<Subject> teacherSubject = subjectMapper.getTeacherSubject(teacher.getTeaId(), year, subName);
 		
-		model.addAttribute("teacherSubject", teacherSubject);
+		if (pages == null || year != null || subName != null) {
+			pages = new PagedListHolder<>(teacherSubject);
+			pages.setPageSize(PAGE_SIZE);
+		} else {
+			
+			final int goToPage = pageNumber - 1;
+			if (goToPage <= pages.getPageCount() && goToPage >= 0) {
+				pages.setPage(goToPage);
+			}
+		}
+		
+		int current = pages.getPage() + 1;
+		int begin = Math.max(1, current - teacherSubject.size());
+		int end = Math.min(begin + 5, pages.getPageCount()); 
+		int totalPageCount = pages.getPageCount();
+		
+		model.addAttribute("beginIndex", begin);
+		model.addAttribute("endIndex", end);
+		model.addAttribute("currentIndex", current);
+		model.addAttribute("totalPageCount", totalPageCount);
+		model.addAttribute("baseUrl", baseUrl);
+		model.addAttribute("pagedListHolder", pages);
+		
+		request.getSession().setAttribute("pageList", pages);
+		
+		model.addAttribute("subjectList", subjectList);
 		model.addAttribute("teacher", teacher);
 
 		return "teacher/TeacherSchedule";
+	}
+	
+	@GetMapping("/mark")
+	public String indexMark(Model model, HttpServletRequest request) {
+		request.getSession().setAttribute("pageList", null);
+		return "redirect:/teacher/mark/page/1";
+	}
+	
+	@GetMapping("/mark/page/{pageNumber}")
+	public String markScoreAll(Model model, Principal principal,
+							   HttpServletRequest request,
+							   @PathVariable int pageNumber) {
+		
+		String baseUrl = "/teacher/mark/page/";
+		
+		PagedListHolder<?> pages = (PagedListHolder<?>) request.getSession().getAttribute("pageList");
+		Account current_account = (Account) ((Authentication) principal).getPrincipal();
+		Teacher teacher = teacherMapper.getTeacher(0, current_account.getAccUsername());
+		
+		List<Student_Score> studentScore = studentScoreMapper.getTeacherMark(teacher.getTeaId(), 0);
+		
+		if (pages == null) {
+			pages = new PagedListHolder<>(studentScore);
+			pages.setPageSize(PAGE_SIZE);
+		} else {
+			
+			final int goToPage = pageNumber - 1;
+			if (goToPage <= pages.getPageCount() && goToPage >= 0) {
+				pages.setPage(goToPage);
+			}
+		}
+		
+		request.getSession().setAttribute("pageList", pages);
+		
+		int current = pages.getPage() + 1;
+		int begin = Math.max(1, current - studentScore.size());
+		int end = Math.min(begin + 5, pages.getPageCount()); 
+		int totalPageCount = pages.getPageCount();
+		
+		model.addAttribute("beginIndex", begin);
+		model.addAttribute("endIndex", end);
+		model.addAttribute("currentIndex", current);
+		model.addAttribute("totalPageCount", totalPageCount);
+		model.addAttribute("baseUrl", baseUrl);
+		model.addAttribute("pagedListHolder", pages);
+		
+		model.addAttribute("teacher", teacher);
+
+		return "teacher/TeacherMarkAll";
 	}
 	
 	@GetMapping("/mark/{subId}")
@@ -53,19 +147,6 @@ public class TeacherSubjectController {
 		Teacher teacher = teacherMapper.getTeacher(0, current_account.getAccUsername());
 		
 		List<Student_Score> studentScore = studentScoreMapper.getTeacherMark(teacher.getTeaId(), subId);
-		
-		model.addAttribute("studentScore", studentScore);
-		model.addAttribute("teacher", teacher);
-
-		return "teacher/TeacherMark";
-	}
-	
-	@GetMapping("/mark")
-	public String markScoreAll(Model model, Principal principal) {
-		Account current_account = (Account) ((Authentication) principal).getPrincipal();
-		Teacher teacher = teacherMapper.getTeacher(0, current_account.getAccUsername());
-		
-		List<Student_Score> studentScore = studentScoreMapper.getTeacherMark(teacher.getTeaId(), 0);
 		
 		model.addAttribute("studentScore", studentScore);
 		model.addAttribute("teacher", teacher);

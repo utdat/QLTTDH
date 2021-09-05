@@ -1,10 +1,13 @@
 package com.quanlytrungtamdayhoc.dbo;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class Student_Score {
+	@Autowired
 	private Subject subject;
+	@Autowired
 	private Student student;
 	private float score;
 	

@@ -59,6 +59,12 @@
 		JOIN STUDENTS ST ON SC.STU_ID = ST.STU_ID
 		JOIN SUBJECTS SU ON SC.SUB_ID = SU.SUB_ID
 		WHERE SC.STU_ID = #{stuId}
+		<if test="subName != null and subName != ''">
+			AND SU.SUB_NAME = #{subName} 
+		</if>
+		<if test="year != null and year != ''">
+			AND YEAR(SU.SUB_STARTDATE) = #{year}
+		</if>
 	</select>
 	
 	<update id="updateScore" parameterType="map">

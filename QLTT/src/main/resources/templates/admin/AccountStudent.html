@@ -7,12 +7,21 @@
 <th:block th:insert="component/common-js :: common-js"></th:block>
 
 <link rel="stylesheet" th:href="@{https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css}">
+<link rel="stylesheet" type="text/css" th:href="@{/css/switch.css}">
+
 </head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
 html, body, h1, h2, h3, h4, h5 {
 	font-family: "Raleway", sans-serif
+}
+div.scroll {
+    overflow: auto;
+    height: 110px;
+}
+div.w3-card {
+	width: 275px;
 }
 </style>
 <body class="w3-light-grey">
@@ -23,7 +32,6 @@ html, body, h1, h2, h3, h4, h5 {
 			var mess = document.getElementById("mess");
 			if (mess.value !== "") {
 				alert(mess.value);
-				console.log("+" + mess.value + "+");
 			}
 		</script>
 	</th:block>
@@ -111,76 +119,144 @@ html, body, h1, h2, h3, h4, h5 {
 			</h2>
 		</header>
 		<div class="panel-body">
-			<div class="input-group">
-				<input class="form-control" type="text"
-					placeholder="Search for names..." id="myInput"
-					onkeyup="myFunction()"> <span class="input-group-btn">
-					<button class="btn btn-default" type="button">
-						<span class="glyphicon glyphicon-search"></span>
-					</button>
-				</span>
+		
+			<div class="row register-form">
+				<div class="col-md-3" >
+					<div class="form-group">
+						<input class="w3-input w3-padding" type="text" placeholder="Search for student name..." 
+							id="stuInput" onkeyup="filterFunction('stuInput','stuDiv')" onclick="myAccFunc('stuDiv')">
+						<div class="w3-dropdown-content w3-bar-block w3-card w3-light-grey scroll" id="stuDiv">
+							<th:block th:each="student : ${nameList}">
+								<a class="w3-bar-item w3-button" th:id="${student.stuId} + '_stu'" 
+									th:text="${student.stuName}"
+									th:onclick="getValueFilter([[${student.stuId}]]+'_stu', 'stuInput', 'stuDiv')"></a>
+							</th:block>
+					    </div>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="form-group">
+						<input class="w3-input w3-padding" type="text" placeholder="Search for student phone..." id="phoneInput" >
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="form-group">
+						<span class="input-group-btn">
+							<a class="btn btn-default" onclick="submitSearch('stuName=', 'stuInput', 'stuPhone=', 'phoneInput')" id="search"
+								th:href="@{/admin/account/student/page/1}">
+								<span class="glyphicon glyphicon-search"></span>
+							</a>
+						</span>
+					</div>
+				</div>
 			</div>
+			
 			<br>
-			<form th:action="@{/admin/account/student}" method="post">
-				<table id="table" class="w3-table-all w3-hoverable" cellpadding="0"
-					width="100%">
-					<thead>
-						<tr class="w3-blue">
-							<th class="w3-center">ID</th>
-							<th>Name</th>
-							<th class="w3-center">Phone</th>
-							<th>School</th>
-							<th>Email</th>
-							<th>Password</th>
-							<th class="w3-center">Detail</th>
-							<th class="w3-center">Active/InActive</th>
-						</tr>
-						<tr>
-							<td class="w3-center"><input size="3"
-								class="form-control w3-center" type="hidden" name="id"/></td>
-							<td><input size="20"
-								class="form-control" type="text" name="name"
-								required /></td>
-							<td class="w3-center"><input size="15"
-								class="form-control w3-center" type="text" name="phone"
-								required /></td>
-							<td><input size="20"
-								class="form-control" type="text" name="school"
-								required /></td>
-							<td><input size="40" 
-								class="form-control" type="email" name="email" 
-								required /></td>
-							<td><input size="10" 
-								class="form-control" type="password" name="password" 
-								required /></td>
-							<td class="w3-center"></td>
-							<td class="w3-center"><button class="form-control w3-center">
-									<i class="fas fa-user-plus"></i>
-								</button></td>
-						</tr>
-						<th:block th:each="student, iter : ${studentList}">
-							<tr>
-								<td th:text="${student.stuId}" class="w3-center"></td>
-								<td th:text="${student.stuName}"></td>
-								<td th:text="${student.stuPhone}" class="w3-center"></td>
-								<td th:text="${student.stuSchool}"></td>
-								<td th:text="${student.stuEmail}"></td>
-								<td></td>
-								<td class="w3-center"><a
-									th:href="@{/admin/account/student/{stuId}(stuId=${student.stuId})}"><i
-										class="fas fa-paper-plane"></i></a></td>
-								<td class="w3-center">
-									<th:block th:if="${accountList[iter.index].accIsactive} == 'T'"> 
-										<a th:href="@{/admin/account/active(username=${student.stuEmail})}"><i class="fas fa-user-slash"></i></a>
-									</th:block>
-									<th:block th:unless="${accountList[iter.index].accIsactive} == 'T'"> 
-										<a th:href="@{/admin/account/active(username=${student.stuEmail})}"><i class="fas fa-user-check"></i></a>
-									</th:block>
-								</td>
+			<th:block th:if="${#lists.isEmpty(studentPagedListHolder.getPageList)}">
+				<h3>No account</h3>
+			</th:block>
+			<th:block th:unless="${#lists.isEmpty(studentPagedListHolder == null)}">
+				<form th:action="@{/admin/account/student}" method="post">
+					<table id="table" class="w3-table-all w3-hoverable" cellpadding="0"
+						width="100%">
+						<thead>
+							<tr class="w3-blue">
+								<th class="w3-center">ID</th>
+								<th>Name</th>
+								<th class="w3-center">Phone</th>
+								<th>School</th>
+								<th>Email</th>
+								<th>Password</th>
+								<th class="w3-center">Detail</th>
+								<th class="w3-center">Active/InActive</th>
 							</tr>
-						</th:block>
-				</table>
-			</form>
+							<tr>
+								<td class="w3-center"><input size="3"
+									class="form-control w3-center" type="hidden" name="id"/></td>
+								<td><input size="20"
+									class="form-control" type="text" name="name"
+									required /></td>
+								<td class="w3-center"><input size="15"
+									class="form-control w3-center" type="text" name="phone"
+									required /></td>
+								<td><input size="20"
+									class="form-control" type="text" name="school"
+									required /></td>
+								<td><input size="40" 
+									class="form-control" type="email" name="email" 
+									required /></td>
+								<td><input size="10" 
+									class="form-control" type="password" name="password" 
+									required /></td>
+								<td class="w3-center"></td>
+								<td class="w3-center"><button class="form-control w3-center">
+										<i class="fas fa-user-plus"></i>
+									</button></td>
+							</tr>
+							<th:block th:each="student, iter : ${studentPagedListHolder.getPageList}">
+								<tr>
+									<td th:text="${student.stuId}" class="w3-center"></td>
+									<td th:text="${student.stuName}"></td>
+									<td th:text="${student.stuPhone}" class="w3-center"></td>
+									<td th:text="${student.stuSchool}"></td>
+									<td th:text="${student.stuEmail}"></td>
+									<td></td>
+									<td class="w3-center"><a
+										th:href="@{/admin/account/student/{stuId}(stuId=${student.stuId})}"><i
+											class="fas fa-paper-plane"></i></a></td>
+									<td class="w3-center">
+										<th:block th:if="${accountPagedListHolder.getPageList[iter.index].accIsactive} == 'T'"> 
+											<label class="switch">
+												<a th:href="@{/admin/account/active(username=${student.stuEmail})}">
+													<input type="checkbox" checked>
+													<span class="slider round"></span>
+												</a>
+											</label>
+										</th:block>
+										<th:block th:unless="${accountPagedListHolder.getPageList[iter.index].accIsactive} == 'T'"> 
+											<label class="switch">
+												<a th:href="@{/admin/account/active(username=${student.stuEmail})}">
+													<input type="checkbox">
+													<span class="slider round"></span>
+												</a>
+											</label>
+										</th:block>
+									</td>
+								</tr>
+							</th:block>
+					</table>
+					<ul class="pagination">
+						<li
+							th:class="${currentIndex == 1}? 'page-item disabled' : 'page-item'">
+							<a class="page-link" th:href="@{/admin/account/student}">First</a>
+						</li>
+						<li
+							th:class="${currentIndex == 1}? 'page-item disabled': 'page-item' ">
+							<a class="page-link" aria-label="Previous"
+							th:href="@{|${baseUrl}${currentIndex - 1}|}"
+							title='Go to previous page'><span aria-hidden="true">«</span>
+								<span class="sr-only">Previous</span></a>
+						</li>
+						<li th:each="item : ${#numbers.sequence(beginIndex,endIndex)}"
+							th:class="${item == currentIndex ? 'page-item active' :'page-item' }">
+							<a class="page-link" th:href="@{|${baseUrl}${item}|}"> <span
+								th:text='${item}'>1</span>
+						</a>
+						</li>
+						<li
+							th:class="${currentIndex == totalPageCount}? 'page-item disabled': 'page-item'">
+							<a class="page-link" aria-label="Next"
+							th:href="@{|${baseUrl}${currentIndex + 1}|}"
+							title='Go to next page'><span aria-hidden="true">»</span> <span
+								class="sr-only">Next</span></a>
+						</li>
+						<li
+							th:class="${currentIndex == totalPageCount}? 'page-item disabled':'page-item'">
+							<a class="page-link" th:href="@{|${baseUrl}${totalPageCount}|}">Last</a>
+						</li>
+					</ul>
+				</form>
+			</th:block>
 		</div>
 		<hr>
 

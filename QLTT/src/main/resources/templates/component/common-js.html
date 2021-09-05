@@ -10,15 +10,53 @@
 
 
 <script type="text/javascript">
-	function get_info(id) {
+
+	function submitSearch(param_1, id_1, param_2, id_2){
+		var form, value_1, value_2;
+		
+		form = document.getElementById('search');
+		value_1 = document.getElementById(id_1).value;
+		value_2 = document.getElementById(id_2).value;
+		
+		form.href += '?' + param_1 + value_1 + '&' + param_2 + value_2;
+	}
+
+	function getValueFilter(id_a, id_input, id_div){
+		var div, a, input, x;
+		
+		input = document.getElementById(id_input);
+		div = document.getElementById(id_div);
+		x = document.getElementById(id_a); 
+		
+		div.className = div.className.replace(" w3-show", "");
+		input.value = x.textContent || x.innerText;
+	}
+	
+	function filterFunction(id_input, id_div) {
+		  var input, filter, a, div;
+		  input = document.getElementById(id_input);
+		  filter = input.value.toUpperCase();
+		  div = document.getElementById(id_div);
+		  a = div.getElementsByTagName("a");
+		  for (i = 0; i < a.length; i++) {
+		    txtValue = a[i].textContent || a[i].innerText;
+		    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+		      a[i].style.display = "";
+		    } else {
+		      a[i].style.display = "none";
+		    }
+		  }
+		}
+
+	function get_info(id_1, id_2) {
 		var name, phone, school, email;
 		
 		document.getElementById('info').style.display = 'block';
 		
-		name = document.getElementById(id + '_name').value;
-		phone = document.getElementById(id + '_phone').value;
-		school = document.getElementById(id + '_school').value;
-		email = document.getElementById(id + '_email').value;
+		name = document.getElementById(id_1 + '_' + id_2 + '_name').value;
+		phone = document.getElementById(id_1 + '_' + id_2 + '_phone').value;
+		school = document.getElementById(id_1 + '_' + id_2 + '_school').value;
+		email = document.getElementById(id_1 + '_' + id_2 + '_email').value;
 		
 		document.getElementById('name').value = name;
 		document.getElementById('phone').value = phone;
@@ -50,14 +88,14 @@
 		overlayBg.style.display = "none";
 	}
 
-	function myFunction() {
+	function myFunction(column) {
 		var input, filter, table, tr, td, i;
 		input = document.getElementById("myInput");
 		filter = input.value.toUpperCase();
 		table = document.getElementById("table");
 		tr = table.getElementsByTagName("tr");
 		for (i = 0; i < tr.length; i++) {
-			td = tr[i].getElementsByTagName("td")[1];
+			td = tr[i].getElementsByTagName("td")[column];
 			if (td) {
 				txtValue = td.textContent || td.innerText;
 				if (txtValue.toUpperCase().indexOf(filter) > -1) {

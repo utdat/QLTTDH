@@ -20,11 +20,25 @@
 		<choose>
 			<when test="role == 1">
 				INNER JOIN STUDENTS ON ACC_USERNAME = STU_EMAIL
-				ORDER BY STU_ID
+				WHERE 1=1
+				<if test="name != null and name != ''">
+					AND STU_NAME = #{name}
+				</if>
+				<if test="phone != null and phone != ''">
+					AND STU_PHONE = #{phone}
+				</if>
+				ORDER BY STU_JOINDATE DESC
 			</when>
 			<when test="role == 2">
 				INNER JOIN TEACHERS ON ACC_USERNAME = TEA_EMAIL
-				ORDER BY TEA_ID
+				WHERE 1=1
+				<if test="name != null and name != ''">
+					AND TEA_NAME = #{name}
+				</if>
+				<if test="phone != null and phone != ''">
+					AND TEA_PHONE = #{phone}
+				</if>
+				ORDER BY TEA_HIREDATE DESC
 			</when>
 		</choose>
 	</select>

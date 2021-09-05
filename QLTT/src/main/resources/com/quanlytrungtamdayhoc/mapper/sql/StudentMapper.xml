@@ -20,6 +20,19 @@
 		ORDER BY STU_ID
 	</select>
 	
+	<select id="getStudentByFilter" resultMap="StudentMapper" parameterType="map">
+		SELECT *
+		FROM STUDENTS
+		WHERE 1=1
+		<if test="stuName != null and stuName != ''">
+			AND STU_NAME = #{stuName}
+		</if>
+		<if test="stuPhone != null and stuPhone != ''">
+			AND STU_PHONE = #{stuPhone}
+		</if>
+		ORDER BY STU_JOINDATE DESC
+	</select>
+	
 	<select id="getStudent" resultMap="StudentMapper" parameterType="map">
 		SELECT *
 		FROM STUDENTS

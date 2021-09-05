@@ -25,10 +25,22 @@
 		</association>
 	</resultMap>
 	
+	<select id="getAllSubject" resultMap="SubjectMapper" parameterType="map">
+		SELECT *
+		FROM SUBJECTS
+	</select>
+	
 	<select id="getTeacherSubject" resultMap="SubjectMapper" parameterType="map">
 		SELECT *
 		FROM SUBJECTS
 		WHERE SUBJECTS.TEA_ID = #{teaId}
+		<if test="year != null and year != ''">
+			AND YEAR(SUBJECTS.SUB_STARTDATE) = #{year}
+		</if>
+		<if test="subName != null and subName != ''">
+			AND SUBJECTS.SUB_NAME = #{subName}
+		</if>
+		ORDER BY SUB_STARTDATE DESC
 	</select>
 	
 	<select id="listStudentSubject" resultMap="SubjectMapper" parameterType="map">
@@ -36,8 +48,14 @@
 		FROM SUBJECTS 
         JOIN TEACHERS ON SUBJECTS.TEA_ID = TEACHERS.TEA_ID
  		WHERE SUB_ID NOT IN (SELECT SUB_ID FROM STUDENT_SCORES WHERE
-							 STUDENT_SCORES.STU_ID = #{stuId}) 
-		ORDER BY SUB_STARTDATE
+							 STUDENT_SCORES.STU_ID = #{stuId})
+		<if test="teaName != null and teaName != ''">
+			AND TEACHERS.TEA_NAME = #{teaName}
+		</if>
+		<if test="subName != null and subName != ''">
+			AND SUBJECTS.SUB_NAME = #{subName}
+		</if>
+		ORDER BY SUB_STARTDATE DESC
 	</select>
 	
 </mapper>

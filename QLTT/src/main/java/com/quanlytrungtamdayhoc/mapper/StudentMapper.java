@@ -11,7 +11,11 @@ public interface StudentMapper {
 	
 	List<Student> getAllStudent();
 	
-	Student getStudent(@Param("stuId") int stuId, @Param("stuEmail") String stuEmail);
+	List<Student> getStudentByFilter(@Param("stuName") String stuName,
+					  				@Param("stuPhone") String stuPhone);		
+	
+	Student getStudent(@Param("stuId") int stuId, 
+					   @Param("stuEmail") String stuEmail);
 
 	int updateStudent(@Param("student") Student student,
 					  @Param("birthdate") String birthdate);

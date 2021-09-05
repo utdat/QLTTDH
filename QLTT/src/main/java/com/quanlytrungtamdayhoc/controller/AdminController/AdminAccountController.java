@@ -2,7 +2,10 @@ package com.quanlytrungtamdayhoc.controller.AdminController;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.support.PagedListHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,20 +40,73 @@ public class AdminAccountController {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
+	private static final int PAGE_SIZE = 5;
+	
 	@GetMapping("/student")
-	public String getAccountStudent(Model model) {
+	public String indexAccountStudent(Model model, HttpServletRequest request) {
+		request.getSession().setAttribute("studentPageList", null);
+		request.getSession().setAttribute("accountPageList", null);
 		
-		List<Student> studentList = studentMapper.getAllStudent();
-		List<Account> accountList = accountMapper.getAccountByRole(1); 
+		return "redirect:/admin/account/student/page/1";
+	}
+	
+	@GetMapping("/student/page/{pageNumber}")
+	public String getAccountStudent(Model model,
+									HttpServletRequest request,
+									@PathVariable int pageNumber,
+									@RequestParam(name = "stuName", required = false) String stuName,
+									@RequestParam(name = "stuPhone", required = false) String stuPhone) {
 		
-		model.addAttribute("studentList", studentList);
-		model.addAttribute("accountList", accountList);
+		String baseUrl = "/admin/account/student/page/";
+		String message = (String) request.getSession().getAttribute("mess");
+		
+		PagedListHolder<?> studentPages = (PagedListHolder<?>) request.getSession().getAttribute("studentPageList");
+		PagedListHolder<?> accountPages = (PagedListHolder<?>) request.getSession().getAttribute("accountPageList");
+		
+		List<Student> nameList = studentMapper.getAllStudent();
+		List<Student> studentList = studentMapper.getStudentByFilter(stuName, stuPhone);
+		List<Account> accountList = accountMapper.getAccountByRole(1, stuName, stuPhone); 
+		
+		if (studentPages == null || stuName != null || stuPhone != null) {
+			studentPages = new PagedListHolder<>(studentList);
+			accountPages = new PagedListHolder<>(accountList);
+			
+			studentPages.setPageSize(PAGE_SIZE);
+			accountPages.setPageSize(PAGE_SIZE);
+		} else {
+			
+			final int goToPage = pageNumber - 1;
+			if (goToPage <= studentPages.getPageCount() && goToPage >= 0) {
+				studentPages.setPage(goToPage);
+				accountPages.setPage(goToPage);
+			}
+		}
+		
+		request.getSession().setAttribute("studentPageList", studentPages);
+		request.getSession().setAttribute("accountPageList", accountPages);
+		request.getSession().removeAttribute("mess");
+		
+		int current = studentPages.getPage() + 1;
+		int begin = Math.max(1, current - studentList.size());
+		int end = Math.min(begin + 5, studentPages.getPageCount()); 
+		int totalPageCount = studentPages.getPageCount();
+		
+		model.addAttribute("beginIndex", begin);
+		model.addAttribute("endIndex", end);
+		model.addAttribute("currentIndex", current);
+		model.addAttribute("totalPageCount", totalPageCount);
+		model.addAttribute("baseUrl", baseUrl);
+		model.addAttribute("studentPagedListHolder", studentPages);
+		model.addAttribute("accountPagedListHolder", accountPages);
+		
+		model.addAttribute("nameList", nameList);
+		model.addAttribute("message", message);
 		
 		return "admin/AccountStudent";
 	}
 	
 	@PostMapping("/student")
-	public String addAccountStudent(Model model,
+	public String addAccountStudent(Model model, HttpServletRequest request,
 									@RequestParam(name = "name") String stuName,
 									@RequestParam(name = "phone") String stuPhone,
 									@RequestParam(name = "school") String stuSchool,
@@ -83,11 +139,9 @@ public class AdminAccountController {
 			}
 		}
 		
-		List<Student> studentList = studentMapper.getAllStudent();
-		model.addAttribute("studentList", studentList);
-		model.addAttribute("message", message);
+		request.getSession().setAttribute("mess", message);
 		
-		return "admin/AccountStudent";
+		return "redirect:/admin/account/student";
 	}
 	
 	@GetMapping("/student/{stuId}")
@@ -130,19 +184,69 @@ public class AdminAccountController {
 	}
 	
 	@GetMapping("/teacher")
-	public String getAccountTeacher(Model model) {
+	public String indexAccountTeacher(Model model, HttpServletRequest request) {
+		request.getSession().setAttribute("teacherPageList", null);
+		request.getSession().setAttribute("accountPageList", null);
 		
-		List<Teacher> teacherList = teacherMapper.getAllTeacher();
-		List<Account> accountList = accountMapper.getAccountByRole(2);
+		return "redirect:/admin/account/teacher/page/1";
+	}
+	
+	@GetMapping("/teacher/page/{pageNumber}")
+	public String getAccountTeacher(Model model, HttpServletRequest request,
+									@PathVariable int pageNumber,
+									@RequestParam(name = "teaName", required = false) String teaName,
+									@RequestParam(name = "teaPhone", required = false) String teaPhone) {
 		
-		model.addAttribute("teacherList", teacherList);
-		model.addAttribute("accountList", accountList);
+		String baseUrl = "/admin/account/teacher/page/";
+		String message = (String) request.getSession().getAttribute("mess");
+		
+		PagedListHolder<?> teacherPages = (PagedListHolder<?>) request.getSession().getAttribute("teacherPageList");
+		PagedListHolder<?> accountPages = (PagedListHolder<?>) request.getSession().getAttribute("accountPageList");
+		
+		List<Teacher> nameList = teacherMapper.getAllTeacher();
+		List<Teacher> teacherList = teacherMapper.getTeacherByFilter(teaName, teaPhone);
+		List<Account> accountList = accountMapper.getAccountByRole(2, teaName, teaPhone); 
+		
+		if (teacherPages == null || teaName != null || teaPhone != null) {
+			teacherPages = new PagedListHolder<>(teacherList);
+			accountPages = new PagedListHolder<>(accountList);
+			
+			teacherPages.setPageSize(PAGE_SIZE);
+			accountPages.setPageSize(PAGE_SIZE);
+		} else {
+			
+			final int goToPage = pageNumber - 1;
+			if (goToPage <= teacherPages.getPageCount() && goToPage >= 0) {
+				teacherPages.setPage(goToPage);
+				accountPages.setPage(goToPage);
+			}
+		}
+		
+		request.getSession().setAttribute("teacherPageList", teacherPages);
+		request.getSession().setAttribute("accountPageList", accountPages);
+		request.getSession().removeAttribute("mess");
+		
+		int current = teacherPages.getPage() + 1;
+		int begin = Math.max(1, current - teacherList.size());
+		int end = Math.min(begin + 5, teacherPages.getPageCount()); 
+		int totalPageCount = teacherPages.getPageCount();
+		
+		model.addAttribute("beginIndex", begin);
+		model.addAttribute("endIndex", end);
+		model.addAttribute("currentIndex", current);
+		model.addAttribute("totalPageCount", totalPageCount);
+		model.addAttribute("baseUrl", baseUrl);
+		model.addAttribute("teacherPagedListHolder", teacherPages);
+		model.addAttribute("accountPagedListHolder", accountPages);
+		
+		model.addAttribute("nameList", nameList);
+		model.addAttribute("message", message);
 		
 		return "admin/AccountTeacher";
 	}
 	
 	@PostMapping("/teacher")
-	public String addAccountTeacher(Model model,
+	public String addAccountTeacher(Model model, HttpServletRequest request,
 									@RequestParam(name = "name") String teaName,
 									@RequestParam(name = "phone") String teaPhone,
 									@RequestParam(name = "school") String teaSchool,
@@ -176,11 +280,9 @@ public class AdminAccountController {
 			}
 		}
 		
-		List<Teacher> teacherList = teacherMapper.getAllTeacher();
-		model.addAttribute("teacherList", teacherList);
-		model.addAttribute("message", message);
+		request.getSession().setAttribute("mess", message);
 		
-		return "admin/AccountTeacher";
+		return "redirect:/admin/account/teacher";
 	}
 	
 	@GetMapping("/teacher/{teaId}")
@@ -232,7 +334,7 @@ public class AdminAccountController {
 	}
 	
 	@GetMapping("/active")
-	public String activateAccount(Model model, RedirectAttributes redirectAttributes,
+	public String activateAccount(Model model, HttpServletRequest request,
 								  @RequestParam(name = "username") String username) {
 		
 		String view = "redirect:/admin/account";
@@ -259,7 +361,7 @@ public class AdminAccountController {
 			view += "/teacher";
 		}
 		
-		redirectAttributes.addFlashAttribute("message", message);
+		request.getSession().setAttribute("mess", message);
 		
 		return view;
 	}

@@ -23,7 +23,6 @@ html, body, h1, h2, h3, h4, h5 {
 			var mess = document.getElementById("mess");
 			if (mess.value !== "") {
 				alert(mess.value);
-				console.log("+" + mess.value + "+");
 			}
 		</script>
 	</th:block>
@@ -108,8 +107,8 @@ html, body, h1, h2, h3, h4, h5 {
 		<div class="panel-body">
 			<div class="input-group">
 				<input class="form-control" type="text"
-					placeholder="Search for subject names..." id="myInput"
-					onkeyup="myFunction()"> <span class="input-group-btn">
+					placeholder="Search for student names..." id="myInput"
+					onkeyup="myFunction(3)"> <span class="input-group-btn">
 					<button class="btn btn-default" type="button">
 						<span class="glyphicon glyphicon-search"></span>
 					</button>
@@ -133,13 +132,20 @@ html, body, h1, h2, h3, h4, h5 {
 							<td th:text="${stuScore.subject.subId}" class="w3-center"></td>
 							<td th:text="${stuScore.subject.subName}"></td>
 							<td th:text="${stuScore.student.stuId}" class="w3-center"></td>
-							<td th:text="${stuScore.student.stuName}"></td>
-							<td class="w3-center"><input size="5" min="0" max="10"
-								step="0.1" class="w3-center" type="number" name="score"
-								th:id="${stuScore.subject.subId + '_' + stuScore.student.stuId + '_i'}"
-								th:value="*{stuScore.score}" /></td>
+							<td th:text="${stuScore.student.stuName}" th:onclick="|get_info(${stuScore.subject.subId}, ${stuScore.student.stuId})|"></td>
+							<td class="w3-center">
+								<input size="5" min="0" max="10" step="0.1" class="w3-center" type="number" name="score"
+									th:id="${stuScore.subject.subId + '_' + stuScore.student.stuId + '_i'}" th:value="*{stuScore.score}" />
+								<input type="hidden" th:id="${stuScore.subject.subId + '_' + stuScore.student.stuId + '_name'}"
+									th:value="${stuScore.student.stuName}" />
+								<input type="hidden" th:id="${stuScore.subject.subId + '_' + stuScore.student.stuId + '_phone'}"
+									th:value="${stuScore.student.stuPhone}" />
+								<input type="hidden" th:id="${stuScore.subject.subId + '_' + stuScore.student.stuId + '_school'}"
+									th:value="${stuScore.student.stuSchool}" />
+								<input type="hidden" th:id="${stuScore.subject.subId + '_' + stuScore.student.stuId + '_email'}"
+									th:value="${stuScore.student.stuEmail}" /></td>
 							<td class="w3-center"><a
-								th:onclick="|update_score(${stuScore.subject.subId},${stuScore.student.stuId})|"
+								th:onclick="|update_score(${stuScore.subject.subId}, ${stuScore.student.stuId})|"
 								th:href="@{/teacher/mark/update(subId=${stuScore.subject.subId}, stuId=${stuScore.student.stuId})}"
 								th:id="${stuScore.subject.subId + '_' + stuScore.student.stuId + '_a'}">
 									<i class="fas fa-paper-plane"></i>
@@ -171,6 +177,46 @@ html, body, h1, h2, h3, h4, h5 {
 					<p>School</p>
 					<p>Teaching Center</p>
 				</div>
+			</div>
+		</div>
+		
+		<div id="info" class="w3-modal">
+			<div class="w3-modal-content w3-animate-top w3-card-4">
+				<header class="w3-container w3-blue">
+					<span
+						onclick="document.getElementById('info').style.display='none'"
+						class="w3-button w3-display-topright">&times;</span>
+					<h2>Student Information</h2>
+				</header>
+				<div class="w3-container"> <br>
+					<div class="form-group">
+						<div class="input-group-prepend">
+							<span class="input-group-text">Full Name</span>
+						</div>
+						<input type="text" class="form-control" id="name"/>
+					</div> <br> 
+					<div class="form-group">
+						<div class="input-group-prepend">
+							<span class="input-group-text">Email</span>
+						</div>
+						<input type="text" class="form-control" id="email"/>
+					</div> <br>
+					<div class="form-group">
+						<div class="input-group-prepend">
+							<span class="input-group-text">Phone</span>
+						</div>
+						<input type="text" class="form-control" id="phone"/>
+					</div> <br>
+					<div class="form-group">
+						<div class="input-group-prepend">
+							<span class="input-group-text">School</span>
+						</div>
+						<input type="text" class="form-control" id="school"/>
+					</div> <br>
+				</div>
+				<footer class="w3-container w3-blue">
+					<p></p>
+				</footer>
 			</div>
 		</div>
 

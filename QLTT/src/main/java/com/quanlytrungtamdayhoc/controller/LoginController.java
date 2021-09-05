@@ -53,11 +53,11 @@ public class LoginController {
 			redirectAttributes.addFlashAttribute("student", student);
 		}else {
 			List<Student> studentList = studentMapper.getAllStudent();
-			List<Account> accountList = accountMapper.getAccountByRole(1);
+			List<Account> accountList = accountMapper.getAccountByRole(1, null, null);
 			
 			redirectAttributes.addFlashAttribute("studentList", studentList);
 			redirectAttributes.addFlashAttribute("accountList", accountList);
-			view = "admin/account/student";
+			view += "admin/account/student";
 		}
 		
 		redirectAttributes.addFlashAttribute("message", message);
@@ -82,7 +82,7 @@ public class LoginController {
 			redirectAttributes.addFlashAttribute("student", student);
 		}else {
 			List<Student> studentList = studentMapper.getAllStudent();
-			List<Account> accountList = accountMapper.getAccountByRole(1);
+			List<Account> accountList = accountMapper.getAccountByRole(1, null, null);
 			
 			redirectAttributes.addFlashAttribute("studentList", studentList);
 			redirectAttributes.addFlashAttribute("accountList", accountList);
