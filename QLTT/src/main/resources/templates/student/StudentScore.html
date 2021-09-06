@@ -170,9 +170,12 @@ div.w3-card {
 								<td class="w3-center" th:text="${stu.subject.subRoom}"></td>
 								<td class="w3-center" th:text="${stu.subject.subTuition}"></td>
 								<td class="w3-center" th:text="${stu.score}"></td>
-								<td class="w3-center"><a
-									th:href="@{/student/score/delete(subId=${stu.subject.subId})}"><i
-										class="fas fa-minus-square"></i></a></td>
+								<td class="w3-center">
+									<th:block th:if="${#dates.format(stu.subject.subStartdate,'yyyy-MM-dd')} > ${#calendars.format(#calendars.createNow(),'yyyy-MM-dd')}">
+										<a th:href="@{/student/score/delete(subId=${stu.subject.subId})}"><i
+												class="fas fa-minus-square"></i></a>
+									</th:block>
+								</td>
 							</tr>
 						</th:block>
 				</table>

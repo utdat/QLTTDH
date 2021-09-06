@@ -66,7 +66,7 @@
 		<if test="teacher.teaAvatar != null">
 		, TEA_AVATAR = #{teacher.teaAvatar}
 		</if>
-		<if test="birthdate != null">
+		<if test="birthdate != null and birthdate != ''">
 		, TEA_BIRTHDATE = #{birthdate}
 		</if>
 		WHERE TEA_ID = #{teacher.teaId}

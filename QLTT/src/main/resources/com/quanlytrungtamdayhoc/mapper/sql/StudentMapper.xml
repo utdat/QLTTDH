@@ -65,7 +65,7 @@
 		<if test="student.stuAvatar != null">
 		, STU_AVATAR = #{student.stuAvatar}
 		</if>
-		<if test="birthdate != null">
+		<if test="birthdate != null and birthdate != ''">
 		, STU_BIRTHDATE = #{birthdate}
 		</if>
 		WHERE STU_ID = #{student.stuId}
